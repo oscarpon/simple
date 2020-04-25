@@ -59,7 +59,7 @@ nombre
 
 
 varios_identificadores2
-	 : 
+	 :                                                           { printf ("varios_identificadores2 ->  "); }
 	 | varios_identificadores2  IDENTIFICADOR CUATRO_PUNTOS      { printf ("varios_identificadores2 ->  varios_identificadores2  IDENTIFICADOR CUATRO_PUNTOS \n"); }
 	 ;
 
