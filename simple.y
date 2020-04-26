@@ -29,7 +29,7 @@ programa
  ;
 
 definicion_programa 
-: programa IDENTIFICADOR ';' codigo_programa                { printf ("def_prog -> programa IDENTIFICADOR ; codigo_programa\n"); }
+: programa IDENTIFICADOR ';' codigo_programa                { printf ("definicion_programa -> programa IDENTIFICADOR ; codigo_programa\n"); }
 ;
 
 codigo_programa 
@@ -75,7 +75,8 @@ codigo_libreria
 ;
 
 varias_declaraciones
-	 : declaracion                         { printf ("  varias_declaraciones -> declaracion \n"); }
+   :                               
+   | declaracion                         { printf ("  varias_declaraciones -> declaracion \n"); }
 	 | varias_declaraciones  declaracion   { printf ("  varias_declaraciones ->  varias_declaraciones  declaracion\n"); }
 	 ;
 
@@ -90,12 +91,10 @@ varios_nombres
   ;
 
 declaracion 
-    : declaracion_objeto 
-    | declaracion_tipo 
-    | declaracion_subprograma    { printf ("  declaracion -> declaracion_objeto declaracion_tipo declaracion_subprograma\n"); }
+    : declaracion_objeto                               { printf ("  declaracion -> declaracion_objeto \n"); }
+    | declaracion_tipo                                 { printf ("  declaracion ->  declaracion_tipo \n"); }
+    | declaracion_subprograma                          { printf ("  declaracion -> declaracion_subprograma\n"); }
       ;
-
-
 
 /********************OBJETOS****************************/
 declaracion_objeto 
@@ -104,10 +103,6 @@ declaracion_objeto
   |  varios_identificadores ':' especificacion_tipo ASIGNACION expresion                 { printf ("  declaracion_objeto -> varios_identificadores : especificacion_tipo ASIGNACION expresion\n"); }
   ;
 
-varios_identificadores
-  : IDENTIFICADOR                                                               { printf ("  varios_identificadores -> IDENTIFICADOR\n"); }
-  | varios_identificadores IDENTIFICADOR                                        { printf ("  varios_identificadores -> varios_identificadores IDENTIFICADOR\n"); }
-  ;
 especificacion_tipo
   : nombre                                                                      { printf ("  especificacion_tipo -> nombre\n"); }
   | tipo_no_estructurado                                                         { printf ("  especificacion_tipo -> tipo_no_estructurado\n"); }
@@ -246,34 +241,32 @@ varias_declaraciones_componente
 
 
 visibilidad 
-: PUBLICO 
-| PROTEGIDO 
-| PRIVADO
-             { printf ("  visibilidad -> PUBLICO PROTEGIDO PRIVADO\n"); }
+: PUBLICO                                           { printf ("  visibilidad -> PUBLICO \n"); }
+| PROTEGIDO                                         { printf ("  visibilidad ->  PROTEGIDO \n"); }
+| PRIVADO                                           { printf ("  visibilidad ->  PRIVADO\n"); }
+             
   ;
 
 componente 
-: declaracion_tipo
-| declaracion_objeto
-| varios_modificadores  declaracion_subprograma
-          { printf ("  componente -> declaracion_tipo declaracion_objeto varios_modificadores declaracion_subprograma"); }
+: declaracion_tipo   { printf ("  componente -> declaracion_tipo"); }
+| declaracion_objeto   { printf ("  componente -> declaracion_objeto"); }
+| varios_modificadores  declaracion_subprograma { printf ("  componente -> varios_modificadores declaracion_subprograma"); }
    ;
 
 
 varios_modificadores
-	 : 
+	 :                                        { printf ("varios_modificadores -> EMPTY\n"); }
    | modificador                           { printf ("  varios_modificadores -> modificador\n"); }
 	 | varios_modificadores  modificador      { printf ("  varios_modificadores ->  varios_modificadores  modificador\n"); }
 	 ;
 
 modificador 
-: CONSTRUCTOR 
-| DESTRUCTOR 
-| GENERICO 
-| ABSTRACTO 
-| ESPECIFICO 
-| FINAL
-          { printf ("  modificador -> CONSTRUCTOR DESTRUCTOR GENERICO ABSTRACTO ESPECIFICO FINAL"); }
+: CONSTRUCTOR                                 { printf ("  modificador -> CONSTRUCTOR "); }
+| DESTRUCTOR                                  { printf ("  modificador ->  DESTRUCTOR "); }
+| GENERICO                                    { printf ("  modificador ->  GENERICO "); }
+| ABSTRACTO                                   { printf ("  modificador -> ABSTRACTO "); }
+| ESPECIFICO                                  { printf ("  modificador ->  ESPECIFICO "); }
+| FINAL                                       { printf ("  modificador -> FINAL"); }
  ;
 
 
@@ -366,17 +359,9 @@ cuerpo_subprograma
 
        ;
 
-varias_instrucciones
-	 : 
-   | instruccion                   { printf ("  varias_instrucciones -> instruccion\n"); }
+varias_instrucciones                          /*A cañón*/
+   : instruccion                             { printf ("  varias_instrucciones -> instruccion\n"); }
 	 | varias_instrucciones  instruccion       { printf ("  varias_instrucciones ->  varias_instrucciones  instruccion\n"); }
-	 ;
-
-
-varias_declaraciones
-	 : 
-   | declaracion                        { printf ("  varias_declaraciones -> declaracion\n"); }
-	 | varias_declaraciones  declaracion      { printf ("  varias_declaraciones ->  varias_declaraciones  declaracion\n"); }
 	 ;
 
 
@@ -605,7 +590,7 @@ instruccion_captura_excepcion
 
 clausulas 
 : clausulas_excepcion                                         { printf ("clausulas ->clausulas_excepcion\n"); }
-| clausulas_excepcion clausulsa_finalmente                     { printf ("clausulas ->clausulas_excepcion clausula_finalmente\n"); }
+| clausulas_excepcion clausula_finalmente                     { printf ("clausulas ->clausulas_excepcion clausula_finalmente\n"); }
 | clausula_finalmente                                         { printf ("clausulas ->clausula_finalmente\n"); }  
 ;
 
