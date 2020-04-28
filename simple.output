@@ -8,6 +8,7 @@ No terminales inútiles en la gramática
    instruccion_si
    cero_mas_instrucciones
    instruccion_casos
+   uno_o_mas_casos
    caso
    entradas
    varias_entradas
@@ -16,7 +17,7 @@ No terminales inútiles en la gramática
    instruccion_bucle
    cero_mas_identificador1
    clausula_iteracion
-   cero_mas_especificacion_tipo
+   cero_o_uno_especificacion_tipo
    cero_o_uno_descendente
    cuando
    expresion_potencia
@@ -154,144 +155,148 @@ Reglas inútiles en la gramática
   162 cero_uno_identificador: %empty
   163                       | IDENTIFICADOR ASIGNACION
 
-  164 instruccion_si: SI expresion ENTONCES cero_mas_instrucciones FIN SI
+  164 instruccion_si: SI expresion ENTONCES varias_instrucciones cero_mas_instrucciones FIN SI
 
   165 cero_mas_instrucciones: %empty
   166                       | SINO varias_instrucciones
 
-  167 instruccion_casos: CASOS expresion ES caso FIN CASOS
+  167 instruccion_casos: CASOS expresion ES uno_o_mas_casos FIN CASOS
 
-  168 caso: CUANDO entradas FLECHA varias_instrucciones
+  168 uno_o_mas_casos: caso
+  169                | uno_o_mas_casos caso
 
-  169 entradas: varias_entradas entrada
+  170 caso: CUANDO entradas FLECHA varias_instrucciones
 
-  170 varias_entradas: entradas ':'
-  171                | varias_entradas entradas ':'
+  171 entradas: varias_entradas entrada
 
-  172 entrada: expresion cero_mas_expresiones1
-  173        | OTRO
+  172 varias_entradas: entrada ':'
+  173                | varias_entradas entrada ':'
 
-  174 cero_mas_expresiones1: %empty
-  175                      | DOS_PTOS expresion
+  174 entrada: expresion cero_mas_expresiones1
+  175        | OTRO
 
-  176 instruccion_bucle: cero_mas_identificador1 clausula_iteracion varias_instrucciones FIN BUCLE
+  176 cero_mas_expresiones1: %empty
+  177                      | DOS_PTOS expresion
 
-  177 cero_mas_identificador1: %empty
-  178                        | IDENTIFICADOR ':'
+  178 instruccion_bucle: cero_mas_identificador1 clausula_iteracion varias_instrucciones FIN BUCLE
 
-  179 clausula_iteracion: PARA IDENTIFICADOR cero_mas_especificacion_tipo EN expresion
-  180                   | REPETIR IDENTIFICADOR cero_mas_especificacion_tipo EN rango cero_o_uno_descendente
-  181                   | MIENTRAS expresion
+  179 cero_mas_identificador1: %empty
+  180                        | IDENTIFICADOR ':'
 
-  182 cero_mas_especificacion_tipo: %empty
-  183                             | ':' especificacion_tipo
+  181 clausula_iteracion: PARA IDENTIFICADOR cero_o_uno_especificacion_tipo EN expresion
+  182                   | REPETIR IDENTIFICADOR cero_o_uno_especificacion_tipo EN rango cero_o_uno_descendente
+  183                   | MIENTRAS expresion
 
-  184 cero_o_uno_descendente: DESCENDENTE
+  184 cero_o_uno_especificacion_tipo: %empty
+  185                               | ':' especificacion_tipo
 
-  185 cuando: CUANDO expresion
+  186 cero_o_uno_descendente: %empty
+  187                       | DESCENDENTE
 
-  186 cero_o_uno_cuando: cuando
+  188 cuando: CUANDO expresion
 
-  187 expresion_potencia: expresion_posfija
-  188                   | expresion_posfija '^' expresion_potencia
+  189 cero_o_uno_cuando: cuando
 
-  189 expresion_posfija: expresion_unaria
-  190                  | expresion_unaria operador_posfijo
+  190 expresion_potencia: expresion_posfija
+  191                   | expresion_posfija '^' expresion_potencia
 
-  191 operador_posfijo: INC
-  192                 | DEC
+  192 expresion_posfija: expresion_unaria
+  193                  | expresion_unaria operador_posfijo
 
-  193 expresion_unaria: primario
-  194                 | '-' primario
+  194 operador_posfijo: INC
+  195                 | DEC
 
-  195 primario: literal
-  196         | objeto
-  197         | llamada_subprograma
-  198         | OBJETO llamada_subprograma
-  199         | enumeraciones
-  200         | '(' expresion ')'
+  196 expresion_unaria: primario
+  197                 | '-' primario
 
-  201 literal: VERDADERO
-  202        | FALSO
-  203        | CTC_ENTERA
-  204        | CTC_REAL
-  205        | CTC_CARACTER
-  206        | CTC_CADENA
+  198 primario: literal
+  199         | objeto
+  200         | llamada_subprograma
+  201         | OBJETO llamada_subprograma
+  202         | enumeraciones
+  203         | '(' expresion ')'
 
-  207 objeto: nombre
-  208       | objeto '.' IDENTIFICADOR
-  209       | objeto '[' varias_expresiones ']'
-  210       | objeto '{' varias_ctc_cadena '}'
+  204 literal: VERDADERO
+  205        | FALSO
+  206        | CTC_ENTERA
+  207        | CTC_REAL
+  208        | CTC_CARACTER
+  209        | CTC_CADENA
 
-  211 varias_expresiones: expresion
-  212                   | varias_expresiones expresion
+  210 objeto: nombre
+  211       | objeto '.' IDENTIFICADOR
+  212       | objeto '[' varias_expresiones ']'
+  213       | objeto '{' varias_ctc_cadena '}'
 
-  213 varias_ctc_cadena: CTC_CADENA
-  214                  | varias_ctc_cadena CTC_CADENA
+  214 varias_expresiones: expresion
+  215                   | varias_expresiones ',' expresion
 
-  215 enumeraciones: '[' expresion_condicional varias_clausulas_iteracion ']'
-  216              | '[' varias_expresiones ']'
-  217              | '{' varias_clave_valor '}'
-  218              | '{' varias_campo_valor '}'
+  216 varias_ctc_cadena: CTC_CADENA
+  217                  | varias_ctc_cadena ',' CTC_CADENA
 
-  219 varias_clausulas_iteracion: varias_clausulas_iteracion
-  220                           | varias_clausulas_iteracion clausula_iteracion
+  218 enumeraciones: '[' expresion_condicional varias_clausulas_iteracion ']'
+  219              | '[' varias_expresiones ']'
+  220              | '{' varias_clave_valor '}'
+  221              | '{' varias_campo_valor '}'
 
-  221 varias_clave_valor: clave_valor
-  222                   | varias_clave_valor clave_valor
+  222 varias_clausulas_iteracion: varias_clausulas_iteracion
+  223                           | varias_clausulas_iteracion clausula_iteracion
 
-  223 varias_campo_valor: campo_valor
-  224                   | varias_campo_valor campo_valor
+  224 varias_clave_valor: clave_valor
+  225                   | varias_clave_valor ',' clave_valor
 
-  225 expresion_condicional: expresion
-  226                      | SI expresion ENTONCES expresion
-  227                      | SI expresion ENTONCES expresion SINO varias_expresiones
+  226 varias_campo_valor: campo_valor
+  227                   | varias_campo_valor ',' campo_valor
 
-  228 clave_valor: CTC_CADENA FLECHA expresion
+  228 expresion_condicional: expresion
+  229                      | SI expresion ENTONCES expresion
+  230                      | SI expresion ENTONCES expresion SINO expresion
 
-  229 campo_valor: IDENTIFICADOR FLECHA expresion
+  231 clave_valor: CTC_CADENA FLECHA expresion
 
-  230 expresion: operadorOR
+  232 campo_valor: IDENTIFICADOR FLECHA expresion
 
-  231 operadorOR: operadorOR OR operadorAND
-  232           | operadorAND
+  233 expresion: operadorOR
 
-  233 operadorAND: operadorAND AND operadorNEG
-  234            | operadorNEG
+  234 operadorOR: operadorOR OR operadorAND
+  235           | operadorAND
 
-  235 operadorNEG: '~' operadorASIG
-  236            | operadorASIG
+  236 operadorAND: operadorAND AND operadorNEG
+  237            | operadorNEG
 
-  237 operadorASIG: '<' operadorDES
-  238             | '>' operadorDES
-  239             | LEQ operadorDES
-  240             | FLECHA operadorDES
-  241             | '=' operadorDES
-  242             | NEQ operadorDES
-  243             | operadorDES
+  238 operadorNEG: '~' operadorASIG
+  239            | operadorASIG
 
-  244 operadorDES: operadorDES DESPI operadorSR
-  245            | operadorDES DESPD operadorSR
-  246            | operadorSR
+  240 operadorASIG: '<' operadorDES
+  241             | '>' operadorDES
+  242             | LEQ operadorDES
+  243             | FLECHA operadorDES
+  244             | '=' operadorDES
+  245             | NEQ operadorDES
+  246             | operadorDES
 
-  247 operadorSR: operadorSR '+' operadorMDM
-  248           | operadorSR '-' operadorMDM
-  249           | operadorMDM
+  247 operadorDES: operadorDES DESPI operadorSR
+  248            | operadorDES DESPD operadorSR
+  249            | operadorSR
 
-  250 operadorMDM: operadorMDM '*' operadorPOT
-  251            | operadorMDM '/' operadorPOT
-  252            | operadorMDM '\\' operadorPOT
-  253            | operadorPOT
+  250 operadorSR: operadorSR '+' operadorMDM
+  251           | operadorSR '-' operadorMDM
+  252           | operadorMDM
 
-  254 operadorPOT: operadorINCDEC '^' operadorPOT
-  255            | operadorINCDEC
+  253 operadorMDM: operadorMDM '*' operadorPOT
+  254            | operadorMDM '/' operadorPOT
+  255            | operadorMDM '\\' operadorPOT
+  256            | operadorPOT
 
-  256 operadorINCDEC: INC operadorMDM
-  257               | DEC operadorMDM
-  258               | operadorMDM
+  257 operadorPOT: operadorINCDEC '^' operadorPOT
+  258            | operadorINCDEC
 
-  259 operadorUN: '-' primario
-  260           | primario
+  259 operadorINCDEC: INC operadorMDM
+  260               | DEC operadorMDM
+  261               | operadorMDM
+
+  262 operadorUN: '-' primario
+  263           | primario
 
 
 La regla es inútil debido a los conflictos
@@ -318,7 +323,7 @@ Estado 80 conflictos: 1 desplazamiento/reducción
 Estado 95 conflictos: 1 desplazamiento/reducción
 Estado 107 conflictos: 1 desplazamiento/reducción
 Estado 108 conflictos: 1 desplazamiento/reducción
-Estado 117 conflictos: 1 desplazamiento/reducción
+Estado 117 conflictos: 2 desplazamiento/reducción
 Estado 127 conflictos: 1 desplazamiento/reducción
 Estado 149 conflictos: 1 desplazamiento/reducción
 Estado 162 conflictos: 1 desplazamiento/reducción
@@ -525,7 +530,7 @@ Gramática
 
   124 instruccion_lanzamiento_excepcion: LANZA nombre ';'
 
-  125 instruccion_captura_excepcion: PRUEBA instruccion clausulas FIN PRUEBA
+  125 instruccion_captura_excepcion: PRUEBA varias_instrucciones clausulas FIN PRUEBA
 
   126 clausulas: clausulas_excepcion
   127          | clausulas_excepcion clausula_finalmente
@@ -774,10 +779,9 @@ cuerpo_subprograma (165)
 cero_o_mas_declaraciones (166)
     en la izquierda: 104 105 106, en la derecha: 103
 varias_instrucciones (167)
-    en la izquierda: 107 108, en la derecha: 103 108 133 134 135
+    en la izquierda: 107 108, en la derecha: 103 108 125 133 134 135
 instruccion (168)
     en la izquierda: 109 110 111 112 113 114, en la derecha: 107 108
-    125
 instruccion_devolver (169)
     en la izquierda: 115, en la derecha: 109
 instruccion_llamada (170)
@@ -1567,7 +1571,7 @@ Estado 74
 
 Estado 75
 
-  125 instruccion_captura_excepcion: PRUEBA . instruccion clausulas FIN PRUEBA
+  125 instruccion_captura_excepcion: PRUEBA . varias_instrucciones clausulas FIN PRUEBA
 
     DEVOLVER       desplazar e ir al estado 73
     LANZA          desplazar e ir al estado 74
@@ -1581,7 +1585,8 @@ Estado 75
 
     nombre                             ir al estado 79
     varios_identificadores2            ir al estado 38
-    instruccion                        ir al estado 117
+    varias_instrucciones               ir al estado 117
+    instruccion                        ir al estado 81
     instruccion_devolver               ir al estado 82
     instruccion_llamada                ir al estado 83
     llamada_subprograma                ir al estado 84
@@ -1978,13 +1983,31 @@ Estado 116
 
 Estado 117
 
-  125 instruccion_captura_excepcion: PRUEBA instruccion . clausulas FIN PRUEBA
+  108 varias_instrucciones: varias_instrucciones . instruccion
+  125 instruccion_captura_excepcion: PRUEBA varias_instrucciones . clausulas FIN PRUEBA
 
-    EXCEPCION   desplazar e ir al estado 148
-    FINALMENTE  desplazar e ir al estado 149
+    DEVOLVER       desplazar e ir al estado 73
+    EXCEPCION      desplazar e ir al estado 148
+    FINALMENTE     desplazar e ir al estado 149
+    LANZA          desplazar e ir al estado 74
+    PRUEBA         desplazar e ir al estado 75
+    SALIR          desplazar e ir al estado 76
+    SIGUIENTE      desplazar e ir al estado 77
+    IDENTIFICADOR  desplazar e ir al estado 36
+    ';'            desplazar e ir al estado 78
 
-    EXCEPCION  [reduce usando la regla 130 (varias_clausula_excepcion_especifica)]
+    EXCEPCION      [reduce usando la regla 130 (varias_clausula_excepcion_especifica)]
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
 
+    nombre                                ir al estado 79
+    varios_identificadores2               ir al estado 38
+    instruccion                           ir al estado 123
+    instruccion_devolver                  ir al estado 82
+    instruccion_llamada                   ir al estado 83
+    llamada_subprograma                   ir al estado 84
+    instruccion_interrupcion              ir al estado 85
+    instruccion_lanzamiento_excepcion     ir al estado 86
+    instruccion_captura_excepcion         ir al estado 87
     clausulas                             ir al estado 150
     clausulas_excepcion                   ir al estado 151
     varias_clausula_excepcion_especifica  ir al estado 152
@@ -2285,7 +2308,7 @@ Estado 149
 
 Estado 150
 
-  125 instruccion_captura_excepcion: PRUEBA instruccion clausulas . FIN PRUEBA
+  125 instruccion_captura_excepcion: PRUEBA varias_instrucciones clausulas . FIN PRUEBA
 
     FIN  desplazar e ir al estado 178
 
@@ -2580,7 +2603,7 @@ Estado 177
 
 Estado 178
 
-  125 instruccion_captura_excepcion: PRUEBA instruccion clausulas FIN . PRUEBA
+  125 instruccion_captura_excepcion: PRUEBA varias_instrucciones clausulas FIN . PRUEBA
 
     PRUEBA  desplazar e ir al estado 211
 
@@ -2881,7 +2904,7 @@ Estado 210
 
 Estado 211
 
-  125 instruccion_captura_excepcion: PRUEBA instruccion clausulas FIN PRUEBA .
+  125 instruccion_captura_excepcion: PRUEBA varias_instrucciones clausulas FIN PRUEBA .
 
     $default  reduce usando la regla 125 (instruccion_captura_excepcion)
 
