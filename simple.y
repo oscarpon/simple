@@ -29,7 +29,7 @@ programa
  ;
 
 definicion_programa 
-: programa IDENTIFICADOR ';' codigo_programa                { printf ("definicion_programa -> programa IDENTIFICADOR ; codigo_programa\n"); }
+: PROGRAMA IDENTIFICADOR ';' codigo_programa                { printf ("definicion_programa -> programa IDENTIFICADOR ; codigo_programa\n"); }
 ;
 
 codigo_programa 
@@ -37,34 +37,35 @@ codigo_programa
 ;
 /****DUDA SOBRE COMO PNER VACIO EN LIBRERIA****/
 varias_librerias
-	 : libreria                        { printf ("  varias_librerias -> libreria\n"); }
+	 : 
+   | libreria                         { printf ("  varias_librerias -> libreria\n"); }
 	 | varias_librerias  libreria       { printf ("  varias_librerias ->  varias_libreria  libreria\n"); }
 	 ;
    
  libreria 
   : IMPORTAR LIBRERIA nombre ';'                              { printf ("  libreria -> IMPORTAR LIBRERIA nombre ;\n"); }
-  | DE LIBRERIA nombre IMPORTAR  varios_identificadores  ';'  { printf ("  libreria -> DE LIBRERIA nombre IMPORTAR varios_identificadores ; \n"); }
+  | DE LIBRERIA nombre IMPORTAR varios_identificadores  ';'  { printf ("  libreria -> DE LIBRERIA nombre IMPORTAR varios_identificadores ; \n"); }
   | IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ';'           { printf ("  libreria -> IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ; \n"); }                                          
   ;
 
 varios_identificadores
 	 : IDENTIFICADOR                               { printf ("  varios_identificadores -> IDENTIFICADOR\n"); }
-	 | varios_identificadores  IDENTIFICADOR       { printf ("  varios_identificadores ->  varios_identificadores  IDENTIFICADOR\n"); }
+	 | varios_identificadores ',' IDENTIFICADOR       { printf ("  varios_identificadores ->  varios_identificadores  IDENTIFICADOR\n"); }
 	 ;
 
 nombre
 : IDENTIFICADOR { printf ("nombre -> IDENTIFICADOR\n"); }                            
-| nombre CUATRO_PUNTOS IDENTIFICADOR { printf ("nombre -> CUATRO_PUNTOS IDENTIFICADOR\n"); }
+| varios_identificadores2 IDENTIFICADOR  { printf ("nombre -> varios_identificadores2 IDENTIFICADOR\n"); }
 ;
 
 
 varios_identificadores2
-	 :                                                           { printf ("varios_identificadores2 ->  "); }
-	 | varios_identificadores2  IDENTIFICADOR CUATRO_PUNTOS      { printf ("varios_identificadores2 ->  varios_identificadores2  IDENTIFICADOR CUATRO_PUNTOS \n"); }
+	 :      
+	 | varios_identificadores2 IDENTIFICADOR CUATRO_PUNTOS      { printf ("varios_identificadores2 ->  varios_identificadores2  IDENTIFICADOR CUATRO_PUNTOS \n"); }
 	 ;
 
 definicion_libreria 
- : libreria IDENTIFICADOR ';' codigo_libreria               { printf ("definicion_libreria -> LIBRERIA IDENTIFICADOR ; codigo_libreria\n"); }
+ : LIBRERIA IDENTIFICADOR ';' codigo_libreria               { printf ("definicion_libreria -> libreria IDENTIFICADOR ; codigo_libreria\n"); }
 ;
 
 
@@ -75,8 +76,7 @@ codigo_libreria
 ;
 
 varias_declaraciones
-   :                               
-   | declaracion                         { printf ("  varias_declaraciones -> declaracion \n"); }
+   : declaracion                         { printf ("  varias_declaraciones -> declaracion \n"); }
 	 | varias_declaraciones  declaracion   { printf ("  varias_declaraciones ->  varias_declaraciones  declaracion\n"); }
 	 ;
 
@@ -87,7 +87,7 @@ exportaciones
 
 varios_nombres
   : nombre                                        { printf ("  varios_nombres -> nombre ; \n"); } 
-  | varios_nombres nombre                         { printf ("  varios_nombres -> varios_nombres  nombre ; \n"); } 
+  | varios_nombres ',' nombre                         { printf ("  varios_nombres -> varios_nombres ',' nombre ; \n"); } 
   ;
 
 declaracion 
@@ -99,8 +99,8 @@ declaracion
 /********************OBJETOS****************************/
 declaracion_objeto 
   :  varios_identificadores ':' CONSTANTE especificacion_tipo ASIGNACION expresion ';'    { printf ("  declaracion_objeto -> varios_identificadores :  CONSTANTE especificacion_tipo ASIGNACION expresion ; \n"); }
-  |  varios_identificadores ':' especificacion_tipo                                      { printf ("  declaracion_objeto -> varios_identificadores : especificacion_tipo\n"); }
-  |  varios_identificadores ':' especificacion_tipo ASIGNACION expresion                 { printf ("  declaracion_objeto -> varios_identificadores : especificacion_tipo ASIGNACION expresion\n"); }
+  |  varios_identificadores ':' especificacion_tipo ';'                               { printf ("  declaracion_objeto -> varios_identificadores : especificacion_tipo ;\n"); }
+  |  varios_identificadores ':' especificacion_tipo ASIGNACION expresion ';'               { printf ("  declaracion_objeto -> varios_identificadores : especificacion_tipo ASIGNACION expresion ;\n"); }
   ;
 
 especificacion_tipo
@@ -110,7 +110,7 @@ especificacion_tipo
 
 /********************TIPOS*****************************/
 declaracion_tipo
-    : TIPO IDENTIFICADOR ES tipo_no_estructurado ';'        { printf ("  declaracion_tipo -> EMPTY\n"); }
+    : TIPO IDENTIFICADOR ES tipo_no_estructurado ';'        { printf ("  declaracion_tipo -> TIPO IDENTIFICADOR ES tipo_no_estructurado ;\n"); }
     | TIPO IDENTIFICADOR ES tipo_estructurado               { printf ("  declaracion_tipo -> TIPO IDENTIFICADOR ES tipo_estructurado\n"); }
     ;
 
@@ -121,7 +121,7 @@ tipo_no_estructurado
   ;
 
 tipo_escalar
-  : cero_o_uno_signo TIPO_BASICO cero_o_uno_longitud cero_o_uno_rango         { printf ("  tipo_escalar-> cero_o_uno_signo TIPO_BASICO cero_o_uno_longitud cero_o_uno_rango\n"); }
+  : cero_o_uno_signo tipo_basico cero_o_uno_longitud cero_o_uno_rango         { printf ("  tipo_escalar-> cero_o_uno_signo tipo_basico cero_o_uno_longitud cero_o_uno_rango\n"); }
   ;
 
 cero_o_uno_signo
@@ -131,7 +131,7 @@ cero_o_uno_signo
 
 cero_o_uno_longitud
   :
-  | LONGITUD                                                { printf ("  cero_o_uno_longitud -> LONGITUD\n"); }
+  | longitud                                                { printf ("  cero_o_uno_longitud -> longitud\n"); }
   ;
 
 cero_o_uno_rango
@@ -153,7 +153,7 @@ tipo_basico
   
 rango
   : expresion DOS_PTOS expresion                              { printf ("  rango -> expresion DOS_PTOS expresion\n"); }
-  | expresion DOS_PTOS expresion DOS_PTOS expresion           { printf ("  rango -> expresion DOS_PTOS expresion\n"); }
+  | expresion DOS_PTOS expresion DOS_PTOS expresion           { printf ("  rango -> expresion DOS_PTOS expresion DOS_PTOS expresion\n"); }
   ;
 
 tipo_tabla
@@ -182,51 +182,48 @@ varios_campos
 
 campo
   : varios_identificadores ':' especificacion_tipo ';' { printf ("  campo -> varios_identificadores : especificacion_tipo ;\n"); }
-  | varios_identificadores ':' especificacion_tipo ASIGNACION cero_uno_expresion ';' { printf ("  campo -> varios_identificadores : especificacion_tipo ASIGNACION cero_uno_expresion;\n"); }
+  | varios_identificadores ':' especificacion_tipo ASIGNACION expresion ';' { printf ("  campo -> varios_identificadores : especificacion_tipo ASIGNACION expresion ;\n"); }
   ;
 
 
 tipo_enumerado
-  : ENUMERACION DE tipo_escalar varios_elemento_enumeracion FIN ENUMERACION { printf ("  tipo_enumerado -> ENUMERACION DE tipo_escalar varios_campos FIN ENUMERACION\n"); }
+  : ENUMERACION varios_elemento_enumeracion FIN ENUMERACION                 { printf ("  tipo_enumerado -> ENUMERACION varios_campos FIN ENUMERACION\n"); }
+  | ENUMERACION DE tipo_escalar varios_elemento_enumeracion FIN ENUMERACION { printf ("  tipo_enumerado -> ENUMERACION DE tipo_escalar varios_campos FIN ENUMERACION\n"); }
   ;
 
 varios_elemento_enumeracion
   : elemento_enumeracion                                     { printf ("  varios_elemento_enumeracion -> elemento_enumeracion\n"); }
-  | varios_elemento_enumeracion elemento_enumeracion         { printf ("  varios_elemento_enumeracion -> varios_elemento_enumeracion elemento_enumeracion\n"); }
+  | varios_elemento_enumeracion ',' elemento_enumeracion         { printf ("  varios_elemento_enumeracion -> varios_elemento_enumeracion , elemento_enumeracion\n"); }
   ;
 
 elemento_enumeracion
-  : IDENTIFICADOR cero_o_uno_elemento_enumeracion                       { printf ("  elemento_enumeracion -> IDENTIFICADOR cero_o_uno_elemento_enumeracion\n"); }
-
-cero_o_uno_elemento_enumeracion
-  : 
-  | ASIGNACION expresion                                    {printf (" cero_o_uno_elemento_enumeracion -> ASIGNACION expresion\n");}
+  : IDENTIFICADOR cero_uno_expresion                       { printf ("  elemento_enumeracion -> IDENTIFICADOR cero_uno_expresion\n"); }
   ;
 
-
-
+cero_uno_expresion
+: 
+| ASIGNACION expresion    { printf ("  cero_uno_expresion -> ASIGNACION expresion\n"); }
+;
+/******QUEDAMOS AQUI CORRIGIENDO ANTES*******/
 /***********CLASES*********************************/
 
 clase 
   : CLASE cero_uno_ultima cero_uno_superclases varias_declaraciones_componente FIN CLASE          { printf ("  clase -> CLASE cero_uno_ultima cero_uno_superclases varias_declaraciones_componente FIN CLASE\n"); }
-   ;
+  ;
 
 cero_uno_ultima
 : 
 | ULTIMA                    { printf ("  cero_uno_ultima -> ULTIMA\n"); }
-
 ;
 
 cero_uno_superclases
 : 
 | superclases            { printf ("  cero_uno_superclases -> superclases\n"); }
-
 ;
 
 superclases 
-    : '(' nombre ')'            { printf ("  superclases -> ( nombre )\n"); }
-         
-    ;
+: '(' varios_nombres ')'            { printf ("  superclases -> ( varios_nombres ) \n"); }
+;
 
 
 declaracion_componente 
@@ -244,20 +241,19 @@ visibilidad
 : PUBLICO                                           { printf ("  visibilidad -> PUBLICO \n"); }
 | PROTEGIDO                                         { printf ("  visibilidad ->  PROTEGIDO \n"); }
 | PRIVADO                                           { printf ("  visibilidad ->  PRIVADO\n"); }
-             
-  ;
+;
 
 componente 
 : declaracion_tipo   { printf ("  componente -> declaracion_tipo"); }
 | declaracion_objeto   { printf ("  componente -> declaracion_objeto"); }
 | varios_modificadores  declaracion_subprograma { printf ("  componente -> varios_modificadores declaracion_subprograma"); }
-   ;
+;
 
 
 varios_modificadores
-	 :                                        { printf ("varios_modificadores -> EMPTY\n"); }
+	 :                                       
    | modificador                           { printf ("  varios_modificadores -> modificador\n"); }
-	 | varios_modificadores  modificador      { printf ("  varios_modificadores ->  varios_modificadores  modificador\n"); }
+	 | varios_modificadores ',' modificador      { printf ("  varios_modificadores ->  varios_modificadores , modificador\n"); }
 	 ;
 
 modificador 
@@ -267,59 +263,38 @@ modificador
 | ABSTRACTO                                   { printf ("  modificador -> ABSTRACTO "); }
 | ESPECIFICO                                  { printf ("  modificador ->  ESPECIFICO "); }
 | FINAL                                       { printf ("  modificador -> FINAL"); }
- ;
+;
 
 
 
 /**************************************SUBPROGRAMAS***************************************/
 
 declaracion_subprograma 
-  : SUBPROGRAMA 
-  cabecera_subprograma 
-  cuerpo_subprograma 
-  SUBPROGRAMA
-                          { printf ("  declaracion_subprograma -> SUBPROGRAMA cabecera_subprograma cuerpo_subprograma SUBPROGRAMA"); }
+: SUBPROGRAMA cabecera_subprograma cuerpo_subprograma SUBPROGRAMA   { printf ("  declaracion_subprograma -> SUBPROGRAMA cabecera_subprograma cuerpo_subprograma SUBPROGRAMA"); }
+;
 
-  ;
-
-  
 cabecera_subprograma 
-    : IDENTIFICADOR 
-     cero_uno_parametrizacion 
-     cero_uno_tipoResultado 
-                                        { printf ("  cabecera_subprograma -> IDENTIFICADOR cero_uno_parametrizacion cero_uno_tipoResultado\n"); }
-
-      ;
-
+: IDENTIFICADOR cero_uno_parametrizacion cero_uno_tipoResultado { printf ("  cabecera_subprograma -> IDENTIFICADOR cero_uno_parametrizacion cero_uno_tipoResultado\n"); }
+;
 
 cero_uno_parametrizacion
 : 
-| parametrizacion
-              { printf ("  cero_uno_parametrizacion -> parametrizacion\n"); }
-
+| parametrizacion         { printf ("  cero_uno_parametrizacion -> parametrizacion\n"); }
 ;
 
 cero_uno_tipoResultado
 : 
-| tipo_resultado
-              { printf ("  cero_uno_tipoResultado -> tipo_resultado\n"); }
-
+| tipo_resultado          { printf ("  cero_uno_tipoResultado -> tipo_resultado\n"); }
 ;
 
 parametrizacion 
-      : '(' varias_declaraciones_parametros 
-         declaracion_parametros 
-        ')'
-                                                          { printf ("parametrizacion -> varias_declaraciones_parametros declaracion_parametros"); }
+: '(' varias_declaraciones_parametros declaracion_parametros ')'  { printf ("parametrizacion -> ( varias_declaraciones_parametros declaracion_parametros ) \n"); }
+;
 
-        ;
-
-
-declaracion_parametros 
-      : varios_identificadores ':' modo especificacion_tipo cero_uno_expresion
-                                                          { printf ("declaracion_parametros -> varios_identificadores : modo especificacion_tipo cero_uno_expresion"); }
-
-       ;
+declaracion_parametros
+: varios_identificadores ':' especificacion_tipo cero_uno_expresion   { printf ("declaracion_parametros -> varios_identificadores : especificacion_tipo cero_uno_expresion"); }
+| varios_identificadores ':' modo especificacion_tipo cero_uno_expresion   { printf ("declaracion_parametros -> varios_identificadores : modo especificacion_tipo cero_uno_expresion"); }
+;
 
 varias_declaraciones_parametros
   :
@@ -328,40 +303,29 @@ varias_declaraciones_parametros
 
 ;
 
-
-cero_uno_expresion
-: 
-| ASIGNACION expresion
-              { printf ("  cero_uno_expresion -> ':=' expresion\n"); }
-
+modo 
+: VALOR                      { printf ("modo -> VALOR\n"); }
+| REFERENCIA                 { printf ("modo -> REFERENCIA\n"); }
 ;
 
-modo 
-   : VALOR  
-   | REFERENCIA
-                                                          { printf ("modo -> VALOR REFERENCIA"); }
-     ;
-
 tipo_resultado 
-    : DEVOLVER
-       especificacion_tipo
-                                                          { printf ("  tipo_resultado -> DEVOLVER especificacion_tipo"); }
-
-       ;
+: DEVOLVER especificacion_tipo      { printf ("  tipo_resultado -> DEVOLVER especificacion_tipo\n"); }
+;
 
 
 cuerpo_subprograma 
-    :  varias_declaraciones  
-       PRINCIPIO  
-       varias_instrucciones  
-       FIN
-                                                          { printf ("  cuerpo_subprograma -> varias_declaraciones PRINCIPIO varias_instrucciones FIN"); }
+:  cero_o_mas_declaraciones PRINCIPIO varias_instrucciones FIN    { printf ("  cuerpo_subprograma -> cero_o_mas_declaraciones PRINCIPIO varias_instrucciones FIN"); }
+;
 
-       ;
+cero_o_mas_declaraciones
+   :
+   | declaracion                         { printf ("  varias_declaraciones -> declaracion \n"); }
+	 | varias_declaraciones  declaracion   { printf ("  varias_declaraciones ->  varias_declaraciones  declaracion\n"); }
+	 ;
 
-varias_instrucciones                          /*A cañón*/
+varias_instrucciones                         
    : instruccion                             { printf ("  varias_instrucciones -> instruccion\n"); }
-	 | varias_instrucciones  instruccion       { printf ("  varias_instrucciones ->  varias_instrucciones  instruccion\n"); }
+	 | varias_instrucciones  instruccion       { printf ("  varias_instrucciones -> varias_instrucciones  instruccion\n"); }
 	 ;
 
 
@@ -379,24 +343,17 @@ instruccion
   |  instruccion_lanzamiento_excepcion  { printf ("instruccion -> instruccion_lanzamiento_excepcion\n"); }
   |  instruccion_captura_excepcion { printf ("instruccion -> instruccion_captura_excepcion\n"); }
   |  ';' { printf ("instruccion -> ;\n"); }
-                                                         
-    
   ;
 
 
 instruccion_asignacion 
-    : objeto
-     op_asignacion
-      expresion 
-      ';'
-                                                          { printf ("  instruccion_asignacion -> objeto op_asignacion expresion;"); }
-
-      ;
+: objeto op_asignacion expresion ';'  { printf ("  instruccion_asignacion -> objeto op_asignacion expresion;"); }
+;
       
 
 op_asignacion 
-  : ASIGNACION  { printf ("  op_asignacion -> ASIGNACION"); }
-  | ASIG_SUMA  { printf ("  op_asignacion -> ASIG_SUMA"); }
+  :  ASIGNACION  { printf ("  op_asignacion -> ASIGNACION"); }
+  |  ASIG_SUMA  { printf ("  op_asignacion -> ASIG_SUMA"); }
   |  ASIG_RESTA  { printf ("  op_asignacion -> :- "); } /*ERROR EN ESTE OPERADOR: CARACTER EXTRA EN CARACTER LITERAL */
   |  ASIG_MULT  { printf ("  op_asignacion -> ASIG_MULT"); }
   |  ASIG_DIV  { printf ("  op_asignacion -> ASIG_DIV"); }
@@ -404,111 +361,72 @@ op_asignacion
   |  ASIG_POT  { printf ("  op_asignacion -> ASIG_POT"); }
   |  ASIG_DESPI  { printf ("  op_asignacion -> ASIG_DESPI"); }
   |  ':'   { printf ("  op_asignacion -> :"); }
-                                               
-    
-    ;
+  ;
 
 
 instruccion_devolver 
-  : DEVOLVER  
-   cero_uno_expr  
-   ';'
-           { printf ("  instruccion_devolver -> DEVOLVER cero_uno_expr ;\n"); }
-   ;
-
-
-cero_uno_expr
-: 
-| expresion
-              { printf ("cero_uno_expresion -> expresion\n"); }
-
-;
+  : DEVOLVER ';' { printf ("  instruccion_devolver -> DEVOLVER ;\n"); }
+  | DEVOLVER  expresion  ';' { printf ("  instruccion_devolver -> DEVOLVER expresion ;\n"); }
+  ;
 
   instruccion_llamada 
-    : llamada_subprograma 
-    ';'
-               { printf ("  instruccion_llamada ->  llamada_subprograma ;\n"); }
-
+    : llamada_subprograma ';' { printf ("  instruccion_llamada ->  llamada_subprograma ;\n"); }
     ;
 
  llamada_subprograma 
-  : nombre 
-  '(' 
-  varias_definicion_parametro
-   ')'
-               { printf ("llamada_subprograma ->  nombre ( varias_definicion_parametro )\n"); }
-
+  : nombre '(' varias_definicion_parametro ')'{ printf ("llamada_subprograma ->  nombre ( varias_definicion_parametro )\n"); }
   ;
 
   varias_definicion_parametro
 	 : 
    | definicion_parametro                             { printf ("  varias_definicion_parametro -> definicion_parametro\n"); }
-	 | varias_definicion_parametro  definicion_parametro       { printf ("  varias_definicion_parametro ->  varias_definicion_parametro  definicion_parametro\n"); }
+	 | varias_definicion_parametro ','  definicion_parametro       { printf ("  varias_definicion_parametro ->  varias_definicion_parametro ',' definicion_parametro\n"); }
 	 ;
 
-
-
 definicion_parametro 
-  :  
-  cero_uno_identificador  
-  expresion
-               { printf ("definicion_parametro ->  cero_uno_identificador expresion\n"); }
-
+  :  cero_uno_identificador  expresion       { printf ("definicion_parametro ->  cero_uno_identificador expresion\n"); }
   ;
 
-  cero_uno_identificador
+cero_uno_identificador
 : 
-| IDENTIFICADOR ASIGNACION
-              { printf ("cero_uno_identificador -> IDENTIFICADOR :=\n"); }
-
+| IDENTIFICADOR ASIGNACION  { printf ("cero_uno_identificador -> IDENTIFICADOR :=\n"); }
 ;
-instruccion_si 
-  : SI expresion ENTONCES  
-  varias_instrucciones 
-  cero_mas_instrucciones  FIN SI
-               { printf ("instruccion_si ->  SI expresion ENTONCES varias_instrucciones cero_mas_instrucciones FIN SI\n"); }
 
-  ;
+instruccion_si 
+: SI expresion ENTONCES varias_instrucciones cero_mas_instrucciones FIN SI  { printf ("instruccion_si ->  SI expresion ENTONCES varias_instrucciones cero_mas_instrucciones FIN SI\n"); }
+;
 
 cero_mas_instrucciones
 : 
 | SINO varias_instrucciones
                { printf ("cero_mas_instrucciones ->  SINO varias_instrucciones\n"); }
-
 ;
+
 instruccion_casos 
-  : CASOS 
-  expresion 
-  ES caso  
-  FIN CASOS 
-               { printf ("instruccion_casos ->  CASOS expresion ES caso FIN CASOS\n"); }
+: CASOS expresion ES uno_o_mas_casos  FIN CASOS  { printf ("instruccion_casos ->  CASOS expresion ES uno_o_mas_casos FIN CASOS\n"); }
+;
 
-  ;
-
+uno_o_mas_casos
+: caso                          { printf ("uno_o_mas_casos ->  caso\n"); }
+| uno_o_mas_casos caso          { printf ("uno_o_mas_casos ->  uno_o_mas_casos caso\n"); }
+;
 
 caso 
-: CUANDO entradas 
-FLECHA 
-varias_instrucciones
-               { printf ("caso ->  CUANDO entradas => varias_instrucciones\n"); }
-
+: CUANDO entradas FLECHA varias_instrucciones   { printf ("caso ->  CUANDO entradas => varias_instrucciones\n"); }
 ;
-entradas 
-: varias_entradas /*entrada ':'*/ 
- entrada
-               { printf ("entradas ->  varias_entradas entrada\n"); }
 
- ;
- varias_entradas
-  : entradas  ':'                  { printf ("varias_entradas ->  entradas :\n"); }         
-  | varias_entradas entradas  ':'     { printf ("varias_entradas ->  varias_entradas entradas :\n"); }
-  ;
+entradas 
+: varias_entradas entrada            { printf ("entradas ->  varias_entradas entrada\n"); }
+;
+
+varias_entradas
+: entrada  ':'                     { printf ("varias_entradas ->  entrada :\n"); }         
+| varias_entradas entrada  ':'     { printf ("varias_entradas ->  varias_entradas entrada :\n"); }
+;
 
 entrada 
-: expresion cero_mas_expresiones1
-| OTRO
-               { printf ("entrada ->  expresion cero_mas_expresiones1 OTRO\n"); }
-
+: expresion cero_mas_expresiones1 { printf ("entrada ->  expresion cero_mas_expresiones1 OTRO\n"); }
+| OTRO                            { printf ("entrada ->  OTRO\n"); }
 ;
 
 cero_mas_expresiones1
@@ -520,39 +438,29 @@ cero_mas_expresiones1
 
 
 instruccion_bucle 
-: cero_mas_identificador1 
-clausula_iteracion varias_instrucciones 
- FIN BUCLE
-
-                { printf ("instruccion_bucle -> cero_mas_identificador1 clausula_iteracion varias_instrucciones FIN BUCLE\n");}
-
- ;
+: cero_mas_identificador1 clausula_iteracion varias_instrucciones FIN BUCLE   { printf ("instruccion_bucle -> cero_mas_identificador1 clausula_iteracion varias_instrucciones FIN BUCLE\n");}
+;
 
 cero_mas_identificador1
 : 
-| IDENTIFICADOR ':'
-               { printf ("cero_mas_identificador1 -> IDENTIFICADOR :\n"); }
-
+| IDENTIFICADOR ':'   { printf ("cero_mas_identificador1 -> IDENTIFICADOR :\n"); }
 ;
 
 clausula_iteracion 
-: PARA IDENTIFICADOR cero_mas_especificacion_tipo  EN expresion
-| REPETIR IDENTIFICADOR cero_mas_especificacion_tipo EN rango cero_o_uno_descendente 
-| MIENTRAS expresion
-                { printf ("clausula_iteracion ->  PARA IDENTIFICADOR cero_mas_especificacion_tipo EN expresion REPETIR IDENTIFICADOR cero_mas_especificacion_tipo EN rango cero_o_uno_descendente MIENTRAS expresion\n");}
-
+: PARA IDENTIFICADOR cero_o_uno_especificacion_tipo  EN expresion                      { printf ("clausula_iteracion ->  PARA IDENTIFICADOR cero_o_uno_especificacion_tipo  EN expresion\n");}
+| REPETIR IDENTIFICADOR cero_o_uno_especificacion_tipo EN rango cero_o_uno_descendente { printf ("clausula_iteracion ->  REPETIR IDENTIFICADOR cero_o_uno_especificacion_tipo EN rango cero_o_uno_descendente\n");}
+| MIENTRAS expresion                                                                   { printf ("clausula_iteracion ->  MIENTRAS expresion\n");}
 ;
 
-cero_mas_especificacion_tipo
+cero_o_uno_especificacion_tipo
 : 
-| ':' especificacion_tipo
-               { printf ("cero_mas_especificacion -> : especificacion_tipo :\n"); }
-
+| ':' especificacion_tipo   { printf ("cero_o_uno_especificacion_tipo -> : especificacion_tipo \n"); }
 ;
 
 ///************************************/////////////////////////////////////////////////////////////////////////////////////
 cero_o_uno_descendente
-  : DESCENDENTE              {printf ("cero_o_uno_descendete -> DESCENDENTE\n");}
+  :                         
+  | DESCENDENTE              {printf ("cero_o_uno_descendete -> DESCENDENTE\n");}
   ;
 
 
@@ -564,9 +472,7 @@ instruccion_interrupcion
   ;
  
 cuando 
-: CUANDO 
-  expresion
-        { printf ("cuando ->CUANDO expresion"); }
+: CUANDO expresion                                        { printf ("cuando ->CUANDO expresion"); }
 ;
 
 cero_o_uno_cuando
@@ -580,12 +486,11 @@ cero_o_uno_de_identificador
   ;
 
 instruccion_lanzamiento_excepcion 
-: LANZA nombre 
-';'
-         { printf ("instruccion_lanzamiento_excepcion ->LANZA nombre ;"); }
+: LANZA nombre ';'                                            { printf ("instruccion_lanzamiento_excepcion ->LANZA nombre ;"); }
 ;
+
 instruccion_captura_excepcion 
-: PRUEBA  instruccion  clausulas FIN PRUEBA                   { printf ("instrucc_cap ->PRUEBA instruc clausulas FIN PRUEBA"); }
+: PRUEBA  varias_instrucciones clausulas FIN PRUEBA                   { printf ("instruccion_captura_excepcion ->PRUEBA varias_instrucciones clausulas FIN PRUEBA"); }
 ;
 
 clausulas 
@@ -596,11 +501,8 @@ clausulas
 
 
 clausulas_excepcion 
-: varias_clausula_excepcion_especifica 
- clausula_excepcion_general
-         { printf ("clausulas_excepcion ->varias_clausula_excepcion_especifica clausula_excepcion_general "); }
-
- ;
+: varias_clausula_excepcion_especifica clausula_excepcion_general       { printf ("clausulas_excepcion ->varias_clausula_excepcion_especifica clausula_excepcion_general "); }
+;
 
  varias_clausula_excepcion_especifica
   :
@@ -609,25 +511,21 @@ clausulas_excepcion
   ;
 
 clausula_excepcion_especifica 
-: EXCEPCION '(' nombre ')' varias_instrucciones { printf ("clausulas_excep_espec ->EXCEPCION ( nombre ) varias_instrucciones "); }
+: EXCEPCION '(' nombre ')' varias_instrucciones { printf ("clausulas_excepcion_especifica -> EXCEPCION ( nombre ) varias_instrucciones "); }
 ;
-
 
 clausula_excepcion_general 
-: EXCEPCION 
-varias_instrucciones
-         { printf ("clausula_excepcion_general ->EXCEPCION instruccion"); }
-
+: EXCEPCION varias_instrucciones                { printf ("clausula_excepcion_general ->EXCEPCION varias_instruccion"); }
 ;
-clausula_finalmente 
-: FINALMENTE 
-varias_instrucciones
-         { printf ("clausula_finalmente ->FINALMENTE instruccion"); }
 
+clausula_finalmente 
+: FINALMENTE varias_instrucciones { printf ("clausula_finalmente ->FINALMENTE varias_instrucciones"); }
 ;
 
 
 /********************EXPRESIONES************************************/
+
+
 expresion_potencia
   : expresion_posfija                                                   { printf ("  expresion_potencia-> expresion_posfija\n"); }
   | expresion_posfija '^' expresion_potencia                            { printf ("  expresion_potencia-> expresion_posfija ^ expresion_potencia\n"); }
@@ -675,12 +573,12 @@ objeto
 
 varias_expresiones
 	 : expresion                        { printf ("  varias_expresiones -> expresion\n"); }
-	 | varias_expresiones  expresion       { printf ("  varias_expresiones ->  varias_expresiones  expresion\n"); }
+	 | varias_expresiones ',' expresion       { printf ("  varias_expresiones ->  varias_expresiones , expresion\n"); }
 	 ;
 
 varias_ctc_cadena
   : CTC_CADENA                                                          { printf ("  varias_ctc_cadena -> CTC_CADENA\n"); }
-  | varias_ctc_cadena CTC_CADENA                                        { printf ("  varias_ctc_cadena -> varias_ctc_cadena CTC_CADENA\n"); }
+  | varias_ctc_cadena ',' CTC_CADENA                                        { printf ("  varias_ctc_cadena -> varias_ctc_cadena , CTC_CADENA\n"); }
   ;
 
 enumeraciones
@@ -697,19 +595,19 @@ varias_clausulas_iteracion
 
 varias_clave_valor
   : clave_valor                                                         { printf ("  varias_clave_valor -> clave_valor\n"); }
-  | varias_clave_valor clave_valor                                      { printf ("  varias_clave_valor -> varias_clave_valor clave_valor\n"); }
+  | varias_clave_valor ',' clave_valor                                      { printf ("  varias_clave_valor -> varias_clave_valor , clave_valor\n"); }
   ;
 
 varias_campo_valor
   : campo_valor                                                         { printf ("  varias_campo_valor -> campo_valor\n"); }
-  | varias_campo_valor campo_valor                                      { printf ("  varias_campo_valor -> varias_campo_valor campo_valor\n"); }
+  | varias_campo_valor ',' campo_valor                                      { printf ("  varias_campo_valor -> varias_campo_valor , campo_valor\n"); }
   ;
   
 
 expresion_condicional
   : expresion                                                           { printf ("  expresion_condicional -> expresion\n"); }
   | SI expresion ENTONCES expresion                                     { printf ("  expresion_condicional -> SI expresion ENTONCES expresion\n"); }
-  | SI expresion ENTONCES expresion SINO varias_expresiones             { printf ("  expresion_condicional -> SI expresion ENTONCES expresion SINO varias_expresiones\n"); }
+  | SI expresion ENTONCES expresion SINO expresion                      { printf ("  expresion_condicional -> SI expresion ENTONCES expresion SINO expresion\n"); }
   ;
 
 clave_valor

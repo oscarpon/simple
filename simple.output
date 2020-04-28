@@ -1,8 +1,5 @@
 No terminales inútiles en la gramática
 
-   varios_identificadores2
-   longitud
-   tipo_basico
    rango
    instruccion_asignacion
    op_asignacion
@@ -53,26 +50,19 @@ No terminales inútiles en la gramática
 
 Terminales no usados en la gramática
 
-   BOOLEANO
    BUCLE
-   CARACTER
    CASOS
    CONSTANTE
-   CORTO
    CUANDO
    DESCENDENTE
    EN
-   ENTERO
    ENTONCES
    FALSO
-   LARGO
    MIENTRAS
    OBJETO
    OTRO
    PARA
-   PROGRAMA
    RANGO
-   REAL
    REPETIR
    SI
    SINO
@@ -83,6 +73,7 @@ Terminales no usados en la gramática
    CTC_ENTERA
    CTC_REAL
    DOS_PTOS
+   ASIGNACION
    FLECHA
    INC
    DEC
@@ -101,6 +92,8 @@ Terminales no usados en la gramática
    ASIG_POT
    ASIG_DESPI
    ASIG_DESP
+   LONGITUD
+   TIPO_BASICO
    '^'
    '-'
    '.'
@@ -120,216 +113,223 @@ Terminales no usados en la gramática
 
 Reglas inútiles en la gramática
 
-  126 varios_identificadores2: %empty
-  127                        | varios_identificadores2 IDENTIFICADOR CUATRO_PUNTOS
+  136 declaracion_objeto: varios_identificadores ':' CONSTANTE especificacion_tipo ASIGNACION expresion ';'
+  137                   | varios_identificadores ':' especificacion_tipo ASIGNACION expresion ';'
 
-  128 declaracion_objeto: varios_identificadores ':' CONSTANTE especificacion_tipo ASIGNACION expresion ';'
-  129                   | varios_identificadores ':' especificacion_tipo ASIGNACION expresion
+  138 cero_o_uno_rango: RANGO rango
 
-  130 cero_o_uno_rango: RANGO rango
+  139 rango: expresion DOS_PTOS expresion
+  140      | expresion DOS_PTOS expresion DOS_PTOS expresion
 
-  131 longitud: CORTO
-  132         | LARGO
+  141 tipo_tabla: TABLA '(' expresion DOS_PTOS expresion ')' DE especificacion_tipo
 
-  133 tipo_basico: BOOLEANO
-  134            | CARACTER
-  135            | ENTERO
-  136            | REAL
+  142 campo: varios_identificadores ':' especificacion_tipo ASIGNACION expresion ';'
 
-  137 rango: expresion DOS_PTOS expresion
-  138      | expresion DOS_PTOS expresion DOS_PTOS expresion
+  143 cero_uno_expresion: ASIGNACION expresion
 
-  139 tipo_tabla: TABLA '(' expresion DOS_PTOS expresion ')' DE especificacion_tipo
+  144 instruccion: instruccion_asignacion
+  145            | instruccion_si
+  146            | instruccion_casos
+  147            | instruccion_bucle
 
-  140 cero_o_uno_elemento_enumeracion: ASIGNACION expresion
+  148 instruccion_asignacion: objeto op_asignacion expresion ';'
 
-  141 cero_uno_expresion: ASIGNACION expresion
+  149 op_asignacion: ASIGNACION
+  150              | ASIG_SUMA
+  151              | ASIG_RESTA
+  152              | ASIG_MULT
+  153              | ASIG_DIV
+  154              | ASIG_RESTO
+  155              | ASIG_POT
+  156              | ASIG_DESPI
+  157              | ':'
 
-  142 instruccion: instruccion_asignacion
-  143            | instruccion_si
-  144            | instruccion_casos
-  145            | instruccion_bucle
+  158 instruccion_devolver: DEVOLVER expresion ';'
 
-  146 instruccion_asignacion: objeto op_asignacion expresion ';'
+  159 varias_definicion_parametro: definicion_parametro
+  160                            | varias_definicion_parametro ',' definicion_parametro
 
-  147 op_asignacion: ASIGNACION
-  148              | ASIG_SUMA
-  149              | ASIG_RESTA
-  150              | ASIG_MULT
-  151              | ASIG_DIV
-  152              | ASIG_RESTO
-  153              | ASIG_POT
-  154              | ASIG_DESPI
-  155              | ':'
+  161 definicion_parametro: cero_uno_identificador expresion
 
-  156 cero_uno_expr: expresion
+  162 cero_uno_identificador: %empty
+  163                       | IDENTIFICADOR ASIGNACION
 
-  157 varias_definicion_parametro: definicion_parametro
-  158                            | varias_definicion_parametro definicion_parametro
+  164 instruccion_si: SI expresion ENTONCES cero_mas_instrucciones FIN SI
 
-  159 definicion_parametro: cero_uno_identificador expresion
+  165 cero_mas_instrucciones: %empty
+  166                       | SINO varias_instrucciones
 
-  160 cero_uno_identificador: %empty
-  161                       | IDENTIFICADOR ASIGNACION
+  167 instruccion_casos: CASOS expresion ES caso FIN CASOS
 
-  162 instruccion_si: SI expresion ENTONCES varias_instrucciones cero_mas_instrucciones FIN SI
+  168 caso: CUANDO entradas FLECHA varias_instrucciones
 
-  163 cero_mas_instrucciones: %empty
-  164                       | SINO varias_instrucciones
+  169 entradas: varias_entradas entrada
 
-  165 instruccion_casos: CASOS expresion ES caso FIN CASOS
+  170 varias_entradas: entradas ':'
+  171                | varias_entradas entradas ':'
 
-  166 caso: CUANDO entradas FLECHA varias_instrucciones
+  172 entrada: expresion cero_mas_expresiones1
+  173        | OTRO
 
-  167 entradas: varias_entradas entrada
+  174 cero_mas_expresiones1: %empty
+  175                      | DOS_PTOS expresion
 
-  168 varias_entradas: entradas ':'
-  169                | varias_entradas entradas ':'
+  176 instruccion_bucle: cero_mas_identificador1 clausula_iteracion varias_instrucciones FIN BUCLE
 
-  170 entrada: expresion cero_mas_expresiones1
-  171        | OTRO
+  177 cero_mas_identificador1: %empty
+  178                        | IDENTIFICADOR ':'
 
-  172 cero_mas_expresiones1: %empty
-  173                      | DOS_PTOS expresion
+  179 clausula_iteracion: PARA IDENTIFICADOR cero_mas_especificacion_tipo EN expresion
+  180                   | REPETIR IDENTIFICADOR cero_mas_especificacion_tipo EN rango cero_o_uno_descendente
+  181                   | MIENTRAS expresion
 
-  174 instruccion_bucle: cero_mas_identificador1 clausula_iteracion varias_instrucciones FIN BUCLE
+  182 cero_mas_especificacion_tipo: %empty
+  183                             | ':' especificacion_tipo
 
-  175 cero_mas_identificador1: %empty
-  176                        | IDENTIFICADOR ':'
+  184 cero_o_uno_descendente: DESCENDENTE
 
-  177 clausula_iteracion: PARA IDENTIFICADOR cero_mas_especificacion_tipo EN expresion
-  178                   | REPETIR IDENTIFICADOR cero_mas_especificacion_tipo EN rango cero_o_uno_descendente
-  179                   | MIENTRAS expresion
+  185 cuando: CUANDO expresion
 
-  180 cero_mas_especificacion_tipo: %empty
-  181                             | ':' especificacion_tipo
+  186 cero_o_uno_cuando: cuando
 
-  182 cero_o_uno_descendente: DESCENDENTE
+  187 expresion_potencia: expresion_posfija
+  188                   | expresion_posfija '^' expresion_potencia
 
-  183 cuando: CUANDO expresion
+  189 expresion_posfija: expresion_unaria
+  190                  | expresion_unaria operador_posfijo
 
-  184 cero_o_uno_cuando: cuando
+  191 operador_posfijo: INC
+  192                 | DEC
 
-  185 expresion_potencia: expresion_posfija
-  186                   | expresion_posfija '^' expresion_potencia
+  193 expresion_unaria: primario
+  194                 | '-' primario
 
-  187 expresion_posfija: expresion_unaria
-  188                  | expresion_unaria operador_posfijo
+  195 primario: literal
+  196         | objeto
+  197         | llamada_subprograma
+  198         | OBJETO llamada_subprograma
+  199         | enumeraciones
+  200         | '(' expresion ')'
 
-  189 operador_posfijo: INC
-  190                 | DEC
+  201 literal: VERDADERO
+  202        | FALSO
+  203        | CTC_ENTERA
+  204        | CTC_REAL
+  205        | CTC_CARACTER
+  206        | CTC_CADENA
 
-  191 expresion_unaria: primario
-  192                 | '-' primario
+  207 objeto: nombre
+  208       | objeto '.' IDENTIFICADOR
+  209       | objeto '[' varias_expresiones ']'
+  210       | objeto '{' varias_ctc_cadena '}'
 
-  193 primario: literal
-  194         | objeto
-  195         | llamada_subprograma
-  196         | OBJETO llamada_subprograma
-  197         | enumeraciones
-  198         | '(' expresion ')'
+  211 varias_expresiones: expresion
+  212                   | varias_expresiones expresion
 
-  199 literal: VERDADERO
-  200        | FALSO
-  201        | CTC_ENTERA
-  202        | CTC_REAL
-  203        | CTC_CARACTER
-  204        | CTC_CADENA
+  213 varias_ctc_cadena: CTC_CADENA
+  214                  | varias_ctc_cadena CTC_CADENA
 
-  205 objeto: nombre
-  206       | objeto '.' IDENTIFICADOR
-  207       | objeto '[' varias_expresiones ']'
-  208       | objeto '{' varias_ctc_cadena '}'
+  215 enumeraciones: '[' expresion_condicional varias_clausulas_iteracion ']'
+  216              | '[' varias_expresiones ']'
+  217              | '{' varias_clave_valor '}'
+  218              | '{' varias_campo_valor '}'
 
-  209 varias_expresiones: expresion
-  210                   | varias_expresiones expresion
+  219 varias_clausulas_iteracion: varias_clausulas_iteracion
+  220                           | varias_clausulas_iteracion clausula_iteracion
 
-  211 varias_ctc_cadena: CTC_CADENA
-  212                  | varias_ctc_cadena CTC_CADENA
+  221 varias_clave_valor: clave_valor
+  222                   | varias_clave_valor clave_valor
 
-  213 enumeraciones: '[' expresion_condicional varias_clausulas_iteracion ']'
-  214              | '[' varias_expresiones ']'
-  215              | '{' varias_clave_valor '}'
-  216              | '{' varias_campo_valor '}'
+  223 varias_campo_valor: campo_valor
+  224                   | varias_campo_valor campo_valor
 
-  217 varias_clausulas_iteracion: varias_clausulas_iteracion
-  218                           | varias_clausulas_iteracion clausula_iteracion
+  225 expresion_condicional: expresion
+  226                      | SI expresion ENTONCES expresion
+  227                      | SI expresion ENTONCES expresion SINO varias_expresiones
 
-  219 varias_clave_valor: clave_valor
-  220                   | varias_clave_valor clave_valor
+  228 clave_valor: CTC_CADENA FLECHA expresion
 
-  221 varias_campo_valor: campo_valor
-  222                   | varias_campo_valor campo_valor
+  229 campo_valor: IDENTIFICADOR FLECHA expresion
 
-  223 expresion_condicional: expresion
-  224                      | SI expresion ENTONCES expresion
-  225                      | SI expresion ENTONCES expresion SINO varias_expresiones
+  230 expresion: operadorOR
 
-  226 clave_valor: CTC_CADENA FLECHA expresion
+  231 operadorOR: operadorOR OR operadorAND
+  232           | operadorAND
 
-  227 campo_valor: IDENTIFICADOR FLECHA expresion
+  233 operadorAND: operadorAND AND operadorNEG
+  234            | operadorNEG
 
-  228 expresion: operadorOR
+  235 operadorNEG: '~' operadorASIG
+  236            | operadorASIG
 
-  229 operadorOR: operadorOR OR operadorAND
-  230           | operadorAND
+  237 operadorASIG: '<' operadorDES
+  238             | '>' operadorDES
+  239             | LEQ operadorDES
+  240             | FLECHA operadorDES
+  241             | '=' operadorDES
+  242             | NEQ operadorDES
+  243             | operadorDES
 
-  231 operadorAND: operadorAND AND operadorNEG
-  232            | operadorNEG
+  244 operadorDES: operadorDES DESPI operadorSR
+  245            | operadorDES DESPD operadorSR
+  246            | operadorSR
 
-  233 operadorNEG: '~' operadorASIG
-  234            | operadorASIG
+  247 operadorSR: operadorSR '+' operadorMDM
+  248           | operadorSR '-' operadorMDM
+  249           | operadorMDM
 
-  235 operadorASIG: '<' operadorDES
-  236             | '>' operadorDES
-  237             | LEQ operadorDES
-  238             | FLECHA operadorDES
-  239             | '=' operadorDES
-  240             | NEQ operadorDES
-  241             | operadorDES
+  250 operadorMDM: operadorMDM '*' operadorPOT
+  251            | operadorMDM '/' operadorPOT
+  252            | operadorMDM '\\' operadorPOT
+  253            | operadorPOT
 
-  242 operadorDES: operadorDES DESPI operadorSR
-  243            | operadorDES DESPD operadorSR
-  244            | operadorSR
+  254 operadorPOT: operadorINCDEC '^' operadorPOT
+  255            | operadorINCDEC
 
-  245 operadorSR: operadorSR '+' operadorMDM
-  246           | operadorSR '-' operadorMDM
-  247           | operadorMDM
+  256 operadorINCDEC: INC operadorMDM
+  257               | DEC operadorMDM
+  258               | operadorMDM
 
-  248 operadorMDM: operadorMDM '*' operadorPOT
-  249            | operadorMDM '/' operadorPOT
-  250            | operadorMDM '\\' operadorPOT
-  251            | operadorPOT
-
-  252 operadorPOT: operadorINCDEC '^' operadorPOT
-  253            | operadorINCDEC
-
-  254 operadorINCDEC: INC operadorMDM
-  255               | DEC operadorMDM
-  256               | operadorMDM
-
-  257 operadorUN: '-' primario
-  258           | primario
+  259 operadorUN: '-' primario
+  260           | primario
 
 
 La regla es inútil debido a los conflictos
 
-   88 varias_declaraciones_parametros: %empty
+   15 varios_identificadores2: %empty
 
-  120 varias_clausula_excepcion_especifica: %empty
+   97 varias_declaraciones_parametros: %empty
+
+  130 varias_clausula_excepcion_especifica: %empty
 
 
-Estado 22 conflictos: 3 desplazamiento/reducción
-Estado 24 conflictos: 3 desplazamiento/reducción
-Estado 41 conflictos: 1 desplazamiento/reducción
-Estado 42 conflictos: 3 desplazamiento/reducción
-Estado 47 conflictos: 3 desplazamiento/reducción
-Estado 54 conflictos: 1 desplazamiento/reducción
-Estado 55 conflictos: 1 desplazamiento/reducción
+Estado 9 conflictos: 2 desplazamiento/reducción
+Estado 10 conflictos: 2 desplazamiento/reducción
+Estado 18 conflictos: 1 desplazamiento/reducción
+Estado 19 conflictos: 1 desplazamiento/reducción
+Estado 20 conflictos: 1 desplazamiento/reducción
+Estado 46 conflictos: 1 desplazamiento/reducción
+Estado 50 conflictos: 1 desplazamiento/reducción
+Estado 56 conflictos: 1 desplazamiento/reducción
+Estado 57 conflictos: 1 desplazamiento/reducción
+Estado 74 conflictos: 1 desplazamiento/reducción
+Estado 75 conflictos: 1 desplazamiento/reducción
+Estado 80 conflictos: 1 desplazamiento/reducción
+Estado 95 conflictos: 1 desplazamiento/reducción
 Estado 107 conflictos: 1 desplazamiento/reducción
-Estado 149 conflictos: 6 desplazamiento/reducción
-Estado 179 conflictos: 6 desplazamiento/reducción
-Estado 180 conflictos: 6 desplazamiento/reducción
+Estado 108 conflictos: 1 desplazamiento/reducción
+Estado 117 conflictos: 1 desplazamiento/reducción
+Estado 127 conflictos: 1 desplazamiento/reducción
+Estado 149 conflictos: 1 desplazamiento/reducción
+Estado 162 conflictos: 1 desplazamiento/reducción
+Estado 165 conflictos: 1 desplazamiento/reducción
+Estado 172 conflictos: 1 desplazamiento/reducción
+Estado 176 conflictos: 1 desplazamiento/reducción
+Estado 177 conflictos: 1 desplazamiento/reducción
+Estado 180 conflictos: 1 desplazamiento/reducción
+Estado 212 conflictos: 1 desplazamiento/reducción
+Estado 222 conflictos: 1 desplazamiento/reducción
+Estado 226 conflictos: 1 desplazamiento/reducción
 
 
 Gramática
@@ -339,211 +339,224 @@ Gramática
     1 programa: definicion_programa
     2         | definicion_libreria
 
-    3 definicion_programa: programa IDENTIFICADOR ';' codigo_programa
+    3 definicion_programa: PROGRAMA IDENTIFICADOR ';' codigo_programa
 
     4 codigo_programa: varias_librerias cuerpo_subprograma
 
-    5 varias_librerias: libreria
-    6                 | varias_librerias libreria
+    5 varias_librerias: %empty
+    6                 | libreria
+    7                 | varias_librerias libreria
 
-    7 libreria: IMPORTAR LIBRERIA nombre ';'
-    8         | DE LIBRERIA nombre IMPORTAR varios_identificadores ';'
-    9         | IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ';'
+    8 libreria: IMPORTAR LIBRERIA nombre ';'
+    9         | DE LIBRERIA nombre IMPORTAR varios_identificadores ';'
+   10         | IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ';'
 
-   10 varios_identificadores: IDENTIFICADOR
-   11                       | varios_identificadores IDENTIFICADOR
+   11 varios_identificadores: IDENTIFICADOR
+   12                       | varios_identificadores ',' IDENTIFICADOR
 
-   12 nombre: IDENTIFICADOR
-   13       | nombre CUATRO_PUNTOS IDENTIFICADOR
+   13 nombre: IDENTIFICADOR
+   14       | varios_identificadores2 IDENTIFICADOR
 
-   14 definicion_libreria: libreria IDENTIFICADOR ';' codigo_libreria
+   15 varios_identificadores2: %empty
+   16                        | varios_identificadores2 IDENTIFICADOR CUATRO_PUNTOS
 
-   15 codigo_libreria: varias_librerias varias_declaraciones
-   16                | varias_librerias exportaciones varias_declaraciones
+   17 definicion_libreria: LIBRERIA IDENTIFICADOR ';' codigo_libreria
 
-   17 varias_declaraciones: %empty
-   18                     | declaracion
-   19                     | varias_declaraciones declaracion
+   18 codigo_libreria: varias_librerias varias_declaraciones
+   19                | varias_librerias exportaciones varias_declaraciones
 
-   20 exportaciones: EXPORTAR varios_nombres ';'
+   20 varias_declaraciones: declaracion
+   21                     | varias_declaraciones declaracion
 
-   21 varios_nombres: nombre
-   22               | varios_nombres nombre
+   22 exportaciones: EXPORTAR varios_nombres ';'
 
-   23 declaracion: declaracion_objeto
-   24            | declaracion_tipo
-   25            | declaracion_subprograma
+   23 varios_nombres: nombre
+   24               | varios_nombres ',' nombre
 
-   26 declaracion_objeto: varios_identificadores ':' especificacion_tipo
+   25 declaracion: declaracion_objeto
+   26            | declaracion_tipo
+   27            | declaracion_subprograma
 
-   27 especificacion_tipo: nombre
-   28                    | tipo_no_estructurado
+   28 declaracion_objeto: varios_identificadores ':' especificacion_tipo ';'
 
-   29 declaracion_tipo: TIPO IDENTIFICADOR ES tipo_no_estructurado ';'
-   30                 | TIPO IDENTIFICADOR ES tipo_estructurado
+   29 especificacion_tipo: nombre
+   30                    | tipo_no_estructurado
 
-   31 tipo_no_estructurado: tipo_escalar
-   32                     | tipo_tabla
-   33                     | tipo_diccionario
+   31 declaracion_tipo: TIPO IDENTIFICADOR ES tipo_no_estructurado ';'
+   32                 | TIPO IDENTIFICADOR ES tipo_estructurado
 
-   34 tipo_escalar: cero_o_uno_signo TIPO_BASICO cero_o_uno_longitud cero_o_uno_rango
+   33 tipo_no_estructurado: tipo_escalar
+   34                     | tipo_tabla
+   35                     | tipo_diccionario
 
-   35 cero_o_uno_signo: %empty
-   36                 | SIGNO
+   36 tipo_escalar: cero_o_uno_signo tipo_basico cero_o_uno_longitud cero_o_uno_rango
 
-   37 cero_o_uno_longitud: %empty
-   38                    | LONGITUD
+   37 cero_o_uno_signo: %empty
+   38                 | SIGNO
 
-   39 cero_o_uno_rango: %empty
+   39 cero_o_uno_longitud: %empty
+   40                    | longitud
 
-   40 tipo_tabla: LISTA DE especificacion_tipo
+   41 cero_o_uno_rango: %empty
 
-   41 tipo_diccionario: DICCIONARIO DE especificacion_tipo
+   42 longitud: CORTO
+   43         | LARGO
 
-   42 tipo_estructurado: tipo_registro
-   43                  | tipo_enumerado
-   44                  | clase
+   44 tipo_basico: BOOLEANO
+   45            | CARACTER
+   46            | ENTERO
+   47            | REAL
 
-   45 tipo_registro: REGISTRO varios_campos FIN REGISTRO
+   48 tipo_tabla: LISTA DE especificacion_tipo
 
-   46 varios_campos: campo
-   47              | varios_campos campo
+   49 tipo_diccionario: DICCIONARIO DE especificacion_tipo
 
-   48 campo: varios_identificadores ':' especificacion_tipo ';'
-   49      | varios_identificadores ':' especificacion_tipo ASIGNACION cero_uno_expresion ';'
+   50 tipo_estructurado: tipo_registro
+   51                  | tipo_enumerado
+   52                  | clase
 
-   50 tipo_enumerado: ENUMERACION DE tipo_escalar varios_elemento_enumeracion FIN ENUMERACION
+   53 tipo_registro: REGISTRO varios_campos FIN REGISTRO
 
-   51 varios_elemento_enumeracion: elemento_enumeracion
-   52                            | varios_elemento_enumeracion elemento_enumeracion
+   54 varios_campos: campo
+   55              | varios_campos campo
 
-   53 elemento_enumeracion: IDENTIFICADOR cero_o_uno_elemento_enumeracion
+   56 campo: varios_identificadores ':' especificacion_tipo ';'
 
-   54 cero_o_uno_elemento_enumeracion: %empty
+   57 tipo_enumerado: ENUMERACION varios_elemento_enumeracion FIN ENUMERACION
+   58               | ENUMERACION DE tipo_escalar varios_elemento_enumeracion FIN ENUMERACION
 
-   55 clase: CLASE cero_uno_ultima cero_uno_superclases varias_declaraciones_componente FIN CLASE
+   59 varios_elemento_enumeracion: elemento_enumeracion
+   60                            | varios_elemento_enumeracion ',' elemento_enumeracion
 
-   56 cero_uno_ultima: %empty
-   57                | ULTIMA
+   61 elemento_enumeracion: IDENTIFICADOR cero_uno_expresion
 
-   58 cero_uno_superclases: %empty
-   59                     | superclases
+   62 cero_uno_expresion: %empty
 
-   60 superclases: '(' nombre ')'
+   63 clase: CLASE cero_uno_ultima cero_uno_superclases varias_declaraciones_componente FIN CLASE
 
-   61 declaracion_componente: componente
-   62                       | visibilidad componente
+   64 cero_uno_ultima: %empty
+   65                | ULTIMA
 
-   63 varias_declaraciones_componente: declaracion_componente
-   64                                | varias_declaraciones_componente declaracion_componente
+   66 cero_uno_superclases: %empty
+   67                     | superclases
 
-   65 visibilidad: PUBLICO
-   66            | PROTEGIDO
-   67            | PRIVADO
+   68 superclases: '(' varios_nombres ')'
 
-   68 componente: declaracion_tipo
-   69           | declaracion_objeto
-   70           | varios_modificadores declaracion_subprograma
+   69 declaracion_componente: componente
+   70                       | visibilidad componente
 
-   71 varios_modificadores: %empty
-   72                     | modificador
-   73                     | varios_modificadores modificador
+   71 varias_declaraciones_componente: declaracion_componente
+   72                                | varias_declaraciones_componente declaracion_componente
 
-   74 modificador: CONSTRUCTOR
-   75            | DESTRUCTOR
-   76            | GENERICO
-   77            | ABSTRACTO
-   78            | ESPECIFICO
-   79            | FINAL
+   73 visibilidad: PUBLICO
+   74            | PROTEGIDO
+   75            | PRIVADO
 
-   80 declaracion_subprograma: SUBPROGRAMA cabecera_subprograma cuerpo_subprograma SUBPROGRAMA
+   76 componente: declaracion_tipo
+   77           | declaracion_objeto
+   78           | varios_modificadores declaracion_subprograma
 
-   81 cabecera_subprograma: IDENTIFICADOR cero_uno_parametrizacion cero_uno_tipoResultado
+   79 varios_modificadores: %empty
+   80                     | modificador
+   81                     | varios_modificadores ',' modificador
 
-   82 cero_uno_parametrizacion: %empty
-   83                         | parametrizacion
+   82 modificador: CONSTRUCTOR
+   83            | DESTRUCTOR
+   84            | GENERICO
+   85            | ABSTRACTO
+   86            | ESPECIFICO
+   87            | FINAL
 
-   84 cero_uno_tipoResultado: %empty
-   85                       | tipo_resultado
+   88 declaracion_subprograma: SUBPROGRAMA cabecera_subprograma cuerpo_subprograma SUBPROGRAMA
 
-   86 parametrizacion: '(' varias_declaraciones_parametros declaracion_parametros ')'
+   89 cabecera_subprograma: IDENTIFICADOR cero_uno_parametrizacion cero_uno_tipoResultado
 
-   87 declaracion_parametros: varios_identificadores ':' modo especificacion_tipo cero_uno_expresion
+   90 cero_uno_parametrizacion: %empty
+   91                         | parametrizacion
 
-   88 varias_declaraciones_parametros: %empty
-   89                                | declaracion_parametros ';'
-   90                                | varias_declaraciones_parametros declaracion_parametros ';'
+   92 cero_uno_tipoResultado: %empty
+   93                       | tipo_resultado
 
-   91 cero_uno_expresion: %empty
+   94 parametrizacion: '(' varias_declaraciones_parametros declaracion_parametros ')'
 
-   92 modo: VALOR
-   93     | REFERENCIA
+   95 declaracion_parametros: varios_identificadores ':' especificacion_tipo cero_uno_expresion
+   96                       | varios_identificadores ':' modo especificacion_tipo cero_uno_expresion
 
-   94 tipo_resultado: DEVOLVER especificacion_tipo
+   97 varias_declaraciones_parametros: %empty
+   98                                | declaracion_parametros ';'
+   99                                | varias_declaraciones_parametros declaracion_parametros ';'
 
-   95 cuerpo_subprograma: varias_declaraciones PRINCIPIO varias_instrucciones FIN
+  100 modo: VALOR
+  101     | REFERENCIA
 
-   96 varias_instrucciones: instruccion
-   97                     | varias_instrucciones instruccion
+  102 tipo_resultado: DEVOLVER especificacion_tipo
 
-   98 instruccion: instruccion_devolver
-   99            | instruccion_llamada
-  100            | instruccion_interrupcion
-  101            | instruccion_lanzamiento_excepcion
-  102            | instruccion_captura_excepcion
-  103            | ';'
+  103 cuerpo_subprograma: cero_o_mas_declaraciones PRINCIPIO varias_instrucciones FIN
 
-  104 instruccion_devolver: DEVOLVER cero_uno_expr ';'
+  104 cero_o_mas_declaraciones: %empty
+  105                         | declaracion
+  106                         | varias_declaraciones declaracion
 
-  105 cero_uno_expr: %empty
+  107 varias_instrucciones: instruccion
+  108                     | varias_instrucciones instruccion
 
-  106 instruccion_llamada: llamada_subprograma ';'
+  109 instruccion: instruccion_devolver
+  110            | instruccion_llamada
+  111            | instruccion_interrupcion
+  112            | instruccion_lanzamiento_excepcion
+  113            | instruccion_captura_excepcion
+  114            | ';'
 
-  107 llamada_subprograma: nombre '(' varias_definicion_parametro ')'
+  115 instruccion_devolver: DEVOLVER ';'
 
-  108 varias_definicion_parametro: %empty
+  116 instruccion_llamada: llamada_subprograma ';'
 
-  109 instruccion_interrupcion: SIGUIENTE cero_o_uno_cuando ';'
-  110                         | SALIR cero_o_uno_de_identificador cero_o_uno_cuando ';'
+  117 llamada_subprograma: nombre '(' varias_definicion_parametro ')'
 
-  111 cero_o_uno_cuando: %empty
+  118 varias_definicion_parametro: %empty
 
-  112 cero_o_uno_de_identificador: %empty
-  113                            | DE IDENTIFICADOR
+  119 instruccion_interrupcion: SIGUIENTE cero_o_uno_cuando ';'
+  120                         | SALIR cero_o_uno_de_identificador cero_o_uno_cuando ';'
 
-  114 instruccion_lanzamiento_excepcion: LANZA nombre ';'
+  121 cero_o_uno_cuando: %empty
 
-  115 instruccion_captura_excepcion: PRUEBA instruccion clausulas FIN PRUEBA
+  122 cero_o_uno_de_identificador: %empty
+  123                            | DE IDENTIFICADOR
 
-  116 clausulas: clausulas_excepcion
-  117          | clausulas_excepcion clausula_finalmente
-  118          | clausula_finalmente
+  124 instruccion_lanzamiento_excepcion: LANZA nombre ';'
 
-  119 clausulas_excepcion: varias_clausula_excepcion_especifica clausula_excepcion_general
+  125 instruccion_captura_excepcion: PRUEBA instruccion clausulas FIN PRUEBA
 
-  120 varias_clausula_excepcion_especifica: %empty
-  121                                     | clausula_excepcion_especifica
-  122                                     | varias_clausula_excepcion_especifica clausula_excepcion_especifica
+  126 clausulas: clausulas_excepcion
+  127          | clausulas_excepcion clausula_finalmente
+  128          | clausula_finalmente
 
-  123 clausula_excepcion_especifica: EXCEPCION '(' nombre ')' varias_instrucciones
+  129 clausulas_excepcion: varias_clausula_excepcion_especifica clausula_excepcion_general
 
-  124 clausula_excepcion_general: EXCEPCION varias_instrucciones
+  130 varias_clausula_excepcion_especifica: %empty
+  131                                     | clausula_excepcion_especifica
+  132                                     | varias_clausula_excepcion_especifica clausula_excepcion_especifica
 
-  125 clausula_finalmente: FINALMENTE varias_instrucciones
+  133 clausula_excepcion_especifica: EXCEPCION '(' nombre ')' varias_instrucciones
+
+  134 clausula_excepcion_general: EXCEPCION varias_instrucciones
+
+  135 clausula_finalmente: FINALMENTE varias_instrucciones
 
 
 Terminales con las reglas donde aparecen
 
 $end (0) 0
-'(' (40) 60 86 107 123
-')' (41) 60 86 107 123
+'(' (40) 68 94 117 133
+')' (41) 68 94 117 133
 '*' (42)
 '+' (43)
+',' (44) 12 24 60 81
 '-' (45)
 '.' (46)
 '/' (47)
-':' (58) 26 48 49 87
-';' (59) 3 7 8 9 14 20 29 48 49 89 90 103 104 106 109 110 114
+':' (58) 28 56 95 96
+';' (59) 3 8 9 10 17 22 28 31 56 98 99 114 115 116 119 120 124
 '<' (60)
 '=' (61)
 '>' (62)
@@ -555,74 +568,74 @@ $end (0) 0
 '}' (125)
 '~' (126)
 error (256)
-ABSTRACTO (258) 77
-BOOLEANO (259)
+ABSTRACTO (258) 85
+BOOLEANO (259) 44
 BUCLE (260)
-CARACTER (261)
+CARACTER (261) 45
 CASOS (262)
-CLASE (263) 55
-COMO (264) 9
+CLASE (263) 63
+COMO (264) 10
 CONSTANTE (265)
-CONSTRUCTOR (266) 74
-CORTO (267)
+CONSTRUCTOR (266) 82
+CORTO (267) 42
 CUANDO (268)
-DE (269) 8 40 41 50 113
+DE (269) 9 48 49 58 123
 DESCENDENTE (270)
-DESTRUCTOR (271) 75
-DEVOLVER (272) 94 104
-DICCIONARIO (273) 41
+DESTRUCTOR (271) 83
+DEVOLVER (272) 102 115
+DICCIONARIO (273) 49
 EN (274)
-ENTERO (275)
+ENTERO (275) 46
 ENTONCES (276)
-ENUMERACION (277) 50
-ES (278) 29 30
-ESPECIFICO (279) 78
-EXCEPCION (280) 123 124
-EXPORTAR (281) 20
+ENUMERACION (277) 57 58
+ES (278) 31 32
+ESPECIFICO (279) 86
+EXCEPCION (280) 133 134
+EXPORTAR (281) 22
 FALSO (282)
-FIN (283) 45 50 55 95 115
-FINAL (284) 79
-FINALMENTE (285) 125
-GENERICO (286) 76
-IMPORTAR (287) 7 8 9
-LARGO (288)
-LANZA (289) 114
-LIBRERIA (290) 7 8 9
-LISTA (291) 40
+FIN (283) 53 57 58 63 103 125
+FINAL (284) 87
+FINALMENTE (285) 135
+GENERICO (286) 84
+IMPORTAR (287) 8 9 10
+LARGO (288) 43
+LANZA (289) 124
+LIBRERIA (290) 8 9 10 17
+LISTA (291) 48
 MIENTRAS (292)
 OBJETO (293)
 OTRO (294)
 PARA (295)
-PRINCIPIO (296) 95
-PRIVADO (297) 67
-PROGRAMA (298)
-PROTEGIDO (299) 66
-PRUEBA (300) 115
-PUBLICO (301) 65
+PRINCIPIO (296) 103
+PRIVADO (297) 75
+PROGRAMA (298) 3
+PROTEGIDO (299) 74
+PRUEBA (300) 125
+PUBLICO (301) 73
 RANGO (302)
-REAL (303)
-REFERENCIA (304) 93
-REGISTRO (305) 45
+REAL (303) 47
+REFERENCIA (304) 101
+REGISTRO (305) 53
 REPETIR (306)
-SALIR (307) 110
+SALIR (307) 120
 SI (308)
-SIGNO (309) 36
-SIGUIENTE (310) 109
+SIGNO (309) 38
+SIGUIENTE (310) 119
 SINO (311)
-SUBPROGRAMA (312) 80
+SUBPROGRAMA (312) 88
 TABLA (313)
-TIPO (314) 29 30
-ULTIMA (315) 57
-VALOR (316) 92
+TIPO (314) 31 32
+ULTIMA (315) 65
+VALOR (316) 100
 VERDADERO (317)
 CTC_CARACTER (318)
 CTC_CADENA (319)
-IDENTIFICADOR (320) 3 9 10 11 12 13 14 29 30 53 81 113
+IDENTIFICADOR (320) 3 10 11 12 13 14 16 17 31 32 61 89 123
 CTC_ENTERA (321)
 CTC_REAL (322)
 DOS_PTOS (323)
-CUATRO_PUNTOS (324) 13
-ASIGNACION (325) 49
+CUATRO_PUNTOS (324) 16
+ASIGNACION (325)
 FLECHA (326)
 INC (327)
 DEC (328)
@@ -641,192 +654,193 @@ ASIG_RESTO (340)
 ASIG_POT (341)
 ASIG_DESPI (342)
 ASIG_DESP (343)
-LONGITUD (344) 38
-TIPO_BASICO (345) 34
+LONGITUD (344)
+TIPO_BASICO (345)
 
 
 No terminales con las reglas donde aparecen
 
-$accept (110)
+$accept (111)
     en la izquierda: 0
-programa (111)
-    en la izquierda: 1 2, en la derecha: 0 3
-definicion_programa (112)
+programa (112)
+    en la izquierda: 1 2, en la derecha: 0
+definicion_programa (113)
     en la izquierda: 3, en la derecha: 1
-codigo_programa (113)
+codigo_programa (114)
     en la izquierda: 4, en la derecha: 3
-varias_librerias (114)
-    en la izquierda: 5 6, en la derecha: 4 6 15 16
-libreria (115)
-    en la izquierda: 7 8 9, en la derecha: 5 6 14
-varios_identificadores (116)
-    en la izquierda: 10 11, en la derecha: 8 11 26 48 49 87
-nombre (117)
-    en la izquierda: 12 13, en la derecha: 7 8 9 13 21 22 27 60 107
-    114 123
-definicion_libreria (118)
-    en la izquierda: 14, en la derecha: 2
-codigo_libreria (119)
-    en la izquierda: 15 16, en la derecha: 14
-varias_declaraciones (120)
-    en la izquierda: 17 18 19, en la derecha: 15 16 19 95
-exportaciones (121)
-    en la izquierda: 20, en la derecha: 16
-varios_nombres (122)
-    en la izquierda: 21 22, en la derecha: 20 22
-declaracion (123)
-    en la izquierda: 23 24 25, en la derecha: 18 19
-declaracion_objeto (124)
-    en la izquierda: 26, en la derecha: 23 69
-especificacion_tipo (125)
-    en la izquierda: 27 28, en la derecha: 26 40 41 48 49 87 94
-declaracion_tipo (126)
-    en la izquierda: 29 30, en la derecha: 24 68
-tipo_no_estructurado (127)
-    en la izquierda: 31 32 33, en la derecha: 28 29
-tipo_escalar (128)
-    en la izquierda: 34, en la derecha: 31 50
-cero_o_uno_signo (129)
-    en la izquierda: 35 36, en la derecha: 34
-cero_o_uno_longitud (130)
-    en la izquierda: 37 38, en la derecha: 34
-cero_o_uno_rango (131)
-    en la izquierda: 39, en la derecha: 34
-tipo_tabla (132)
-    en la izquierda: 40, en la derecha: 32
-tipo_diccionario (133)
-    en la izquierda: 41, en la derecha: 33
-tipo_estructurado (134)
-    en la izquierda: 42 43 44, en la derecha: 30
-tipo_registro (135)
-    en la izquierda: 45, en la derecha: 42
-varios_campos (136)
-    en la izquierda: 46 47, en la derecha: 45 47
-campo (137)
-    en la izquierda: 48 49, en la derecha: 46 47
-tipo_enumerado (138)
-    en la izquierda: 50, en la derecha: 43
-varios_elemento_enumeracion (139)
-    en la izquierda: 51 52, en la derecha: 50 52
-elemento_enumeracion (140)
-    en la izquierda: 53, en la derecha: 51 52
-cero_o_uno_elemento_enumeracion (141)
-    en la izquierda: 54, en la derecha: 53
-clase (142)
-    en la izquierda: 55, en la derecha: 44
-cero_uno_ultima (143)
-    en la izquierda: 56 57, en la derecha: 55
-cero_uno_superclases (144)
-    en la izquierda: 58 59, en la derecha: 55
-superclases (145)
-    en la izquierda: 60, en la derecha: 59
-declaracion_componente (146)
-    en la izquierda: 61 62, en la derecha: 63 64
-varias_declaraciones_componente (147)
-    en la izquierda: 63 64, en la derecha: 55 64
-visibilidad (148)
-    en la izquierda: 65 66 67, en la derecha: 62
-componente (149)
-    en la izquierda: 68 69 70, en la derecha: 61 62
-varios_modificadores (150)
-    en la izquierda: 71 72 73, en la derecha: 70 73
-modificador (151)
-    en la izquierda: 74 75 76 77 78 79, en la derecha: 72 73
-declaracion_subprograma (152)
-    en la izquierda: 80, en la derecha: 25 70
-cabecera_subprograma (153)
-    en la izquierda: 81, en la derecha: 80
-cero_uno_parametrizacion (154)
-    en la izquierda: 82 83, en la derecha: 81
-cero_uno_tipoResultado (155)
-    en la izquierda: 84 85, en la derecha: 81
-parametrizacion (156)
-    en la izquierda: 86, en la derecha: 83
-declaracion_parametros (157)
-    en la izquierda: 87, en la derecha: 86 89 90
-varias_declaraciones_parametros (158)
-    en la izquierda: 88 89 90, en la derecha: 86 90
-cero_uno_expresion (159)
-    en la izquierda: 91, en la derecha: 49 87
-modo (160)
-    en la izquierda: 92 93, en la derecha: 87
-tipo_resultado (161)
-    en la izquierda: 94, en la derecha: 85
-cuerpo_subprograma (162)
-    en la izquierda: 95, en la derecha: 4 80
-varias_instrucciones (163)
-    en la izquierda: 96 97, en la derecha: 95 97 123 124 125
-instruccion (164)
-    en la izquierda: 98 99 100 101 102 103, en la derecha: 96 97 115
-instruccion_devolver (165)
-    en la izquierda: 104, en la derecha: 98
-cero_uno_expr (166)
-    en la izquierda: 105, en la derecha: 104
-instruccion_llamada (167)
-    en la izquierda: 106, en la derecha: 99
-llamada_subprograma (168)
-    en la izquierda: 107, en la derecha: 106
-varias_definicion_parametro (169)
-    en la izquierda: 108, en la derecha: 107
-instruccion_interrupcion (170)
-    en la izquierda: 109 110, en la derecha: 100
-cero_o_uno_cuando (171)
-    en la izquierda: 111, en la derecha: 109 110
-cero_o_uno_de_identificador (172)
-    en la izquierda: 112 113, en la derecha: 110
-instruccion_lanzamiento_excepcion (173)
-    en la izquierda: 114, en la derecha: 101
-instruccion_captura_excepcion (174)
-    en la izquierda: 115, en la derecha: 102
-clausulas (175)
-    en la izquierda: 116 117 118, en la derecha: 115
-clausulas_excepcion (176)
-    en la izquierda: 119, en la derecha: 116 117
-varias_clausula_excepcion_especifica (177)
-    en la izquierda: 120 121 122, en la derecha: 119 122
-clausula_excepcion_especifica (178)
-    en la izquierda: 123, en la derecha: 121 122
-clausula_excepcion_general (179)
-    en la izquierda: 124, en la derecha: 119
-clausula_finalmente (180)
-    en la izquierda: 125, en la derecha: 117 118
+varias_librerias (115)
+    en la izquierda: 5 6 7, en la derecha: 4 7 18 19
+libreria (116)
+    en la izquierda: 8 9 10, en la derecha: 6 7
+varios_identificadores (117)
+    en la izquierda: 11 12, en la derecha: 9 12 28 56 95 96
+nombre (118)
+    en la izquierda: 13 14, en la derecha: 8 9 10 23 24 29 117 124
+    133
+varios_identificadores2 (119)
+    en la izquierda: 15 16, en la derecha: 14 16
+definicion_libreria (120)
+    en la izquierda: 17, en la derecha: 2
+codigo_libreria (121)
+    en la izquierda: 18 19, en la derecha: 17
+varias_declaraciones (122)
+    en la izquierda: 20 21, en la derecha: 18 19 21 106
+exportaciones (123)
+    en la izquierda: 22, en la derecha: 19
+varios_nombres (124)
+    en la izquierda: 23 24, en la derecha: 22 24 68
+declaracion (125)
+    en la izquierda: 25 26 27, en la derecha: 20 21 105 106
+declaracion_objeto (126)
+    en la izquierda: 28, en la derecha: 25 77
+especificacion_tipo (127)
+    en la izquierda: 29 30, en la derecha: 28 48 49 56 95 96 102
+declaracion_tipo (128)
+    en la izquierda: 31 32, en la derecha: 26 76
+tipo_no_estructurado (129)
+    en la izquierda: 33 34 35, en la derecha: 30 31
+tipo_escalar (130)
+    en la izquierda: 36, en la derecha: 33 58
+cero_o_uno_signo (131)
+    en la izquierda: 37 38, en la derecha: 36
+cero_o_uno_longitud (132)
+    en la izquierda: 39 40, en la derecha: 36
+cero_o_uno_rango (133)
+    en la izquierda: 41, en la derecha: 36
+longitud (134)
+    en la izquierda: 42 43, en la derecha: 40
+tipo_basico (135)
+    en la izquierda: 44 45 46 47, en la derecha: 36
+tipo_tabla (136)
+    en la izquierda: 48, en la derecha: 34
+tipo_diccionario (137)
+    en la izquierda: 49, en la derecha: 35
+tipo_estructurado (138)
+    en la izquierda: 50 51 52, en la derecha: 32
+tipo_registro (139)
+    en la izquierda: 53, en la derecha: 50
+varios_campos (140)
+    en la izquierda: 54 55, en la derecha: 53 55
+campo (141)
+    en la izquierda: 56, en la derecha: 54 55
+tipo_enumerado (142)
+    en la izquierda: 57 58, en la derecha: 51
+varios_elemento_enumeracion (143)
+    en la izquierda: 59 60, en la derecha: 57 58 60
+elemento_enumeracion (144)
+    en la izquierda: 61, en la derecha: 59 60
+cero_uno_expresion (145)
+    en la izquierda: 62, en la derecha: 61 95 96
+clase (146)
+    en la izquierda: 63, en la derecha: 52
+cero_uno_ultima (147)
+    en la izquierda: 64 65, en la derecha: 63
+cero_uno_superclases (148)
+    en la izquierda: 66 67, en la derecha: 63
+superclases (149)
+    en la izquierda: 68, en la derecha: 67
+declaracion_componente (150)
+    en la izquierda: 69 70, en la derecha: 71 72
+varias_declaraciones_componente (151)
+    en la izquierda: 71 72, en la derecha: 63 72
+visibilidad (152)
+    en la izquierda: 73 74 75, en la derecha: 70
+componente (153)
+    en la izquierda: 76 77 78, en la derecha: 69 70
+varios_modificadores (154)
+    en la izquierda: 79 80 81, en la derecha: 78 81
+modificador (155)
+    en la izquierda: 82 83 84 85 86 87, en la derecha: 80 81
+declaracion_subprograma (156)
+    en la izquierda: 88, en la derecha: 27 78
+cabecera_subprograma (157)
+    en la izquierda: 89, en la derecha: 88
+cero_uno_parametrizacion (158)
+    en la izquierda: 90 91, en la derecha: 89
+cero_uno_tipoResultado (159)
+    en la izquierda: 92 93, en la derecha: 89
+parametrizacion (160)
+    en la izquierda: 94, en la derecha: 91
+declaracion_parametros (161)
+    en la izquierda: 95 96, en la derecha: 94 98 99
+varias_declaraciones_parametros (162)
+    en la izquierda: 97 98 99, en la derecha: 94 99
+modo (163)
+    en la izquierda: 100 101, en la derecha: 96
+tipo_resultado (164)
+    en la izquierda: 102, en la derecha: 93
+cuerpo_subprograma (165)
+    en la izquierda: 103, en la derecha: 4 88
+cero_o_mas_declaraciones (166)
+    en la izquierda: 104 105 106, en la derecha: 103
+varias_instrucciones (167)
+    en la izquierda: 107 108, en la derecha: 103 108 133 134 135
+instruccion (168)
+    en la izquierda: 109 110 111 112 113 114, en la derecha: 107 108
+    125
+instruccion_devolver (169)
+    en la izquierda: 115, en la derecha: 109
+instruccion_llamada (170)
+    en la izquierda: 116, en la derecha: 110
+llamada_subprograma (171)
+    en la izquierda: 117, en la derecha: 116
+varias_definicion_parametro (172)
+    en la izquierda: 118, en la derecha: 117
+instruccion_interrupcion (173)
+    en la izquierda: 119 120, en la derecha: 111
+cero_o_uno_cuando (174)
+    en la izquierda: 121, en la derecha: 119 120
+cero_o_uno_de_identificador (175)
+    en la izquierda: 122 123, en la derecha: 120
+instruccion_lanzamiento_excepcion (176)
+    en la izquierda: 124, en la derecha: 112
+instruccion_captura_excepcion (177)
+    en la izquierda: 125, en la derecha: 113
+clausulas (178)
+    en la izquierda: 126 127 128, en la derecha: 125
+clausulas_excepcion (179)
+    en la izquierda: 129, en la derecha: 126 127
+varias_clausula_excepcion_especifica (180)
+    en la izquierda: 130 131 132, en la derecha: 129 132
+clausula_excepcion_especifica (181)
+    en la izquierda: 133, en la derecha: 131 132
+clausula_excepcion_general (182)
+    en la izquierda: 134, en la derecha: 129
+clausula_finalmente (183)
+    en la izquierda: 135, en la derecha: 127 128
 
 
 Estado 0
 
     0 $accept: . programa $end
 
-    DE        desplazar e ir al estado 1
-    IMPORTAR  desplazar e ir al estado 2
+    LIBRERIA  desplazar e ir al estado 1
+    PROGRAMA  desplazar e ir al estado 2
 
     programa             ir al estado 3
     definicion_programa  ir al estado 4
-    libreria             ir al estado 5
-    definicion_libreria  ir al estado 6
+    definicion_libreria  ir al estado 5
 
 
 Estado 1
 
-    8 libreria: DE . LIBRERIA nombre IMPORTAR varios_identificadores ';'
+   17 definicion_libreria: LIBRERIA . IDENTIFICADOR ';' codigo_libreria
 
-    LIBRERIA  desplazar e ir al estado 7
+    IDENTIFICADOR  desplazar e ir al estado 6
 
 
 Estado 2
 
-    7 libreria: IMPORTAR . LIBRERIA nombre ';'
-    9         | IMPORTAR . LIBRERIA nombre COMO IDENTIFICADOR ';'
+    3 definicion_programa: PROGRAMA . IDENTIFICADOR ';' codigo_programa
 
-    LIBRERIA  desplazar e ir al estado 8
+    IDENTIFICADOR  desplazar e ir al estado 7
 
 
 Estado 3
 
     0 $accept: programa . $end
-    3 definicion_programa: programa . IDENTIFICADOR ';' codigo_programa
 
-    $end           desplazar e ir al estado 9
-    IDENTIFICADOR  desplazar e ir al estado 10
+    $end  desplazar e ir al estado 8
 
 
 Estado 4
@@ -838,2040 +852,2206 @@ Estado 4
 
 Estado 5
 
-   14 definicion_libreria: libreria . IDENTIFICADOR ';' codigo_libreria
-
-    IDENTIFICADOR  desplazar e ir al estado 11
-
-
-Estado 6
-
     2 programa: definicion_libreria .
 
     $default  reduce usando la regla 2 (programa)
 
 
+Estado 6
+
+   17 definicion_libreria: LIBRERIA IDENTIFICADOR . ';' codigo_libreria
+
+    ';'  desplazar e ir al estado 9
+
+
 Estado 7
 
-    8 libreria: DE LIBRERIA . nombre IMPORTAR varios_identificadores ';'
+    3 definicion_programa: PROGRAMA IDENTIFICADOR . ';' codigo_programa
 
-    IDENTIFICADOR  desplazar e ir al estado 12
-
-    nombre  ir al estado 13
+    ';'  desplazar e ir al estado 10
 
 
 Estado 8
-
-    7 libreria: IMPORTAR LIBRERIA . nombre ';'
-    9         | IMPORTAR LIBRERIA . nombre COMO IDENTIFICADOR ';'
-
-    IDENTIFICADOR  desplazar e ir al estado 12
-
-    nombre  ir al estado 14
-
-
-Estado 9
 
     0 $accept: programa $end .
 
     $default  aceptar
 
 
+Estado 9
+
+   17 definicion_libreria: LIBRERIA IDENTIFICADOR ';' . codigo_libreria
+
+    DE        desplazar e ir al estado 11
+    IMPORTAR  desplazar e ir al estado 12
+
+    DE        [reduce usando la regla 5 (varias_librerias)]
+    IMPORTAR  [reduce usando la regla 5 (varias_librerias)]
+    $default  reduce usando la regla 5 (varias_librerias)
+
+    varias_librerias  ir al estado 13
+    libreria          ir al estado 14
+    codigo_libreria   ir al estado 15
+
+
 Estado 10
 
-    3 definicion_programa: programa IDENTIFICADOR . ';' codigo_programa
+    3 definicion_programa: PROGRAMA IDENTIFICADOR ';' . codigo_programa
 
-    ';'  desplazar e ir al estado 15
+    DE        desplazar e ir al estado 11
+    IMPORTAR  desplazar e ir al estado 12
+
+    DE        [reduce usando la regla 5 (varias_librerias)]
+    IMPORTAR  [reduce usando la regla 5 (varias_librerias)]
+    $default  reduce usando la regla 5 (varias_librerias)
+
+    codigo_programa   ir al estado 16
+    varias_librerias  ir al estado 17
+    libreria          ir al estado 14
 
 
 Estado 11
 
-   14 definicion_libreria: libreria IDENTIFICADOR . ';' codigo_libreria
+    9 libreria: DE . LIBRERIA nombre IMPORTAR varios_identificadores ';'
 
-    ';'  desplazar e ir al estado 16
+    LIBRERIA  desplazar e ir al estado 18
 
 
 Estado 12
 
-   12 nombre: IDENTIFICADOR .
+    8 libreria: IMPORTAR . LIBRERIA nombre ';'
+   10         | IMPORTAR . LIBRERIA nombre COMO IDENTIFICADOR ';'
 
-    $default  reduce usando la regla 12 (nombre)
+    LIBRERIA  desplazar e ir al estado 19
 
 
 Estado 13
 
-    8 libreria: DE LIBRERIA nombre . IMPORTAR varios_identificadores ';'
-   13 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
+    7 varias_librerias: varias_librerias . libreria
+   18 codigo_libreria: varias_librerias . varias_declaraciones
+   19                | varias_librerias . exportaciones varias_declaraciones
 
-    IMPORTAR       desplazar e ir al estado 17
-    CUATRO_PUNTOS  desplazar e ir al estado 18
+    DE             desplazar e ir al estado 11
+    EXPORTAR       desplazar e ir al estado 20
+    IMPORTAR       desplazar e ir al estado 12
+    SUBPROGRAMA    desplazar e ir al estado 21
+    TIPO           desplazar e ir al estado 22
+    IDENTIFICADOR  desplazar e ir al estado 23
+
+    libreria                 ir al estado 24
+    varios_identificadores   ir al estado 25
+    varias_declaraciones     ir al estado 26
+    exportaciones            ir al estado 27
+    declaracion              ir al estado 28
+    declaracion_objeto       ir al estado 29
+    declaracion_tipo         ir al estado 30
+    declaracion_subprograma  ir al estado 31
 
 
 Estado 14
 
-    7 libreria: IMPORTAR LIBRERIA nombre . ';'
-    9         | IMPORTAR LIBRERIA nombre . COMO IDENTIFICADOR ';'
-   13 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
-
-    COMO           desplazar e ir al estado 19
-    CUATRO_PUNTOS  desplazar e ir al estado 18
-    ';'            desplazar e ir al estado 20
-
-
-Estado 15
-
-    3 definicion_programa: programa IDENTIFICADOR ';' . codigo_programa
-
-    DE        desplazar e ir al estado 1
-    IMPORTAR  desplazar e ir al estado 2
-
-    codigo_programa   ir al estado 21
-    varias_librerias  ir al estado 22
-    libreria          ir al estado 23
-
-
-Estado 16
-
-   14 definicion_libreria: libreria IDENTIFICADOR ';' . codigo_libreria
-
-    DE        desplazar e ir al estado 1
-    IMPORTAR  desplazar e ir al estado 2
-
-    varias_librerias  ir al estado 24
-    libreria          ir al estado 23
-    codigo_libreria   ir al estado 25
-
-
-Estado 17
-
-    8 libreria: DE LIBRERIA nombre IMPORTAR . varios_identificadores ';'
-
-    IDENTIFICADOR  desplazar e ir al estado 26
-
-    varios_identificadores  ir al estado 27
-
-
-Estado 18
-
-   13 nombre: nombre CUATRO_PUNTOS . IDENTIFICADOR
-
-    IDENTIFICADOR  desplazar e ir al estado 28
-
-
-Estado 19
-
-    9 libreria: IMPORTAR LIBRERIA nombre COMO . IDENTIFICADOR ';'
-
-    IDENTIFICADOR  desplazar e ir al estado 29
-
-
-Estado 20
-
-    7 libreria: IMPORTAR LIBRERIA nombre ';' .
-
-    $default  reduce usando la regla 7 (libreria)
-
-
-Estado 21
-
-    3 definicion_programa: programa IDENTIFICADOR ';' codigo_programa .
-
-    $default  reduce usando la regla 3 (definicion_programa)
-
-
-Estado 22
-
-    4 codigo_programa: varias_librerias . cuerpo_subprograma
-    6 varias_librerias: varias_librerias . libreria
-
-    DE             desplazar e ir al estado 1
-    IMPORTAR       desplazar e ir al estado 2
-    SUBPROGRAMA    desplazar e ir al estado 30
-    TIPO           desplazar e ir al estado 31
-    IDENTIFICADOR  desplazar e ir al estado 26
-
-    SUBPROGRAMA    [reduce usando la regla 17 (varias_declaraciones)]
-    TIPO           [reduce usando la regla 17 (varias_declaraciones)]
-    IDENTIFICADOR  [reduce usando la regla 17 (varias_declaraciones)]
-    $default       reduce usando la regla 17 (varias_declaraciones)
-
-    libreria                 ir al estado 32
-    varios_identificadores   ir al estado 33
-    varias_declaraciones     ir al estado 34
-    declaracion              ir al estado 35
-    declaracion_objeto       ir al estado 36
-    declaracion_tipo         ir al estado 37
-    declaracion_subprograma  ir al estado 38
-    cuerpo_subprograma       ir al estado 39
-
-
-Estado 23
-
-    5 varias_librerias: libreria .
-
-    $default  reduce usando la regla 5 (varias_librerias)
-
-
-Estado 24
-
-    6 varias_librerias: varias_librerias . libreria
-   15 codigo_libreria: varias_librerias . varias_declaraciones
-   16                | varias_librerias . exportaciones varias_declaraciones
-
-    DE             desplazar e ir al estado 1
-    EXPORTAR       desplazar e ir al estado 40
-    IMPORTAR       desplazar e ir al estado 2
-    SUBPROGRAMA    desplazar e ir al estado 30
-    TIPO           desplazar e ir al estado 31
-    IDENTIFICADOR  desplazar e ir al estado 26
-
-    SUBPROGRAMA    [reduce usando la regla 17 (varias_declaraciones)]
-    TIPO           [reduce usando la regla 17 (varias_declaraciones)]
-    IDENTIFICADOR  [reduce usando la regla 17 (varias_declaraciones)]
-    $default       reduce usando la regla 17 (varias_declaraciones)
-
-    libreria                 ir al estado 32
-    varios_identificadores   ir al estado 33
-    varias_declaraciones     ir al estado 41
-    exportaciones            ir al estado 42
-    declaracion              ir al estado 35
-    declaracion_objeto       ir al estado 36
-    declaracion_tipo         ir al estado 37
-    declaracion_subprograma  ir al estado 38
-
-
-Estado 25
-
-   14 definicion_libreria: libreria IDENTIFICADOR ';' codigo_libreria .
-
-    $default  reduce usando la regla 14 (definicion_libreria)
-
-
-Estado 26
-
-   10 varios_identificadores: IDENTIFICADOR .
-
-    $default  reduce usando la regla 10 (varios_identificadores)
-
-
-Estado 27
-
-    8 libreria: DE LIBRERIA nombre IMPORTAR varios_identificadores . ';'
-   11 varios_identificadores: varios_identificadores . IDENTIFICADOR
-
-    IDENTIFICADOR  desplazar e ir al estado 43
-    ';'            desplazar e ir al estado 44
-
-
-Estado 28
-
-   13 nombre: nombre CUATRO_PUNTOS IDENTIFICADOR .
-
-    $default  reduce usando la regla 13 (nombre)
-
-
-Estado 29
-
-    9 libreria: IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR . ';'
-
-    ';'  desplazar e ir al estado 45
-
-
-Estado 30
-
-   80 declaracion_subprograma: SUBPROGRAMA . cabecera_subprograma cuerpo_subprograma SUBPROGRAMA
-
-    IDENTIFICADOR  desplazar e ir al estado 46
-
-    cabecera_subprograma  ir al estado 47
-
-
-Estado 31
-
-   29 declaracion_tipo: TIPO . IDENTIFICADOR ES tipo_no_estructurado ';'
-   30                 | TIPO . IDENTIFICADOR ES tipo_estructurado
-
-    IDENTIFICADOR  desplazar e ir al estado 48
-
-
-Estado 32
-
-    6 varias_librerias: varias_librerias libreria .
+    6 varias_librerias: libreria .
 
     $default  reduce usando la regla 6 (varias_librerias)
 
 
-Estado 33
+Estado 15
 
-   11 varios_identificadores: varios_identificadores . IDENTIFICADOR
-   26 declaracion_objeto: varios_identificadores . ':' especificacion_tipo
+   17 definicion_libreria: LIBRERIA IDENTIFICADOR ';' codigo_libreria .
 
-    IDENTIFICADOR  desplazar e ir al estado 43
-    ':'            desplazar e ir al estado 49
+    $default  reduce usando la regla 17 (definicion_libreria)
 
 
-Estado 34
+Estado 16
 
-   19 varias_declaraciones: varias_declaraciones . declaracion
-   95 cuerpo_subprograma: varias_declaraciones . PRINCIPIO varias_instrucciones FIN
+    3 definicion_programa: PROGRAMA IDENTIFICADOR ';' codigo_programa .
 
-    PRINCIPIO      desplazar e ir al estado 50
-    SUBPROGRAMA    desplazar e ir al estado 30
-    TIPO           desplazar e ir al estado 31
-    IDENTIFICADOR  desplazar e ir al estado 26
-
-    varios_identificadores   ir al estado 33
-    declaracion              ir al estado 51
-    declaracion_objeto       ir al estado 36
-    declaracion_tipo         ir al estado 37
-    declaracion_subprograma  ir al estado 38
+    $default  reduce usando la regla 3 (definicion_programa)
 
 
-Estado 35
+Estado 17
 
-   18 varias_declaraciones: declaracion .
+    4 codigo_programa: varias_librerias . cuerpo_subprograma
+    7 varias_librerias: varias_librerias . libreria
 
-    $default  reduce usando la regla 18 (varias_declaraciones)
+    DE             desplazar e ir al estado 11
+    IMPORTAR       desplazar e ir al estado 12
+    SUBPROGRAMA    desplazar e ir al estado 21
+    TIPO           desplazar e ir al estado 22
+    IDENTIFICADOR  desplazar e ir al estado 23
+
+    $default  reduce usando la regla 104 (cero_o_mas_declaraciones)
+
+    libreria                  ir al estado 24
+    varios_identificadores    ir al estado 25
+    varias_declaraciones      ir al estado 32
+    declaracion               ir al estado 33
+    declaracion_objeto        ir al estado 29
+    declaracion_tipo          ir al estado 30
+    declaracion_subprograma   ir al estado 31
+    cuerpo_subprograma        ir al estado 34
+    cero_o_mas_declaraciones  ir al estado 35
 
 
-Estado 36
+Estado 18
 
-   23 declaracion: declaracion_objeto .
+    9 libreria: DE LIBRERIA . nombre IMPORTAR varios_identificadores ';'
 
-    $default  reduce usando la regla 23 (declaracion)
+    IDENTIFICADOR  desplazar e ir al estado 36
 
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
 
-Estado 37
-
-   24 declaracion: declaracion_tipo .
-
-    $default  reduce usando la regla 24 (declaracion)
+    nombre                   ir al estado 37
+    varios_identificadores2  ir al estado 38
 
 
-Estado 38
+Estado 19
 
-   25 declaracion: declaracion_subprograma .
+    8 libreria: IMPORTAR LIBRERIA . nombre ';'
+   10         | IMPORTAR LIBRERIA . nombre COMO IDENTIFICADOR ';'
+
+    IDENTIFICADOR  desplazar e ir al estado 36
+
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+
+    nombre                   ir al estado 39
+    varios_identificadores2  ir al estado 38
+
+
+Estado 20
+
+   22 exportaciones: EXPORTAR . varios_nombres ';'
+
+    IDENTIFICADOR  desplazar e ir al estado 36
+
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+
+    nombre                   ir al estado 40
+    varios_identificadores2  ir al estado 38
+    varios_nombres           ir al estado 41
+
+
+Estado 21
+
+   88 declaracion_subprograma: SUBPROGRAMA . cabecera_subprograma cuerpo_subprograma SUBPROGRAMA
+
+    IDENTIFICADOR  desplazar e ir al estado 42
+
+    cabecera_subprograma  ir al estado 43
+
+
+Estado 22
+
+   31 declaracion_tipo: TIPO . IDENTIFICADOR ES tipo_no_estructurado ';'
+   32                 | TIPO . IDENTIFICADOR ES tipo_estructurado
+
+    IDENTIFICADOR  desplazar e ir al estado 44
+
+
+Estado 23
+
+   11 varios_identificadores: IDENTIFICADOR .
+
+    $default  reduce usando la regla 11 (varios_identificadores)
+
+
+Estado 24
+
+    7 varias_librerias: varias_librerias libreria .
+
+    $default  reduce usando la regla 7 (varias_librerias)
+
+
+Estado 25
+
+   12 varios_identificadores: varios_identificadores . ',' IDENTIFICADOR
+   28 declaracion_objeto: varios_identificadores . ':' especificacion_tipo ';'
+
+    ','  desplazar e ir al estado 45
+    ':'  desplazar e ir al estado 46
+
+
+Estado 26
+
+   18 codigo_libreria: varias_librerias varias_declaraciones .
+   21 varias_declaraciones: varias_declaraciones . declaracion
+
+    SUBPROGRAMA    desplazar e ir al estado 21
+    TIPO           desplazar e ir al estado 22
+    IDENTIFICADOR  desplazar e ir al estado 23
+
+    $default  reduce usando la regla 18 (codigo_libreria)
+
+    varios_identificadores   ir al estado 25
+    declaracion              ir al estado 47
+    declaracion_objeto       ir al estado 29
+    declaracion_tipo         ir al estado 30
+    declaracion_subprograma  ir al estado 31
+
+
+Estado 27
+
+   19 codigo_libreria: varias_librerias exportaciones . varias_declaraciones
+
+    SUBPROGRAMA    desplazar e ir al estado 21
+    TIPO           desplazar e ir al estado 22
+    IDENTIFICADOR  desplazar e ir al estado 23
+
+    varios_identificadores   ir al estado 25
+    varias_declaraciones     ir al estado 48
+    declaracion              ir al estado 28
+    declaracion_objeto       ir al estado 29
+    declaracion_tipo         ir al estado 30
+    declaracion_subprograma  ir al estado 31
+
+
+Estado 28
+
+   20 varias_declaraciones: declaracion .
+
+    $default  reduce usando la regla 20 (varias_declaraciones)
+
+
+Estado 29
+
+   25 declaracion: declaracion_objeto .
 
     $default  reduce usando la regla 25 (declaracion)
 
 
-Estado 39
+Estado 30
+
+   26 declaracion: declaracion_tipo .
+
+    $default  reduce usando la regla 26 (declaracion)
+
+
+Estado 31
+
+   27 declaracion: declaracion_subprograma .
+
+    $default  reduce usando la regla 27 (declaracion)
+
+
+Estado 32
+
+   21 varias_declaraciones: varias_declaraciones . declaracion
+  106 cero_o_mas_declaraciones: varias_declaraciones . declaracion
+
+    SUBPROGRAMA    desplazar e ir al estado 21
+    TIPO           desplazar e ir al estado 22
+    IDENTIFICADOR  desplazar e ir al estado 23
+
+    varios_identificadores   ir al estado 25
+    declaracion              ir al estado 49
+    declaracion_objeto       ir al estado 29
+    declaracion_tipo         ir al estado 30
+    declaracion_subprograma  ir al estado 31
+
+
+Estado 33
+
+   20 varias_declaraciones: declaracion .
+  105 cero_o_mas_declaraciones: declaracion .
+
+    PRINCIPIO  reduce usando la regla 105 (cero_o_mas_declaraciones)
+    $default   reduce usando la regla 20 (varias_declaraciones)
+
+
+Estado 34
 
     4 codigo_programa: varias_librerias cuerpo_subprograma .
 
     $default  reduce usando la regla 4 (codigo_programa)
 
 
+Estado 35
+
+  103 cuerpo_subprograma: cero_o_mas_declaraciones . PRINCIPIO varias_instrucciones FIN
+
+    PRINCIPIO  desplazar e ir al estado 50
+
+
+Estado 36
+
+   13 nombre: IDENTIFICADOR .
+
+    $default  reduce usando la regla 13 (nombre)
+
+
+Estado 37
+
+    9 libreria: DE LIBRERIA nombre . IMPORTAR varios_identificadores ';'
+
+    IMPORTAR  desplazar e ir al estado 51
+
+
+Estado 38
+
+   14 nombre: varios_identificadores2 . IDENTIFICADOR
+   16 varios_identificadores2: varios_identificadores2 . IDENTIFICADOR CUATRO_PUNTOS
+
+    IDENTIFICADOR  desplazar e ir al estado 52
+
+
+Estado 39
+
+    8 libreria: IMPORTAR LIBRERIA nombre . ';'
+   10         | IMPORTAR LIBRERIA nombre . COMO IDENTIFICADOR ';'
+
+    COMO  desplazar e ir al estado 53
+    ';'   desplazar e ir al estado 54
+
+
 Estado 40
 
-   20 exportaciones: EXPORTAR . varios_nombres ';'
+   23 varios_nombres: nombre .
 
-    IDENTIFICADOR  desplazar e ir al estado 12
-
-    nombre          ir al estado 52
-    varios_nombres  ir al estado 53
+    $default  reduce usando la regla 23 (varios_nombres)
 
 
 Estado 41
 
-   15 codigo_libreria: varias_librerias varias_declaraciones .
-   19 varias_declaraciones: varias_declaraciones . declaracion
+   22 exportaciones: EXPORTAR varios_nombres . ';'
+   24 varios_nombres: varios_nombres . ',' nombre
 
-    SUBPROGRAMA    desplazar e ir al estado 30
-    TIPO           desplazar e ir al estado 31
-    IDENTIFICADOR  desplazar e ir al estado 26
-
-    IDENTIFICADOR  [reduce usando la regla 15 (codigo_libreria)]
-    $default       reduce usando la regla 15 (codigo_libreria)
-
-    varios_identificadores   ir al estado 33
-    declaracion              ir al estado 51
-    declaracion_objeto       ir al estado 36
-    declaracion_tipo         ir al estado 37
-    declaracion_subprograma  ir al estado 38
+    ';'  desplazar e ir al estado 55
+    ','  desplazar e ir al estado 56
 
 
 Estado 42
 
-   16 codigo_libreria: varias_librerias exportaciones . varias_declaraciones
+   89 cabecera_subprograma: IDENTIFICADOR . cero_uno_parametrizacion cero_uno_tipoResultado
 
-    SUBPROGRAMA    desplazar e ir al estado 30
-    TIPO           desplazar e ir al estado 31
-    IDENTIFICADOR  desplazar e ir al estado 26
+    '('  desplazar e ir al estado 57
 
-    SUBPROGRAMA    [reduce usando la regla 17 (varias_declaraciones)]
-    TIPO           [reduce usando la regla 17 (varias_declaraciones)]
-    IDENTIFICADOR  [reduce usando la regla 17 (varias_declaraciones)]
-    $default       reduce usando la regla 17 (varias_declaraciones)
+    $default  reduce usando la regla 90 (cero_uno_parametrizacion)
 
-    varios_identificadores   ir al estado 33
-    varias_declaraciones     ir al estado 54
-    declaracion              ir al estado 35
-    declaracion_objeto       ir al estado 36
-    declaracion_tipo         ir al estado 37
-    declaracion_subprograma  ir al estado 38
+    cero_uno_parametrizacion  ir al estado 58
+    parametrizacion           ir al estado 59
 
 
 Estado 43
 
-   11 varios_identificadores: varios_identificadores IDENTIFICADOR .
+   88 declaracion_subprograma: SUBPROGRAMA cabecera_subprograma . cuerpo_subprograma SUBPROGRAMA
 
-    $default  reduce usando la regla 11 (varios_identificadores)
+    SUBPROGRAMA    desplazar e ir al estado 21
+    TIPO           desplazar e ir al estado 22
+    IDENTIFICADOR  desplazar e ir al estado 23
+
+    $default  reduce usando la regla 104 (cero_o_mas_declaraciones)
+
+    varios_identificadores    ir al estado 25
+    varias_declaraciones      ir al estado 32
+    declaracion               ir al estado 33
+    declaracion_objeto        ir al estado 29
+    declaracion_tipo          ir al estado 30
+    declaracion_subprograma   ir al estado 31
+    cuerpo_subprograma        ir al estado 60
+    cero_o_mas_declaraciones  ir al estado 35
 
 
 Estado 44
 
-    8 libreria: DE LIBRERIA nombre IMPORTAR varios_identificadores ';' .
+   31 declaracion_tipo: TIPO IDENTIFICADOR . ES tipo_no_estructurado ';'
+   32                 | TIPO IDENTIFICADOR . ES tipo_estructurado
 
-    $default  reduce usando la regla 8 (libreria)
+    ES  desplazar e ir al estado 61
 
 
 Estado 45
 
-    9 libreria: IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ';' .
+   12 varios_identificadores: varios_identificadores ',' . IDENTIFICADOR
 
-    $default  reduce usando la regla 9 (libreria)
+    IDENTIFICADOR  desplazar e ir al estado 62
 
 
 Estado 46
 
-   81 cabecera_subprograma: IDENTIFICADOR . cero_uno_parametrizacion cero_uno_tipoResultado
+   28 declaracion_objeto: varios_identificadores ':' . especificacion_tipo ';'
 
-    '('  desplazar e ir al estado 55
+    DICCIONARIO    desplazar e ir al estado 63
+    LISTA          desplazar e ir al estado 64
+    SIGNO          desplazar e ir al estado 65
+    IDENTIFICADOR  desplazar e ir al estado 36
 
-    $default  reduce usando la regla 82 (cero_uno_parametrizacion)
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+    $default       reduce usando la regla 37 (cero_o_uno_signo)
 
-    cero_uno_parametrizacion  ir al estado 56
-    parametrizacion           ir al estado 57
+    nombre                   ir al estado 66
+    varios_identificadores2  ir al estado 38
+    especificacion_tipo      ir al estado 67
+    tipo_no_estructurado     ir al estado 68
+    tipo_escalar             ir al estado 69
+    cero_o_uno_signo         ir al estado 70
+    tipo_tabla               ir al estado 71
+    tipo_diccionario         ir al estado 72
 
 
 Estado 47
 
-   80 declaracion_subprograma: SUBPROGRAMA cabecera_subprograma . cuerpo_subprograma SUBPROGRAMA
+   21 varias_declaraciones: varias_declaraciones declaracion .
 
-    SUBPROGRAMA    desplazar e ir al estado 30
-    TIPO           desplazar e ir al estado 31
-    IDENTIFICADOR  desplazar e ir al estado 26
-
-    SUBPROGRAMA    [reduce usando la regla 17 (varias_declaraciones)]
-    TIPO           [reduce usando la regla 17 (varias_declaraciones)]
-    IDENTIFICADOR  [reduce usando la regla 17 (varias_declaraciones)]
-    $default       reduce usando la regla 17 (varias_declaraciones)
-
-    varios_identificadores   ir al estado 33
-    varias_declaraciones     ir al estado 34
-    declaracion              ir al estado 35
-    declaracion_objeto       ir al estado 36
-    declaracion_tipo         ir al estado 37
-    declaracion_subprograma  ir al estado 38
-    cuerpo_subprograma       ir al estado 58
+    $default  reduce usando la regla 21 (varias_declaraciones)
 
 
 Estado 48
 
-   29 declaracion_tipo: TIPO IDENTIFICADOR . ES tipo_no_estructurado ';'
-   30                 | TIPO IDENTIFICADOR . ES tipo_estructurado
+   19 codigo_libreria: varias_librerias exportaciones varias_declaraciones .
+   21 varias_declaraciones: varias_declaraciones . declaracion
 
-    ES  desplazar e ir al estado 59
+    SUBPROGRAMA    desplazar e ir al estado 21
+    TIPO           desplazar e ir al estado 22
+    IDENTIFICADOR  desplazar e ir al estado 23
+
+    $default  reduce usando la regla 19 (codigo_libreria)
+
+    varios_identificadores   ir al estado 25
+    declaracion              ir al estado 47
+    declaracion_objeto       ir al estado 29
+    declaracion_tipo         ir al estado 30
+    declaracion_subprograma  ir al estado 31
 
 
 Estado 49
 
-   26 declaracion_objeto: varios_identificadores ':' . especificacion_tipo
+   21 varias_declaraciones: varias_declaraciones declaracion .
+  106 cero_o_mas_declaraciones: varias_declaraciones declaracion .
 
-    DICCIONARIO    desplazar e ir al estado 60
-    LISTA          desplazar e ir al estado 61
-    SIGNO          desplazar e ir al estado 62
-    IDENTIFICADOR  desplazar e ir al estado 12
-
-    $default  reduce usando la regla 35 (cero_o_uno_signo)
-
-    nombre                ir al estado 63
-    especificacion_tipo   ir al estado 64
-    tipo_no_estructurado  ir al estado 65
-    tipo_escalar          ir al estado 66
-    cero_o_uno_signo      ir al estado 67
-    tipo_tabla            ir al estado 68
-    tipo_diccionario      ir al estado 69
+    PRINCIPIO  reduce usando la regla 106 (cero_o_mas_declaraciones)
+    $default   reduce usando la regla 21 (varias_declaraciones)
 
 
 Estado 50
 
-   95 cuerpo_subprograma: varias_declaraciones PRINCIPIO . varias_instrucciones FIN
+  103 cuerpo_subprograma: cero_o_mas_declaraciones PRINCIPIO . varias_instrucciones FIN
 
-    DEVOLVER       desplazar e ir al estado 70
-    LANZA          desplazar e ir al estado 71
-    PRUEBA         desplazar e ir al estado 72
-    SALIR          desplazar e ir al estado 73
-    SIGUIENTE      desplazar e ir al estado 74
-    IDENTIFICADOR  desplazar e ir al estado 12
-    ';'            desplazar e ir al estado 75
+    DEVOLVER       desplazar e ir al estado 73
+    LANZA          desplazar e ir al estado 74
+    PRUEBA         desplazar e ir al estado 75
+    SALIR          desplazar e ir al estado 76
+    SIGUIENTE      desplazar e ir al estado 77
+    IDENTIFICADOR  desplazar e ir al estado 36
+    ';'            desplazar e ir al estado 78
 
-    nombre                             ir al estado 76
-    varias_instrucciones               ir al estado 77
-    instruccion                        ir al estado 78
-    instruccion_devolver               ir al estado 79
-    instruccion_llamada                ir al estado 80
-    llamada_subprograma                ir al estado 81
-    instruccion_interrupcion           ir al estado 82
-    instruccion_lanzamiento_excepcion  ir al estado 83
-    instruccion_captura_excepcion      ir al estado 84
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+
+    nombre                             ir al estado 79
+    varios_identificadores2            ir al estado 38
+    varias_instrucciones               ir al estado 80
+    instruccion                        ir al estado 81
+    instruccion_devolver               ir al estado 82
+    instruccion_llamada                ir al estado 83
+    llamada_subprograma                ir al estado 84
+    instruccion_interrupcion           ir al estado 85
+    instruccion_lanzamiento_excepcion  ir al estado 86
+    instruccion_captura_excepcion      ir al estado 87
 
 
 Estado 51
 
-   19 varias_declaraciones: varias_declaraciones declaracion .
+    9 libreria: DE LIBRERIA nombre IMPORTAR . varios_identificadores ';'
 
-    $default  reduce usando la regla 19 (varias_declaraciones)
+    IDENTIFICADOR  desplazar e ir al estado 23
+
+    varios_identificadores  ir al estado 88
 
 
 Estado 52
 
-   13 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
-   21 varios_nombres: nombre .
+   14 nombre: varios_identificadores2 IDENTIFICADOR .
+   16 varios_identificadores2: varios_identificadores2 IDENTIFICADOR . CUATRO_PUNTOS
 
-    CUATRO_PUNTOS  desplazar e ir al estado 18
+    CUATRO_PUNTOS  desplazar e ir al estado 89
 
-    $default  reduce usando la regla 21 (varios_nombres)
+    $default  reduce usando la regla 14 (nombre)
 
 
 Estado 53
 
-   20 exportaciones: EXPORTAR varios_nombres . ';'
-   22 varios_nombres: varios_nombres . nombre
+   10 libreria: IMPORTAR LIBRERIA nombre COMO . IDENTIFICADOR ';'
 
-    IDENTIFICADOR  desplazar e ir al estado 12
-    ';'            desplazar e ir al estado 85
-
-    nombre  ir al estado 86
+    IDENTIFICADOR  desplazar e ir al estado 90
 
 
 Estado 54
 
-   16 codigo_libreria: varias_librerias exportaciones varias_declaraciones .
-   19 varias_declaraciones: varias_declaraciones . declaracion
+    8 libreria: IMPORTAR LIBRERIA nombre ';' .
 
-    SUBPROGRAMA    desplazar e ir al estado 30
-    TIPO           desplazar e ir al estado 31
-    IDENTIFICADOR  desplazar e ir al estado 26
-
-    IDENTIFICADOR  [reduce usando la regla 16 (codigo_libreria)]
-    $default       reduce usando la regla 16 (codigo_libreria)
-
-    varios_identificadores   ir al estado 33
-    declaracion              ir al estado 51
-    declaracion_objeto       ir al estado 36
-    declaracion_tipo         ir al estado 37
-    declaracion_subprograma  ir al estado 38
+    $default  reduce usando la regla 8 (libreria)
 
 
 Estado 55
 
-   86 parametrizacion: '(' . varias_declaraciones_parametros declaracion_parametros ')'
+   22 exportaciones: EXPORTAR varios_nombres ';' .
 
-    IDENTIFICADOR  desplazar e ir al estado 26
-
-    IDENTIFICADOR  [reduce usando la regla 88 (varias_declaraciones_parametros)]
-
-    varios_identificadores           ir al estado 87
-    declaracion_parametros           ir al estado 88
-    varias_declaraciones_parametros  ir al estado 89
+    $default  reduce usando la regla 22 (exportaciones)
 
 
 Estado 56
 
-   81 cabecera_subprograma: IDENTIFICADOR cero_uno_parametrizacion . cero_uno_tipoResultado
+   24 varios_nombres: varios_nombres ',' . nombre
 
-    DEVOLVER  desplazar e ir al estado 90
+    IDENTIFICADOR  desplazar e ir al estado 36
 
-    $default  reduce usando la regla 84 (cero_uno_tipoResultado)
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
 
-    cero_uno_tipoResultado  ir al estado 91
-    tipo_resultado          ir al estado 92
+    nombre                   ir al estado 91
+    varios_identificadores2  ir al estado 38
 
 
 Estado 57
 
-   83 cero_uno_parametrizacion: parametrizacion .
+   94 parametrizacion: '(' . varias_declaraciones_parametros declaracion_parametros ')'
 
-    $default  reduce usando la regla 83 (cero_uno_parametrizacion)
+    IDENTIFICADOR  desplazar e ir al estado 23
+
+    IDENTIFICADOR  [reduce usando la regla 97 (varias_declaraciones_parametros)]
+
+    varios_identificadores           ir al estado 92
+    declaracion_parametros           ir al estado 93
+    varias_declaraciones_parametros  ir al estado 94
 
 
 Estado 58
 
-   80 declaracion_subprograma: SUBPROGRAMA cabecera_subprograma cuerpo_subprograma . SUBPROGRAMA
+   89 cabecera_subprograma: IDENTIFICADOR cero_uno_parametrizacion . cero_uno_tipoResultado
 
-    SUBPROGRAMA  desplazar e ir al estado 93
+    DEVOLVER  desplazar e ir al estado 95
+
+    $default  reduce usando la regla 92 (cero_uno_tipoResultado)
+
+    cero_uno_tipoResultado  ir al estado 96
+    tipo_resultado          ir al estado 97
 
 
 Estado 59
 
-   29 declaracion_tipo: TIPO IDENTIFICADOR ES . tipo_no_estructurado ';'
-   30                 | TIPO IDENTIFICADOR ES . tipo_estructurado
+   91 cero_uno_parametrizacion: parametrizacion .
 
-    CLASE        desplazar e ir al estado 94
-    DICCIONARIO  desplazar e ir al estado 60
-    ENUMERACION  desplazar e ir al estado 95
-    LISTA        desplazar e ir al estado 61
-    REGISTRO     desplazar e ir al estado 96
-    SIGNO        desplazar e ir al estado 62
-
-    $default  reduce usando la regla 35 (cero_o_uno_signo)
-
-    tipo_no_estructurado  ir al estado 97
-    tipo_escalar          ir al estado 66
-    cero_o_uno_signo      ir al estado 67
-    tipo_tabla            ir al estado 68
-    tipo_diccionario      ir al estado 69
-    tipo_estructurado     ir al estado 98
-    tipo_registro         ir al estado 99
-    tipo_enumerado        ir al estado 100
-    clase                 ir al estado 101
+    $default  reduce usando la regla 91 (cero_uno_parametrizacion)
 
 
 Estado 60
 
-   41 tipo_diccionario: DICCIONARIO . DE especificacion_tipo
+   88 declaracion_subprograma: SUBPROGRAMA cabecera_subprograma cuerpo_subprograma . SUBPROGRAMA
 
-    DE  desplazar e ir al estado 102
+    SUBPROGRAMA  desplazar e ir al estado 98
 
 
 Estado 61
 
-   40 tipo_tabla: LISTA . DE especificacion_tipo
+   31 declaracion_tipo: TIPO IDENTIFICADOR ES . tipo_no_estructurado ';'
+   32                 | TIPO IDENTIFICADOR ES . tipo_estructurado
 
-    DE  desplazar e ir al estado 103
+    CLASE        desplazar e ir al estado 99
+    DICCIONARIO  desplazar e ir al estado 63
+    ENUMERACION  desplazar e ir al estado 100
+    LISTA        desplazar e ir al estado 64
+    REGISTRO     desplazar e ir al estado 101
+    SIGNO        desplazar e ir al estado 65
+
+    $default  reduce usando la regla 37 (cero_o_uno_signo)
+
+    tipo_no_estructurado  ir al estado 102
+    tipo_escalar          ir al estado 69
+    cero_o_uno_signo      ir al estado 70
+    tipo_tabla            ir al estado 71
+    tipo_diccionario      ir al estado 72
+    tipo_estructurado     ir al estado 103
+    tipo_registro         ir al estado 104
+    tipo_enumerado        ir al estado 105
+    clase                 ir al estado 106
 
 
 Estado 62
 
-   36 cero_o_uno_signo: SIGNO .
+   12 varios_identificadores: varios_identificadores ',' IDENTIFICADOR .
 
-    $default  reduce usando la regla 36 (cero_o_uno_signo)
+    $default  reduce usando la regla 12 (varios_identificadores)
 
 
 Estado 63
 
-   13 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
-   27 especificacion_tipo: nombre .
+   49 tipo_diccionario: DICCIONARIO . DE especificacion_tipo
 
-    CUATRO_PUNTOS  desplazar e ir al estado 18
-
-    $default  reduce usando la regla 27 (especificacion_tipo)
+    DE  desplazar e ir al estado 107
 
 
 Estado 64
 
-   26 declaracion_objeto: varios_identificadores ':' especificacion_tipo .
+   48 tipo_tabla: LISTA . DE especificacion_tipo
 
-    $default  reduce usando la regla 26 (declaracion_objeto)
+    DE  desplazar e ir al estado 108
 
 
 Estado 65
 
-   28 especificacion_tipo: tipo_no_estructurado .
+   38 cero_o_uno_signo: SIGNO .
 
-    $default  reduce usando la regla 28 (especificacion_tipo)
+    $default  reduce usando la regla 38 (cero_o_uno_signo)
 
 
 Estado 66
 
-   31 tipo_no_estructurado: tipo_escalar .
+   29 especificacion_tipo: nombre .
 
-    $default  reduce usando la regla 31 (tipo_no_estructurado)
+    $default  reduce usando la regla 29 (especificacion_tipo)
 
 
 Estado 67
 
-   34 tipo_escalar: cero_o_uno_signo . TIPO_BASICO cero_o_uno_longitud cero_o_uno_rango
+   28 declaracion_objeto: varios_identificadores ':' especificacion_tipo . ';'
 
-    TIPO_BASICO  desplazar e ir al estado 104
+    ';'  desplazar e ir al estado 109
 
 
 Estado 68
 
-   32 tipo_no_estructurado: tipo_tabla .
+   30 especificacion_tipo: tipo_no_estructurado .
 
-    $default  reduce usando la regla 32 (tipo_no_estructurado)
+    $default  reduce usando la regla 30 (especificacion_tipo)
 
 
 Estado 69
 
-   33 tipo_no_estructurado: tipo_diccionario .
+   33 tipo_no_estructurado: tipo_escalar .
 
     $default  reduce usando la regla 33 (tipo_no_estructurado)
 
 
 Estado 70
 
-  104 instruccion_devolver: DEVOLVER . cero_uno_expr ';'
+   36 tipo_escalar: cero_o_uno_signo . tipo_basico cero_o_uno_longitud cero_o_uno_rango
 
-    $default  reduce usando la regla 105 (cero_uno_expr)
+    BOOLEANO  desplazar e ir al estado 110
+    CARACTER  desplazar e ir al estado 111
+    ENTERO    desplazar e ir al estado 112
+    REAL      desplazar e ir al estado 113
 
-    cero_uno_expr  ir al estado 105
+    tipo_basico  ir al estado 114
 
 
 Estado 71
 
-  114 instruccion_lanzamiento_excepcion: LANZA . nombre ';'
+   34 tipo_no_estructurado: tipo_tabla .
 
-    IDENTIFICADOR  desplazar e ir al estado 12
-
-    nombre  ir al estado 106
+    $default  reduce usando la regla 34 (tipo_no_estructurado)
 
 
 Estado 72
 
-  115 instruccion_captura_excepcion: PRUEBA . instruccion clausulas FIN PRUEBA
+   35 tipo_no_estructurado: tipo_diccionario .
 
-    DEVOLVER       desplazar e ir al estado 70
-    LANZA          desplazar e ir al estado 71
-    PRUEBA         desplazar e ir al estado 72
-    SALIR          desplazar e ir al estado 73
-    SIGUIENTE      desplazar e ir al estado 74
-    IDENTIFICADOR  desplazar e ir al estado 12
-    ';'            desplazar e ir al estado 75
-
-    nombre                             ir al estado 76
-    instruccion                        ir al estado 107
-    instruccion_devolver               ir al estado 79
-    instruccion_llamada                ir al estado 80
-    llamada_subprograma                ir al estado 81
-    instruccion_interrupcion           ir al estado 82
-    instruccion_lanzamiento_excepcion  ir al estado 83
-    instruccion_captura_excepcion      ir al estado 84
+    $default  reduce usando la regla 35 (tipo_no_estructurado)
 
 
 Estado 73
 
-  110 instruccion_interrupcion: SALIR . cero_o_uno_de_identificador cero_o_uno_cuando ';'
+  115 instruccion_devolver: DEVOLVER . ';'
 
-    DE  desplazar e ir al estado 108
-
-    $default  reduce usando la regla 112 (cero_o_uno_de_identificador)
-
-    cero_o_uno_de_identificador  ir al estado 109
+    ';'  desplazar e ir al estado 115
 
 
 Estado 74
 
-  109 instruccion_interrupcion: SIGUIENTE . cero_o_uno_cuando ';'
+  124 instruccion_lanzamiento_excepcion: LANZA . nombre ';'
 
-    $default  reduce usando la regla 111 (cero_o_uno_cuando)
+    IDENTIFICADOR  desplazar e ir al estado 36
 
-    cero_o_uno_cuando  ir al estado 110
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+
+    nombre                   ir al estado 116
+    varios_identificadores2  ir al estado 38
 
 
 Estado 75
 
-  103 instruccion: ';' .
+  125 instruccion_captura_excepcion: PRUEBA . instruccion clausulas FIN PRUEBA
 
-    $default  reduce usando la regla 103 (instruccion)
+    DEVOLVER       desplazar e ir al estado 73
+    LANZA          desplazar e ir al estado 74
+    PRUEBA         desplazar e ir al estado 75
+    SALIR          desplazar e ir al estado 76
+    SIGUIENTE      desplazar e ir al estado 77
+    IDENTIFICADOR  desplazar e ir al estado 36
+    ';'            desplazar e ir al estado 78
+
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+
+    nombre                             ir al estado 79
+    varios_identificadores2            ir al estado 38
+    instruccion                        ir al estado 117
+    instruccion_devolver               ir al estado 82
+    instruccion_llamada                ir al estado 83
+    llamada_subprograma                ir al estado 84
+    instruccion_interrupcion           ir al estado 85
+    instruccion_lanzamiento_excepcion  ir al estado 86
+    instruccion_captura_excepcion      ir al estado 87
 
 
 Estado 76
 
-   13 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
-  107 llamada_subprograma: nombre . '(' varias_definicion_parametro ')'
+  120 instruccion_interrupcion: SALIR . cero_o_uno_de_identificador cero_o_uno_cuando ';'
 
-    CUATRO_PUNTOS  desplazar e ir al estado 18
-    '('            desplazar e ir al estado 111
+    DE  desplazar e ir al estado 118
+
+    $default  reduce usando la regla 122 (cero_o_uno_de_identificador)
+
+    cero_o_uno_de_identificador  ir al estado 119
 
 
 Estado 77
 
-   95 cuerpo_subprograma: varias_declaraciones PRINCIPIO varias_instrucciones . FIN
-   97 varias_instrucciones: varias_instrucciones . instruccion
+  119 instruccion_interrupcion: SIGUIENTE . cero_o_uno_cuando ';'
 
-    DEVOLVER       desplazar e ir al estado 70
-    FIN            desplazar e ir al estado 112
-    LANZA          desplazar e ir al estado 71
-    PRUEBA         desplazar e ir al estado 72
-    SALIR          desplazar e ir al estado 73
-    SIGUIENTE      desplazar e ir al estado 74
-    IDENTIFICADOR  desplazar e ir al estado 12
-    ';'            desplazar e ir al estado 75
+    $default  reduce usando la regla 121 (cero_o_uno_cuando)
 
-    nombre                             ir al estado 76
-    instruccion                        ir al estado 113
-    instruccion_devolver               ir al estado 79
-    instruccion_llamada                ir al estado 80
-    llamada_subprograma                ir al estado 81
-    instruccion_interrupcion           ir al estado 82
-    instruccion_lanzamiento_excepcion  ir al estado 83
-    instruccion_captura_excepcion      ir al estado 84
+    cero_o_uno_cuando  ir al estado 120
 
 
 Estado 78
 
-   96 varias_instrucciones: instruccion .
+  114 instruccion: ';' .
 
-    $default  reduce usando la regla 96 (varias_instrucciones)
+    $default  reduce usando la regla 114 (instruccion)
 
 
 Estado 79
 
-   98 instruccion: instruccion_devolver .
+  117 llamada_subprograma: nombre . '(' varias_definicion_parametro ')'
 
-    $default  reduce usando la regla 98 (instruccion)
+    '('  desplazar e ir al estado 121
 
 
 Estado 80
 
-   99 instruccion: instruccion_llamada .
+  103 cuerpo_subprograma: cero_o_mas_declaraciones PRINCIPIO varias_instrucciones . FIN
+  108 varias_instrucciones: varias_instrucciones . instruccion
 
-    $default  reduce usando la regla 99 (instruccion)
+    DEVOLVER       desplazar e ir al estado 73
+    FIN            desplazar e ir al estado 122
+    LANZA          desplazar e ir al estado 74
+    PRUEBA         desplazar e ir al estado 75
+    SALIR          desplazar e ir al estado 76
+    SIGUIENTE      desplazar e ir al estado 77
+    IDENTIFICADOR  desplazar e ir al estado 36
+    ';'            desplazar e ir al estado 78
+
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+
+    nombre                             ir al estado 79
+    varios_identificadores2            ir al estado 38
+    instruccion                        ir al estado 123
+    instruccion_devolver               ir al estado 82
+    instruccion_llamada                ir al estado 83
+    llamada_subprograma                ir al estado 84
+    instruccion_interrupcion           ir al estado 85
+    instruccion_lanzamiento_excepcion  ir al estado 86
+    instruccion_captura_excepcion      ir al estado 87
 
 
 Estado 81
 
-  106 instruccion_llamada: llamada_subprograma . ';'
+  107 varias_instrucciones: instruccion .
 
-    ';'  desplazar e ir al estado 114
+    $default  reduce usando la regla 107 (varias_instrucciones)
 
 
 Estado 82
 
-  100 instruccion: instruccion_interrupcion .
+  109 instruccion: instruccion_devolver .
 
-    $default  reduce usando la regla 100 (instruccion)
+    $default  reduce usando la regla 109 (instruccion)
 
 
 Estado 83
 
-  101 instruccion: instruccion_lanzamiento_excepcion .
+  110 instruccion: instruccion_llamada .
 
-    $default  reduce usando la regla 101 (instruccion)
+    $default  reduce usando la regla 110 (instruccion)
 
 
 Estado 84
 
-  102 instruccion: instruccion_captura_excepcion .
+  116 instruccion_llamada: llamada_subprograma . ';'
 
-    $default  reduce usando la regla 102 (instruccion)
+    ';'  desplazar e ir al estado 124
 
 
 Estado 85
 
-   20 exportaciones: EXPORTAR varios_nombres ';' .
+  111 instruccion: instruccion_interrupcion .
 
-    $default  reduce usando la regla 20 (exportaciones)
+    $default  reduce usando la regla 111 (instruccion)
 
 
 Estado 86
 
-   13 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
-   22 varios_nombres: varios_nombres nombre .
+  112 instruccion: instruccion_lanzamiento_excepcion .
 
-    CUATRO_PUNTOS  desplazar e ir al estado 18
-
-    $default  reduce usando la regla 22 (varios_nombres)
+    $default  reduce usando la regla 112 (instruccion)
 
 
 Estado 87
 
-   11 varios_identificadores: varios_identificadores . IDENTIFICADOR
-   87 declaracion_parametros: varios_identificadores . ':' modo especificacion_tipo cero_uno_expresion
+  113 instruccion: instruccion_captura_excepcion .
 
-    IDENTIFICADOR  desplazar e ir al estado 43
-    ':'            desplazar e ir al estado 115
+    $default  reduce usando la regla 113 (instruccion)
 
 
 Estado 88
 
-   89 varias_declaraciones_parametros: declaracion_parametros . ';'
+    9 libreria: DE LIBRERIA nombre IMPORTAR varios_identificadores . ';'
+   12 varios_identificadores: varios_identificadores . ',' IDENTIFICADOR
 
-    ';'  desplazar e ir al estado 116
+    ';'  desplazar e ir al estado 125
+    ','  desplazar e ir al estado 45
 
 
 Estado 89
 
-   86 parametrizacion: '(' varias_declaraciones_parametros . declaracion_parametros ')'
-   90 varias_declaraciones_parametros: varias_declaraciones_parametros . declaracion_parametros ';'
+   16 varios_identificadores2: varios_identificadores2 IDENTIFICADOR CUATRO_PUNTOS .
 
-    IDENTIFICADOR  desplazar e ir al estado 26
-
-    varios_identificadores  ir al estado 87
-    declaracion_parametros  ir al estado 117
+    $default  reduce usando la regla 16 (varios_identificadores2)
 
 
 Estado 90
 
-   94 tipo_resultado: DEVOLVER . especificacion_tipo
+   10 libreria: IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR . ';'
 
-    DICCIONARIO    desplazar e ir al estado 60
-    LISTA          desplazar e ir al estado 61
-    SIGNO          desplazar e ir al estado 62
-    IDENTIFICADOR  desplazar e ir al estado 12
-
-    $default  reduce usando la regla 35 (cero_o_uno_signo)
-
-    nombre                ir al estado 63
-    especificacion_tipo   ir al estado 118
-    tipo_no_estructurado  ir al estado 65
-    tipo_escalar          ir al estado 66
-    cero_o_uno_signo      ir al estado 67
-    tipo_tabla            ir al estado 68
-    tipo_diccionario      ir al estado 69
+    ';'  desplazar e ir al estado 126
 
 
 Estado 91
 
-   81 cabecera_subprograma: IDENTIFICADOR cero_uno_parametrizacion cero_uno_tipoResultado .
+   24 varios_nombres: varios_nombres ',' nombre .
 
-    $default  reduce usando la regla 81 (cabecera_subprograma)
+    $default  reduce usando la regla 24 (varios_nombres)
 
 
 Estado 92
 
-   85 cero_uno_tipoResultado: tipo_resultado .
+   12 varios_identificadores: varios_identificadores . ',' IDENTIFICADOR
+   95 declaracion_parametros: varios_identificadores . ':' especificacion_tipo cero_uno_expresion
+   96                       | varios_identificadores . ':' modo especificacion_tipo cero_uno_expresion
 
-    $default  reduce usando la regla 85 (cero_uno_tipoResultado)
+    ','  desplazar e ir al estado 45
+    ':'  desplazar e ir al estado 127
 
 
 Estado 93
 
-   80 declaracion_subprograma: SUBPROGRAMA cabecera_subprograma cuerpo_subprograma SUBPROGRAMA .
+   98 varias_declaraciones_parametros: declaracion_parametros . ';'
 
-    $default  reduce usando la regla 80 (declaracion_subprograma)
+    ';'  desplazar e ir al estado 128
 
 
 Estado 94
 
-   55 clase: CLASE . cero_uno_ultima cero_uno_superclases varias_declaraciones_componente FIN CLASE
+   94 parametrizacion: '(' varias_declaraciones_parametros . declaracion_parametros ')'
+   99 varias_declaraciones_parametros: varias_declaraciones_parametros . declaracion_parametros ';'
 
-    ULTIMA  desplazar e ir al estado 119
+    IDENTIFICADOR  desplazar e ir al estado 23
 
-    $default  reduce usando la regla 56 (cero_uno_ultima)
-
-    cero_uno_ultima  ir al estado 120
+    varios_identificadores  ir al estado 92
+    declaracion_parametros  ir al estado 129
 
 
 Estado 95
 
-   50 tipo_enumerado: ENUMERACION . DE tipo_escalar varios_elemento_enumeracion FIN ENUMERACION
+  102 tipo_resultado: DEVOLVER . especificacion_tipo
 
-    DE  desplazar e ir al estado 121
+    DICCIONARIO    desplazar e ir al estado 63
+    LISTA          desplazar e ir al estado 64
+    SIGNO          desplazar e ir al estado 65
+    IDENTIFICADOR  desplazar e ir al estado 36
+
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+    $default       reduce usando la regla 37 (cero_o_uno_signo)
+
+    nombre                   ir al estado 66
+    varios_identificadores2  ir al estado 38
+    especificacion_tipo      ir al estado 130
+    tipo_no_estructurado     ir al estado 68
+    tipo_escalar             ir al estado 69
+    cero_o_uno_signo         ir al estado 70
+    tipo_tabla               ir al estado 71
+    tipo_diccionario         ir al estado 72
 
 
 Estado 96
 
-   45 tipo_registro: REGISTRO . varios_campos FIN REGISTRO
+   89 cabecera_subprograma: IDENTIFICADOR cero_uno_parametrizacion cero_uno_tipoResultado .
 
-    IDENTIFICADOR  desplazar e ir al estado 26
-
-    varios_identificadores  ir al estado 122
-    varios_campos           ir al estado 123
-    campo                   ir al estado 124
+    $default  reduce usando la regla 89 (cabecera_subprograma)
 
 
 Estado 97
 
-   29 declaracion_tipo: TIPO IDENTIFICADOR ES tipo_no_estructurado . ';'
+   93 cero_uno_tipoResultado: tipo_resultado .
 
-    ';'  desplazar e ir al estado 125
+    $default  reduce usando la regla 93 (cero_uno_tipoResultado)
 
 
 Estado 98
 
-   30 declaracion_tipo: TIPO IDENTIFICADOR ES tipo_estructurado .
+   88 declaracion_subprograma: SUBPROGRAMA cabecera_subprograma cuerpo_subprograma SUBPROGRAMA .
 
-    $default  reduce usando la regla 30 (declaracion_tipo)
+    $default  reduce usando la regla 88 (declaracion_subprograma)
 
 
 Estado 99
 
-   42 tipo_estructurado: tipo_registro .
+   63 clase: CLASE . cero_uno_ultima cero_uno_superclases varias_declaraciones_componente FIN CLASE
 
-    $default  reduce usando la regla 42 (tipo_estructurado)
+    ULTIMA  desplazar e ir al estado 131
+
+    $default  reduce usando la regla 64 (cero_uno_ultima)
+
+    cero_uno_ultima  ir al estado 132
 
 
 Estado 100
 
-   43 tipo_estructurado: tipo_enumerado .
+   57 tipo_enumerado: ENUMERACION . varios_elemento_enumeracion FIN ENUMERACION
+   58               | ENUMERACION . DE tipo_escalar varios_elemento_enumeracion FIN ENUMERACION
 
-    $default  reduce usando la regla 43 (tipo_estructurado)
+    DE             desplazar e ir al estado 133
+    IDENTIFICADOR  desplazar e ir al estado 134
+
+    varios_elemento_enumeracion  ir al estado 135
+    elemento_enumeracion         ir al estado 136
 
 
 Estado 101
 
-   44 tipo_estructurado: clase .
+   53 tipo_registro: REGISTRO . varios_campos FIN REGISTRO
 
-    $default  reduce usando la regla 44 (tipo_estructurado)
+    IDENTIFICADOR  desplazar e ir al estado 23
+
+    varios_identificadores  ir al estado 137
+    varios_campos           ir al estado 138
+    campo                   ir al estado 139
 
 
 Estado 102
 
-   41 tipo_diccionario: DICCIONARIO DE . especificacion_tipo
+   31 declaracion_tipo: TIPO IDENTIFICADOR ES tipo_no_estructurado . ';'
 
-    DICCIONARIO    desplazar e ir al estado 60
-    LISTA          desplazar e ir al estado 61
-    SIGNO          desplazar e ir al estado 62
-    IDENTIFICADOR  desplazar e ir al estado 12
-
-    $default  reduce usando la regla 35 (cero_o_uno_signo)
-
-    nombre                ir al estado 63
-    especificacion_tipo   ir al estado 126
-    tipo_no_estructurado  ir al estado 65
-    tipo_escalar          ir al estado 66
-    cero_o_uno_signo      ir al estado 67
-    tipo_tabla            ir al estado 68
-    tipo_diccionario      ir al estado 69
+    ';'  desplazar e ir al estado 140
 
 
 Estado 103
 
-   40 tipo_tabla: LISTA DE . especificacion_tipo
+   32 declaracion_tipo: TIPO IDENTIFICADOR ES tipo_estructurado .
 
-    DICCIONARIO    desplazar e ir al estado 60
-    LISTA          desplazar e ir al estado 61
-    SIGNO          desplazar e ir al estado 62
-    IDENTIFICADOR  desplazar e ir al estado 12
-
-    $default  reduce usando la regla 35 (cero_o_uno_signo)
-
-    nombre                ir al estado 63
-    especificacion_tipo   ir al estado 127
-    tipo_no_estructurado  ir al estado 65
-    tipo_escalar          ir al estado 66
-    cero_o_uno_signo      ir al estado 67
-    tipo_tabla            ir al estado 68
-    tipo_diccionario      ir al estado 69
+    $default  reduce usando la regla 32 (declaracion_tipo)
 
 
 Estado 104
 
-   34 tipo_escalar: cero_o_uno_signo TIPO_BASICO . cero_o_uno_longitud cero_o_uno_rango
+   50 tipo_estructurado: tipo_registro .
 
-    LONGITUD  desplazar e ir al estado 128
-
-    $default  reduce usando la regla 37 (cero_o_uno_longitud)
-
-    cero_o_uno_longitud  ir al estado 129
+    $default  reduce usando la regla 50 (tipo_estructurado)
 
 
 Estado 105
 
-  104 instruccion_devolver: DEVOLVER cero_uno_expr . ';'
+   51 tipo_estructurado: tipo_enumerado .
 
-    ';'  desplazar e ir al estado 130
+    $default  reduce usando la regla 51 (tipo_estructurado)
 
 
 Estado 106
 
-   13 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
-  114 instruccion_lanzamiento_excepcion: LANZA nombre . ';'
+   52 tipo_estructurado: clase .
 
-    CUATRO_PUNTOS  desplazar e ir al estado 18
-    ';'            desplazar e ir al estado 131
+    $default  reduce usando la regla 52 (tipo_estructurado)
 
 
 Estado 107
 
-  115 instruccion_captura_excepcion: PRUEBA instruccion . clausulas FIN PRUEBA
+   49 tipo_diccionario: DICCIONARIO DE . especificacion_tipo
 
-    EXCEPCION   desplazar e ir al estado 132
-    FINALMENTE  desplazar e ir al estado 133
+    DICCIONARIO    desplazar e ir al estado 63
+    LISTA          desplazar e ir al estado 64
+    SIGNO          desplazar e ir al estado 65
+    IDENTIFICADOR  desplazar e ir al estado 36
 
-    EXCEPCION  [reduce usando la regla 120 (varias_clausula_excepcion_especifica)]
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+    $default       reduce usando la regla 37 (cero_o_uno_signo)
 
-    clausulas                             ir al estado 134
-    clausulas_excepcion                   ir al estado 135
-    varias_clausula_excepcion_especifica  ir al estado 136
-    clausula_excepcion_especifica         ir al estado 137
-    clausula_finalmente                   ir al estado 138
+    nombre                   ir al estado 66
+    varios_identificadores2  ir al estado 38
+    especificacion_tipo      ir al estado 141
+    tipo_no_estructurado     ir al estado 68
+    tipo_escalar             ir al estado 69
+    cero_o_uno_signo         ir al estado 70
+    tipo_tabla               ir al estado 71
+    tipo_diccionario         ir al estado 72
 
 
 Estado 108
 
-  113 cero_o_uno_de_identificador: DE . IDENTIFICADOR
+   48 tipo_tabla: LISTA DE . especificacion_tipo
 
-    IDENTIFICADOR  desplazar e ir al estado 139
+    DICCIONARIO    desplazar e ir al estado 63
+    LISTA          desplazar e ir al estado 64
+    SIGNO          desplazar e ir al estado 65
+    IDENTIFICADOR  desplazar e ir al estado 36
+
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+    $default       reduce usando la regla 37 (cero_o_uno_signo)
+
+    nombre                   ir al estado 66
+    varios_identificadores2  ir al estado 38
+    especificacion_tipo      ir al estado 142
+    tipo_no_estructurado     ir al estado 68
+    tipo_escalar             ir al estado 69
+    cero_o_uno_signo         ir al estado 70
+    tipo_tabla               ir al estado 71
+    tipo_diccionario         ir al estado 72
 
 
 Estado 109
 
-  110 instruccion_interrupcion: SALIR cero_o_uno_de_identificador . cero_o_uno_cuando ';'
+   28 declaracion_objeto: varios_identificadores ':' especificacion_tipo ';' .
 
-    $default  reduce usando la regla 111 (cero_o_uno_cuando)
-
-    cero_o_uno_cuando  ir al estado 140
+    $default  reduce usando la regla 28 (declaracion_objeto)
 
 
 Estado 110
 
-  109 instruccion_interrupcion: SIGUIENTE cero_o_uno_cuando . ';'
+   44 tipo_basico: BOOLEANO .
 
-    ';'  desplazar e ir al estado 141
+    $default  reduce usando la regla 44 (tipo_basico)
 
 
 Estado 111
 
-  107 llamada_subprograma: nombre '(' . varias_definicion_parametro ')'
+   45 tipo_basico: CARACTER .
 
-    $default  reduce usando la regla 108 (varias_definicion_parametro)
-
-    varias_definicion_parametro  ir al estado 142
+    $default  reduce usando la regla 45 (tipo_basico)
 
 
 Estado 112
 
-   95 cuerpo_subprograma: varias_declaraciones PRINCIPIO varias_instrucciones FIN .
+   46 tipo_basico: ENTERO .
 
-    $default  reduce usando la regla 95 (cuerpo_subprograma)
+    $default  reduce usando la regla 46 (tipo_basico)
 
 
 Estado 113
 
-   97 varias_instrucciones: varias_instrucciones instruccion .
+   47 tipo_basico: REAL .
 
-    $default  reduce usando la regla 97 (varias_instrucciones)
+    $default  reduce usando la regla 47 (tipo_basico)
 
 
 Estado 114
 
-  106 instruccion_llamada: llamada_subprograma ';' .
+   36 tipo_escalar: cero_o_uno_signo tipo_basico . cero_o_uno_longitud cero_o_uno_rango
 
-    $default  reduce usando la regla 106 (instruccion_llamada)
+    CORTO  desplazar e ir al estado 143
+    LARGO  desplazar e ir al estado 144
+
+    $default  reduce usando la regla 39 (cero_o_uno_longitud)
+
+    cero_o_uno_longitud  ir al estado 145
+    longitud             ir al estado 146
 
 
 Estado 115
 
-   87 declaracion_parametros: varios_identificadores ':' . modo especificacion_tipo cero_uno_expresion
+  115 instruccion_devolver: DEVOLVER ';' .
 
-    REFERENCIA  desplazar e ir al estado 143
-    VALOR       desplazar e ir al estado 144
-
-    modo  ir al estado 145
+    $default  reduce usando la regla 115 (instruccion_devolver)
 
 
 Estado 116
 
-   89 varias_declaraciones_parametros: declaracion_parametros ';' .
+  124 instruccion_lanzamiento_excepcion: LANZA nombre . ';'
 
-    $default  reduce usando la regla 89 (varias_declaraciones_parametros)
+    ';'  desplazar e ir al estado 147
 
 
 Estado 117
 
-   86 parametrizacion: '(' varias_declaraciones_parametros declaracion_parametros . ')'
-   90 varias_declaraciones_parametros: varias_declaraciones_parametros declaracion_parametros . ';'
+  125 instruccion_captura_excepcion: PRUEBA instruccion . clausulas FIN PRUEBA
 
-    ';'  desplazar e ir al estado 146
-    ')'  desplazar e ir al estado 147
+    EXCEPCION   desplazar e ir al estado 148
+    FINALMENTE  desplazar e ir al estado 149
+
+    EXCEPCION  [reduce usando la regla 130 (varias_clausula_excepcion_especifica)]
+
+    clausulas                             ir al estado 150
+    clausulas_excepcion                   ir al estado 151
+    varias_clausula_excepcion_especifica  ir al estado 152
+    clausula_excepcion_especifica         ir al estado 153
+    clausula_finalmente                   ir al estado 154
 
 
 Estado 118
 
-   94 tipo_resultado: DEVOLVER especificacion_tipo .
+  123 cero_o_uno_de_identificador: DE . IDENTIFICADOR
 
-    $default  reduce usando la regla 94 (tipo_resultado)
+    IDENTIFICADOR  desplazar e ir al estado 155
 
 
 Estado 119
 
-   57 cero_uno_ultima: ULTIMA .
+  120 instruccion_interrupcion: SALIR cero_o_uno_de_identificador . cero_o_uno_cuando ';'
 
-    $default  reduce usando la regla 57 (cero_uno_ultima)
+    $default  reduce usando la regla 121 (cero_o_uno_cuando)
+
+    cero_o_uno_cuando  ir al estado 156
 
 
 Estado 120
 
-   55 clase: CLASE cero_uno_ultima . cero_uno_superclases varias_declaraciones_componente FIN CLASE
+  119 instruccion_interrupcion: SIGUIENTE cero_o_uno_cuando . ';'
 
-    '('  desplazar e ir al estado 148
-
-    $default  reduce usando la regla 58 (cero_uno_superclases)
-
-    cero_uno_superclases  ir al estado 149
-    superclases           ir al estado 150
+    ';'  desplazar e ir al estado 157
 
 
 Estado 121
 
-   50 tipo_enumerado: ENUMERACION DE . tipo_escalar varios_elemento_enumeracion FIN ENUMERACION
+  117 llamada_subprograma: nombre '(' . varias_definicion_parametro ')'
 
-    SIGNO  desplazar e ir al estado 62
+    $default  reduce usando la regla 118 (varias_definicion_parametro)
 
-    $default  reduce usando la regla 35 (cero_o_uno_signo)
-
-    tipo_escalar      ir al estado 151
-    cero_o_uno_signo  ir al estado 67
+    varias_definicion_parametro  ir al estado 158
 
 
 Estado 122
 
-   11 varios_identificadores: varios_identificadores . IDENTIFICADOR
-   48 campo: varios_identificadores . ':' especificacion_tipo ';'
-   49      | varios_identificadores . ':' especificacion_tipo ASIGNACION cero_uno_expresion ';'
+  103 cuerpo_subprograma: cero_o_mas_declaraciones PRINCIPIO varias_instrucciones FIN .
 
-    IDENTIFICADOR  desplazar e ir al estado 43
-    ':'            desplazar e ir al estado 152
+    $default  reduce usando la regla 103 (cuerpo_subprograma)
 
 
 Estado 123
 
-   45 tipo_registro: REGISTRO varios_campos . FIN REGISTRO
-   47 varios_campos: varios_campos . campo
+  108 varias_instrucciones: varias_instrucciones instruccion .
 
-    FIN            desplazar e ir al estado 153
-    IDENTIFICADOR  desplazar e ir al estado 26
-
-    varios_identificadores  ir al estado 122
-    campo                   ir al estado 154
+    $default  reduce usando la regla 108 (varias_instrucciones)
 
 
 Estado 124
 
-   46 varios_campos: campo .
+  116 instruccion_llamada: llamada_subprograma ';' .
 
-    $default  reduce usando la regla 46 (varios_campos)
+    $default  reduce usando la regla 116 (instruccion_llamada)
 
 
 Estado 125
 
-   29 declaracion_tipo: TIPO IDENTIFICADOR ES tipo_no_estructurado ';' .
+    9 libreria: DE LIBRERIA nombre IMPORTAR varios_identificadores ';' .
 
-    $default  reduce usando la regla 29 (declaracion_tipo)
+    $default  reduce usando la regla 9 (libreria)
 
 
 Estado 126
 
-   41 tipo_diccionario: DICCIONARIO DE especificacion_tipo .
+   10 libreria: IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ';' .
 
-    $default  reduce usando la regla 41 (tipo_diccionario)
+    $default  reduce usando la regla 10 (libreria)
 
 
 Estado 127
 
-   40 tipo_tabla: LISTA DE especificacion_tipo .
+   95 declaracion_parametros: varios_identificadores ':' . especificacion_tipo cero_uno_expresion
+   96                       | varios_identificadores ':' . modo especificacion_tipo cero_uno_expresion
 
-    $default  reduce usando la regla 40 (tipo_tabla)
+    DICCIONARIO    desplazar e ir al estado 63
+    LISTA          desplazar e ir al estado 64
+    REFERENCIA     desplazar e ir al estado 159
+    SIGNO          desplazar e ir al estado 65
+    VALOR          desplazar e ir al estado 160
+    IDENTIFICADOR  desplazar e ir al estado 36
+
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+    $default       reduce usando la regla 37 (cero_o_uno_signo)
+
+    nombre                   ir al estado 66
+    varios_identificadores2  ir al estado 38
+    especificacion_tipo      ir al estado 161
+    tipo_no_estructurado     ir al estado 68
+    tipo_escalar             ir al estado 69
+    cero_o_uno_signo         ir al estado 70
+    tipo_tabla               ir al estado 71
+    tipo_diccionario         ir al estado 72
+    modo                     ir al estado 162
 
 
 Estado 128
 
-   38 cero_o_uno_longitud: LONGITUD .
+   98 varias_declaraciones_parametros: declaracion_parametros ';' .
 
-    $default  reduce usando la regla 38 (cero_o_uno_longitud)
+    $default  reduce usando la regla 98 (varias_declaraciones_parametros)
 
 
 Estado 129
 
-   34 tipo_escalar: cero_o_uno_signo TIPO_BASICO cero_o_uno_longitud . cero_o_uno_rango
+   94 parametrizacion: '(' varias_declaraciones_parametros declaracion_parametros . ')'
+   99 varias_declaraciones_parametros: varias_declaraciones_parametros declaracion_parametros . ';'
 
-    $default  reduce usando la regla 39 (cero_o_uno_rango)
-
-    cero_o_uno_rango  ir al estado 155
+    ';'  desplazar e ir al estado 163
+    ')'  desplazar e ir al estado 164
 
 
 Estado 130
 
-  104 instruccion_devolver: DEVOLVER cero_uno_expr ';' .
+  102 tipo_resultado: DEVOLVER especificacion_tipo .
 
-    $default  reduce usando la regla 104 (instruccion_devolver)
+    $default  reduce usando la regla 102 (tipo_resultado)
 
 
 Estado 131
 
-  114 instruccion_lanzamiento_excepcion: LANZA nombre ';' .
+   65 cero_uno_ultima: ULTIMA .
 
-    $default  reduce usando la regla 114 (instruccion_lanzamiento_excepcion)
+    $default  reduce usando la regla 65 (cero_uno_ultima)
 
 
 Estado 132
 
-  123 clausula_excepcion_especifica: EXCEPCION . '(' nombre ')' varias_instrucciones
+   63 clase: CLASE cero_uno_ultima . cero_uno_superclases varias_declaraciones_componente FIN CLASE
 
-    '('  desplazar e ir al estado 156
+    '('  desplazar e ir al estado 165
+
+    $default  reduce usando la regla 66 (cero_uno_superclases)
+
+    cero_uno_superclases  ir al estado 166
+    superclases           ir al estado 167
 
 
 Estado 133
 
-  125 clausula_finalmente: FINALMENTE . varias_instrucciones
+   58 tipo_enumerado: ENUMERACION DE . tipo_escalar varios_elemento_enumeracion FIN ENUMERACION
 
-    DEVOLVER       desplazar e ir al estado 70
-    LANZA          desplazar e ir al estado 71
-    PRUEBA         desplazar e ir al estado 72
-    SALIR          desplazar e ir al estado 73
-    SIGUIENTE      desplazar e ir al estado 74
-    IDENTIFICADOR  desplazar e ir al estado 12
-    ';'            desplazar e ir al estado 75
+    SIGNO  desplazar e ir al estado 65
 
-    nombre                             ir al estado 76
-    varias_instrucciones               ir al estado 157
-    instruccion                        ir al estado 78
-    instruccion_devolver               ir al estado 79
-    instruccion_llamada                ir al estado 80
-    llamada_subprograma                ir al estado 81
-    instruccion_interrupcion           ir al estado 82
-    instruccion_lanzamiento_excepcion  ir al estado 83
-    instruccion_captura_excepcion      ir al estado 84
+    $default  reduce usando la regla 37 (cero_o_uno_signo)
+
+    tipo_escalar      ir al estado 168
+    cero_o_uno_signo  ir al estado 70
 
 
 Estado 134
 
-  115 instruccion_captura_excepcion: PRUEBA instruccion clausulas . FIN PRUEBA
+   61 elemento_enumeracion: IDENTIFICADOR . cero_uno_expresion
 
-    FIN  desplazar e ir al estado 158
+    $default  reduce usando la regla 62 (cero_uno_expresion)
+
+    cero_uno_expresion  ir al estado 169
 
 
 Estado 135
 
-  116 clausulas: clausulas_excepcion .
-  117          | clausulas_excepcion . clausula_finalmente
+   57 tipo_enumerado: ENUMERACION varios_elemento_enumeracion . FIN ENUMERACION
+   60 varios_elemento_enumeracion: varios_elemento_enumeracion . ',' elemento_enumeracion
 
-    FINALMENTE  desplazar e ir al estado 133
-
-    $default  reduce usando la regla 116 (clausulas)
-
-    clausula_finalmente  ir al estado 159
+    FIN  desplazar e ir al estado 170
+    ','  desplazar e ir al estado 171
 
 
 Estado 136
 
-  119 clausulas_excepcion: varias_clausula_excepcion_especifica . clausula_excepcion_general
-  122 varias_clausula_excepcion_especifica: varias_clausula_excepcion_especifica . clausula_excepcion_especifica
+   59 varios_elemento_enumeracion: elemento_enumeracion .
 
-    EXCEPCION  desplazar e ir al estado 160
-
-    clausula_excepcion_especifica  ir al estado 161
-    clausula_excepcion_general     ir al estado 162
+    $default  reduce usando la regla 59 (varios_elemento_enumeracion)
 
 
 Estado 137
 
-  121 varias_clausula_excepcion_especifica: clausula_excepcion_especifica .
+   12 varios_identificadores: varios_identificadores . ',' IDENTIFICADOR
+   56 campo: varios_identificadores . ':' especificacion_tipo ';'
 
-    $default  reduce usando la regla 121 (varias_clausula_excepcion_especifica)
+    ','  desplazar e ir al estado 45
+    ':'  desplazar e ir al estado 172
 
 
 Estado 138
 
-  118 clausulas: clausula_finalmente .
+   53 tipo_registro: REGISTRO varios_campos . FIN REGISTRO
+   55 varios_campos: varios_campos . campo
 
-    $default  reduce usando la regla 118 (clausulas)
+    FIN            desplazar e ir al estado 173
+    IDENTIFICADOR  desplazar e ir al estado 23
+
+    varios_identificadores  ir al estado 137
+    campo                   ir al estado 174
 
 
 Estado 139
 
-  113 cero_o_uno_de_identificador: DE IDENTIFICADOR .
+   54 varios_campos: campo .
 
-    $default  reduce usando la regla 113 (cero_o_uno_de_identificador)
+    $default  reduce usando la regla 54 (varios_campos)
 
 
 Estado 140
 
-  110 instruccion_interrupcion: SALIR cero_o_uno_de_identificador cero_o_uno_cuando . ';'
+   31 declaracion_tipo: TIPO IDENTIFICADOR ES tipo_no_estructurado ';' .
 
-    ';'  desplazar e ir al estado 163
+    $default  reduce usando la regla 31 (declaracion_tipo)
 
 
 Estado 141
 
-  109 instruccion_interrupcion: SIGUIENTE cero_o_uno_cuando ';' .
+   49 tipo_diccionario: DICCIONARIO DE especificacion_tipo .
 
-    $default  reduce usando la regla 109 (instruccion_interrupcion)
+    $default  reduce usando la regla 49 (tipo_diccionario)
 
 
 Estado 142
 
-  107 llamada_subprograma: nombre '(' varias_definicion_parametro . ')'
+   48 tipo_tabla: LISTA DE especificacion_tipo .
 
-    ')'  desplazar e ir al estado 164
+    $default  reduce usando la regla 48 (tipo_tabla)
 
 
 Estado 143
 
-   93 modo: REFERENCIA .
+   42 longitud: CORTO .
 
-    $default  reduce usando la regla 93 (modo)
+    $default  reduce usando la regla 42 (longitud)
 
 
 Estado 144
 
-   92 modo: VALOR .
+   43 longitud: LARGO .
 
-    $default  reduce usando la regla 92 (modo)
+    $default  reduce usando la regla 43 (longitud)
 
 
 Estado 145
 
-   87 declaracion_parametros: varios_identificadores ':' modo . especificacion_tipo cero_uno_expresion
+   36 tipo_escalar: cero_o_uno_signo tipo_basico cero_o_uno_longitud . cero_o_uno_rango
 
-    DICCIONARIO    desplazar e ir al estado 60
-    LISTA          desplazar e ir al estado 61
-    SIGNO          desplazar e ir al estado 62
-    IDENTIFICADOR  desplazar e ir al estado 12
+    $default  reduce usando la regla 41 (cero_o_uno_rango)
 
-    $default  reduce usando la regla 35 (cero_o_uno_signo)
-
-    nombre                ir al estado 63
-    especificacion_tipo   ir al estado 165
-    tipo_no_estructurado  ir al estado 65
-    tipo_escalar          ir al estado 66
-    cero_o_uno_signo      ir al estado 67
-    tipo_tabla            ir al estado 68
-    tipo_diccionario      ir al estado 69
+    cero_o_uno_rango  ir al estado 175
 
 
 Estado 146
 
-   90 varias_declaraciones_parametros: varias_declaraciones_parametros declaracion_parametros ';' .
+   40 cero_o_uno_longitud: longitud .
 
-    $default  reduce usando la regla 90 (varias_declaraciones_parametros)
+    $default  reduce usando la regla 40 (cero_o_uno_longitud)
 
 
 Estado 147
 
-   86 parametrizacion: '(' varias_declaraciones_parametros declaracion_parametros ')' .
+  124 instruccion_lanzamiento_excepcion: LANZA nombre ';' .
 
-    $default  reduce usando la regla 86 (parametrizacion)
+    $default  reduce usando la regla 124 (instruccion_lanzamiento_excepcion)
 
 
 Estado 148
 
-   60 superclases: '(' . nombre ')'
+  133 clausula_excepcion_especifica: EXCEPCION . '(' nombre ')' varias_instrucciones
 
-    IDENTIFICADOR  desplazar e ir al estado 12
-
-    nombre  ir al estado 166
+    '('  desplazar e ir al estado 176
 
 
 Estado 149
 
-   55 clase: CLASE cero_uno_ultima cero_uno_superclases . varias_declaraciones_componente FIN CLASE
+  135 clausula_finalmente: FINALMENTE . varias_instrucciones
 
-    ABSTRACTO      desplazar e ir al estado 167
-    CONSTRUCTOR    desplazar e ir al estado 168
-    DESTRUCTOR     desplazar e ir al estado 169
-    ESPECIFICO     desplazar e ir al estado 170
-    FINAL          desplazar e ir al estado 171
-    GENERICO       desplazar e ir al estado 172
-    PRIVADO        desplazar e ir al estado 173
-    PROTEGIDO      desplazar e ir al estado 174
-    PUBLICO        desplazar e ir al estado 175
-    TIPO           desplazar e ir al estado 31
-    IDENTIFICADOR  desplazar e ir al estado 26
+    DEVOLVER       desplazar e ir al estado 73
+    LANZA          desplazar e ir al estado 74
+    PRUEBA         desplazar e ir al estado 75
+    SALIR          desplazar e ir al estado 76
+    SIGUIENTE      desplazar e ir al estado 77
+    IDENTIFICADOR  desplazar e ir al estado 36
+    ';'            desplazar e ir al estado 78
 
-    ABSTRACTO    [reduce usando la regla 71 (varios_modificadores)]
-    CONSTRUCTOR  [reduce usando la regla 71 (varios_modificadores)]
-    DESTRUCTOR   [reduce usando la regla 71 (varios_modificadores)]
-    ESPECIFICO   [reduce usando la regla 71 (varios_modificadores)]
-    FINAL        [reduce usando la regla 71 (varios_modificadores)]
-    GENERICO     [reduce usando la regla 71 (varios_modificadores)]
-    $default     reduce usando la regla 71 (varios_modificadores)
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
 
-    varios_identificadores           ir al estado 33
-    declaracion_objeto               ir al estado 176
-    declaracion_tipo                 ir al estado 177
-    declaracion_componente           ir al estado 178
-    varias_declaraciones_componente  ir al estado 179
-    visibilidad                      ir al estado 180
-    componente                       ir al estado 181
-    varios_modificadores             ir al estado 182
-    modificador                      ir al estado 183
+    nombre                             ir al estado 79
+    varios_identificadores2            ir al estado 38
+    varias_instrucciones               ir al estado 177
+    instruccion                        ir al estado 81
+    instruccion_devolver               ir al estado 82
+    instruccion_llamada                ir al estado 83
+    llamada_subprograma                ir al estado 84
+    instruccion_interrupcion           ir al estado 85
+    instruccion_lanzamiento_excepcion  ir al estado 86
+    instruccion_captura_excepcion      ir al estado 87
 
 
 Estado 150
 
-   59 cero_uno_superclases: superclases .
+  125 instruccion_captura_excepcion: PRUEBA instruccion clausulas . FIN PRUEBA
 
-    $default  reduce usando la regla 59 (cero_uno_superclases)
+    FIN  desplazar e ir al estado 178
 
 
 Estado 151
 
-   50 tipo_enumerado: ENUMERACION DE tipo_escalar . varios_elemento_enumeracion FIN ENUMERACION
+  126 clausulas: clausulas_excepcion .
+  127          | clausulas_excepcion . clausula_finalmente
 
-    IDENTIFICADOR  desplazar e ir al estado 184
+    FINALMENTE  desplazar e ir al estado 149
 
-    varios_elemento_enumeracion  ir al estado 185
-    elemento_enumeracion         ir al estado 186
+    $default  reduce usando la regla 126 (clausulas)
+
+    clausula_finalmente  ir al estado 179
 
 
 Estado 152
 
-   48 campo: varios_identificadores ':' . especificacion_tipo ';'
-   49      | varios_identificadores ':' . especificacion_tipo ASIGNACION cero_uno_expresion ';'
+  129 clausulas_excepcion: varias_clausula_excepcion_especifica . clausula_excepcion_general
+  132 varias_clausula_excepcion_especifica: varias_clausula_excepcion_especifica . clausula_excepcion_especifica
 
-    DICCIONARIO    desplazar e ir al estado 60
-    LISTA          desplazar e ir al estado 61
-    SIGNO          desplazar e ir al estado 62
-    IDENTIFICADOR  desplazar e ir al estado 12
+    EXCEPCION  desplazar e ir al estado 180
 
-    $default  reduce usando la regla 35 (cero_o_uno_signo)
-
-    nombre                ir al estado 63
-    especificacion_tipo   ir al estado 187
-    tipo_no_estructurado  ir al estado 65
-    tipo_escalar          ir al estado 66
-    cero_o_uno_signo      ir al estado 67
-    tipo_tabla            ir al estado 68
-    tipo_diccionario      ir al estado 69
+    clausula_excepcion_especifica  ir al estado 181
+    clausula_excepcion_general     ir al estado 182
 
 
 Estado 153
 
-   45 tipo_registro: REGISTRO varios_campos FIN . REGISTRO
+  131 varias_clausula_excepcion_especifica: clausula_excepcion_especifica .
 
-    REGISTRO  desplazar e ir al estado 188
+    $default  reduce usando la regla 131 (varias_clausula_excepcion_especifica)
 
 
 Estado 154
 
-   47 varios_campos: varios_campos campo .
+  128 clausulas: clausula_finalmente .
 
-    $default  reduce usando la regla 47 (varios_campos)
+    $default  reduce usando la regla 128 (clausulas)
 
 
 Estado 155
 
-   34 tipo_escalar: cero_o_uno_signo TIPO_BASICO cero_o_uno_longitud cero_o_uno_rango .
+  123 cero_o_uno_de_identificador: DE IDENTIFICADOR .
 
-    $default  reduce usando la regla 34 (tipo_escalar)
+    $default  reduce usando la regla 123 (cero_o_uno_de_identificador)
 
 
 Estado 156
 
-  123 clausula_excepcion_especifica: EXCEPCION '(' . nombre ')' varias_instrucciones
+  120 instruccion_interrupcion: SALIR cero_o_uno_de_identificador cero_o_uno_cuando . ';'
 
-    IDENTIFICADOR  desplazar e ir al estado 12
-
-    nombre  ir al estado 189
+    ';'  desplazar e ir al estado 183
 
 
 Estado 157
 
-   97 varias_instrucciones: varias_instrucciones . instruccion
-  125 clausula_finalmente: FINALMENTE varias_instrucciones .
+  119 instruccion_interrupcion: SIGUIENTE cero_o_uno_cuando ';' .
 
-    DEVOLVER       desplazar e ir al estado 70
-    LANZA          desplazar e ir al estado 71
-    PRUEBA         desplazar e ir al estado 72
-    SALIR          desplazar e ir al estado 73
-    SIGUIENTE      desplazar e ir al estado 74
-    IDENTIFICADOR  desplazar e ir al estado 12
-    ';'            desplazar e ir al estado 75
-
-    $default  reduce usando la regla 125 (clausula_finalmente)
-
-    nombre                             ir al estado 76
-    instruccion                        ir al estado 113
-    instruccion_devolver               ir al estado 79
-    instruccion_llamada                ir al estado 80
-    llamada_subprograma                ir al estado 81
-    instruccion_interrupcion           ir al estado 82
-    instruccion_lanzamiento_excepcion  ir al estado 83
-    instruccion_captura_excepcion      ir al estado 84
+    $default  reduce usando la regla 119 (instruccion_interrupcion)
 
 
 Estado 158
 
-  115 instruccion_captura_excepcion: PRUEBA instruccion clausulas FIN . PRUEBA
+  117 llamada_subprograma: nombre '(' varias_definicion_parametro . ')'
 
-    PRUEBA  desplazar e ir al estado 190
+    ')'  desplazar e ir al estado 184
 
 
 Estado 159
 
-  117 clausulas: clausulas_excepcion clausula_finalmente .
+  101 modo: REFERENCIA .
 
-    $default  reduce usando la regla 117 (clausulas)
+    $default  reduce usando la regla 101 (modo)
 
 
 Estado 160
 
-  123 clausula_excepcion_especifica: EXCEPCION . '(' nombre ')' varias_instrucciones
-  124 clausula_excepcion_general: EXCEPCION . varias_instrucciones
+  100 modo: VALOR .
 
-    DEVOLVER       desplazar e ir al estado 70
-    LANZA          desplazar e ir al estado 71
-    PRUEBA         desplazar e ir al estado 72
-    SALIR          desplazar e ir al estado 73
-    SIGUIENTE      desplazar e ir al estado 74
-    IDENTIFICADOR  desplazar e ir al estado 12
-    ';'            desplazar e ir al estado 75
-    '('            desplazar e ir al estado 156
-
-    nombre                             ir al estado 76
-    varias_instrucciones               ir al estado 191
-    instruccion                        ir al estado 78
-    instruccion_devolver               ir al estado 79
-    instruccion_llamada                ir al estado 80
-    llamada_subprograma                ir al estado 81
-    instruccion_interrupcion           ir al estado 82
-    instruccion_lanzamiento_excepcion  ir al estado 83
-    instruccion_captura_excepcion      ir al estado 84
+    $default  reduce usando la regla 100 (modo)
 
 
 Estado 161
 
-  122 varias_clausula_excepcion_especifica: varias_clausula_excepcion_especifica clausula_excepcion_especifica .
+   95 declaracion_parametros: varios_identificadores ':' especificacion_tipo . cero_uno_expresion
 
-    $default  reduce usando la regla 122 (varias_clausula_excepcion_especifica)
+    $default  reduce usando la regla 62 (cero_uno_expresion)
+
+    cero_uno_expresion  ir al estado 185
 
 
 Estado 162
 
-  119 clausulas_excepcion: varias_clausula_excepcion_especifica clausula_excepcion_general .
+   96 declaracion_parametros: varios_identificadores ':' modo . especificacion_tipo cero_uno_expresion
 
-    $default  reduce usando la regla 119 (clausulas_excepcion)
+    DICCIONARIO    desplazar e ir al estado 63
+    LISTA          desplazar e ir al estado 64
+    SIGNO          desplazar e ir al estado 65
+    IDENTIFICADOR  desplazar e ir al estado 36
+
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+    $default       reduce usando la regla 37 (cero_o_uno_signo)
+
+    nombre                   ir al estado 66
+    varios_identificadores2  ir al estado 38
+    especificacion_tipo      ir al estado 186
+    tipo_no_estructurado     ir al estado 68
+    tipo_escalar             ir al estado 69
+    cero_o_uno_signo         ir al estado 70
+    tipo_tabla               ir al estado 71
+    tipo_diccionario         ir al estado 72
 
 
 Estado 163
 
-  110 instruccion_interrupcion: SALIR cero_o_uno_de_identificador cero_o_uno_cuando ';' .
+   99 varias_declaraciones_parametros: varias_declaraciones_parametros declaracion_parametros ';' .
 
-    $default  reduce usando la regla 110 (instruccion_interrupcion)
+    $default  reduce usando la regla 99 (varias_declaraciones_parametros)
 
 
 Estado 164
 
-  107 llamada_subprograma: nombre '(' varias_definicion_parametro ')' .
+   94 parametrizacion: '(' varias_declaraciones_parametros declaracion_parametros ')' .
 
-    $default  reduce usando la regla 107 (llamada_subprograma)
+    $default  reduce usando la regla 94 (parametrizacion)
 
 
 Estado 165
 
-   87 declaracion_parametros: varios_identificadores ':' modo especificacion_tipo . cero_uno_expresion
+   68 superclases: '(' . varios_nombres ')'
 
-    $default  reduce usando la regla 91 (cero_uno_expresion)
+    IDENTIFICADOR  desplazar e ir al estado 36
 
-    cero_uno_expresion  ir al estado 192
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+
+    nombre                   ir al estado 40
+    varios_identificadores2  ir al estado 38
+    varios_nombres           ir al estado 187
 
 
 Estado 166
 
-   13 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
-   60 superclases: '(' nombre . ')'
+   63 clase: CLASE cero_uno_ultima cero_uno_superclases . varias_declaraciones_componente FIN CLASE
 
-    CUATRO_PUNTOS  desplazar e ir al estado 18
-    ')'            desplazar e ir al estado 193
+    ABSTRACTO      desplazar e ir al estado 188
+    CONSTRUCTOR    desplazar e ir al estado 189
+    DESTRUCTOR     desplazar e ir al estado 190
+    ESPECIFICO     desplazar e ir al estado 191
+    FINAL          desplazar e ir al estado 192
+    GENERICO       desplazar e ir al estado 193
+    PRIVADO        desplazar e ir al estado 194
+    PROTEGIDO      desplazar e ir al estado 195
+    PUBLICO        desplazar e ir al estado 196
+    TIPO           desplazar e ir al estado 22
+    IDENTIFICADOR  desplazar e ir al estado 23
+
+    $default  reduce usando la regla 79 (varios_modificadores)
+
+    varios_identificadores           ir al estado 25
+    declaracion_objeto               ir al estado 197
+    declaracion_tipo                 ir al estado 198
+    declaracion_componente           ir al estado 199
+    varias_declaraciones_componente  ir al estado 200
+    visibilidad                      ir al estado 201
+    componente                       ir al estado 202
+    varios_modificadores             ir al estado 203
+    modificador                      ir al estado 204
 
 
 Estado 167
 
-   77 modificador: ABSTRACTO .
+   67 cero_uno_superclases: superclases .
 
-    $default  reduce usando la regla 77 (modificador)
+    $default  reduce usando la regla 67 (cero_uno_superclases)
 
 
 Estado 168
 
-   74 modificador: CONSTRUCTOR .
+   58 tipo_enumerado: ENUMERACION DE tipo_escalar . varios_elemento_enumeracion FIN ENUMERACION
 
-    $default  reduce usando la regla 74 (modificador)
+    IDENTIFICADOR  desplazar e ir al estado 134
+
+    varios_elemento_enumeracion  ir al estado 205
+    elemento_enumeracion         ir al estado 136
 
 
 Estado 169
 
-   75 modificador: DESTRUCTOR .
+   61 elemento_enumeracion: IDENTIFICADOR cero_uno_expresion .
 
-    $default  reduce usando la regla 75 (modificador)
+    $default  reduce usando la regla 61 (elemento_enumeracion)
 
 
 Estado 170
 
-   78 modificador: ESPECIFICO .
-
-    $default  reduce usando la regla 78 (modificador)
-
-
-Estado 171
-
-   79 modificador: FINAL .
-
-    $default  reduce usando la regla 79 (modificador)
-
-
-Estado 172
-
-   76 modificador: GENERICO .
-
-    $default  reduce usando la regla 76 (modificador)
-
-
-Estado 173
-
-   67 visibilidad: PRIVADO .
-
-    $default  reduce usando la regla 67 (visibilidad)
-
-
-Estado 174
-
-   66 visibilidad: PROTEGIDO .
-
-    $default  reduce usando la regla 66 (visibilidad)
-
-
-Estado 175
-
-   65 visibilidad: PUBLICO .
-
-    $default  reduce usando la regla 65 (visibilidad)
-
-
-Estado 176
-
-   69 componente: declaracion_objeto .
-
-    $default  reduce usando la regla 69 (componente)
-
-
-Estado 177
-
-   68 componente: declaracion_tipo .
-
-    $default  reduce usando la regla 68 (componente)
-
-
-Estado 178
-
-   63 varias_declaraciones_componente: declaracion_componente .
-
-    $default  reduce usando la regla 63 (varias_declaraciones_componente)
-
-
-Estado 179
-
-   55 clase: CLASE cero_uno_ultima cero_uno_superclases varias_declaraciones_componente . FIN CLASE
-   64 varias_declaraciones_componente: varias_declaraciones_componente . declaracion_componente
-
-    ABSTRACTO      desplazar e ir al estado 167
-    CONSTRUCTOR    desplazar e ir al estado 168
-    DESTRUCTOR     desplazar e ir al estado 169
-    ESPECIFICO     desplazar e ir al estado 170
-    FIN            desplazar e ir al estado 194
-    FINAL          desplazar e ir al estado 171
-    GENERICO       desplazar e ir al estado 172
-    PRIVADO        desplazar e ir al estado 173
-    PROTEGIDO      desplazar e ir al estado 174
-    PUBLICO        desplazar e ir al estado 175
-    TIPO           desplazar e ir al estado 31
-    IDENTIFICADOR  desplazar e ir al estado 26
-
-    ABSTRACTO    [reduce usando la regla 71 (varios_modificadores)]
-    CONSTRUCTOR  [reduce usando la regla 71 (varios_modificadores)]
-    DESTRUCTOR   [reduce usando la regla 71 (varios_modificadores)]
-    ESPECIFICO   [reduce usando la regla 71 (varios_modificadores)]
-    FINAL        [reduce usando la regla 71 (varios_modificadores)]
-    GENERICO     [reduce usando la regla 71 (varios_modificadores)]
-    $default     reduce usando la regla 71 (varios_modificadores)
-
-    varios_identificadores  ir al estado 33
-    declaracion_objeto      ir al estado 176
-    declaracion_tipo        ir al estado 177
-    declaracion_componente  ir al estado 195
-    visibilidad             ir al estado 180
-    componente              ir al estado 181
-    varios_modificadores    ir al estado 182
-    modificador             ir al estado 183
-
-
-Estado 180
-
-   62 declaracion_componente: visibilidad . componente
-
-    ABSTRACTO      desplazar e ir al estado 167
-    CONSTRUCTOR    desplazar e ir al estado 168
-    DESTRUCTOR     desplazar e ir al estado 169
-    ESPECIFICO     desplazar e ir al estado 170
-    FINAL          desplazar e ir al estado 171
-    GENERICO       desplazar e ir al estado 172
-    TIPO           desplazar e ir al estado 31
-    IDENTIFICADOR  desplazar e ir al estado 26
-
-    ABSTRACTO    [reduce usando la regla 71 (varios_modificadores)]
-    CONSTRUCTOR  [reduce usando la regla 71 (varios_modificadores)]
-    DESTRUCTOR   [reduce usando la regla 71 (varios_modificadores)]
-    ESPECIFICO   [reduce usando la regla 71 (varios_modificadores)]
-    FINAL        [reduce usando la regla 71 (varios_modificadores)]
-    GENERICO     [reduce usando la regla 71 (varios_modificadores)]
-    $default     reduce usando la regla 71 (varios_modificadores)
-
-    varios_identificadores  ir al estado 33
-    declaracion_objeto      ir al estado 176
-    declaracion_tipo        ir al estado 177
-    componente              ir al estado 196
-    varios_modificadores    ir al estado 182
-    modificador             ir al estado 183
-
-
-Estado 181
-
-   61 declaracion_componente: componente .
-
-    $default  reduce usando la regla 61 (declaracion_componente)
-
-
-Estado 182
-
-   70 componente: varios_modificadores . declaracion_subprograma
-   73 varios_modificadores: varios_modificadores . modificador
-
-    ABSTRACTO    desplazar e ir al estado 167
-    CONSTRUCTOR  desplazar e ir al estado 168
-    DESTRUCTOR   desplazar e ir al estado 169
-    ESPECIFICO   desplazar e ir al estado 170
-    FINAL        desplazar e ir al estado 171
-    GENERICO     desplazar e ir al estado 172
-    SUBPROGRAMA  desplazar e ir al estado 30
-
-    modificador              ir al estado 197
-    declaracion_subprograma  ir al estado 198
-
-
-Estado 183
-
-   72 varios_modificadores: modificador .
-
-    $default  reduce usando la regla 72 (varios_modificadores)
-
-
-Estado 184
-
-   53 elemento_enumeracion: IDENTIFICADOR . cero_o_uno_elemento_enumeracion
-
-    $default  reduce usando la regla 54 (cero_o_uno_elemento_enumeracion)
-
-    cero_o_uno_elemento_enumeracion  ir al estado 199
-
-
-Estado 185
-
-   50 tipo_enumerado: ENUMERACION DE tipo_escalar varios_elemento_enumeracion . FIN ENUMERACION
-   52 varios_elemento_enumeracion: varios_elemento_enumeracion . elemento_enumeracion
-
-    FIN            desplazar e ir al estado 200
-    IDENTIFICADOR  desplazar e ir al estado 184
-
-    elemento_enumeracion  ir al estado 201
-
-
-Estado 186
-
-   51 varios_elemento_enumeracion: elemento_enumeracion .
-
-    $default  reduce usando la regla 51 (varios_elemento_enumeracion)
-
-
-Estado 187
-
-   48 campo: varios_identificadores ':' especificacion_tipo . ';'
-   49      | varios_identificadores ':' especificacion_tipo . ASIGNACION cero_uno_expresion ';'
-
-    ASIGNACION  desplazar e ir al estado 202
-    ';'         desplazar e ir al estado 203
-
-
-Estado 188
-
-   45 tipo_registro: REGISTRO varios_campos FIN REGISTRO .
-
-    $default  reduce usando la regla 45 (tipo_registro)
-
-
-Estado 189
-
-   13 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
-  123 clausula_excepcion_especifica: EXCEPCION '(' nombre . ')' varias_instrucciones
-
-    CUATRO_PUNTOS  desplazar e ir al estado 18
-    ')'            desplazar e ir al estado 204
-
-
-Estado 190
-
-  115 instruccion_captura_excepcion: PRUEBA instruccion clausulas FIN PRUEBA .
-
-    $default  reduce usando la regla 115 (instruccion_captura_excepcion)
-
-
-Estado 191
-
-   97 varias_instrucciones: varias_instrucciones . instruccion
-  124 clausula_excepcion_general: EXCEPCION varias_instrucciones .
-
-    DEVOLVER       desplazar e ir al estado 70
-    LANZA          desplazar e ir al estado 71
-    PRUEBA         desplazar e ir al estado 72
-    SALIR          desplazar e ir al estado 73
-    SIGUIENTE      desplazar e ir al estado 74
-    IDENTIFICADOR  desplazar e ir al estado 12
-    ';'            desplazar e ir al estado 75
-
-    $default  reduce usando la regla 124 (clausula_excepcion_general)
-
-    nombre                             ir al estado 76
-    instruccion                        ir al estado 113
-    instruccion_devolver               ir al estado 79
-    instruccion_llamada                ir al estado 80
-    llamada_subprograma                ir al estado 81
-    instruccion_interrupcion           ir al estado 82
-    instruccion_lanzamiento_excepcion  ir al estado 83
-    instruccion_captura_excepcion      ir al estado 84
-
-
-Estado 192
-
-   87 declaracion_parametros: varios_identificadores ':' modo especificacion_tipo cero_uno_expresion .
-
-    $default  reduce usando la regla 87 (declaracion_parametros)
-
-
-Estado 193
-
-   60 superclases: '(' nombre ')' .
-
-    $default  reduce usando la regla 60 (superclases)
-
-
-Estado 194
-
-   55 clase: CLASE cero_uno_ultima cero_uno_superclases varias_declaraciones_componente FIN . CLASE
-
-    CLASE  desplazar e ir al estado 205
-
-
-Estado 195
-
-   64 varias_declaraciones_componente: varias_declaraciones_componente declaracion_componente .
-
-    $default  reduce usando la regla 64 (varias_declaraciones_componente)
-
-
-Estado 196
-
-   62 declaracion_componente: visibilidad componente .
-
-    $default  reduce usando la regla 62 (declaracion_componente)
-
-
-Estado 197
-
-   73 varios_modificadores: varios_modificadores modificador .
-
-    $default  reduce usando la regla 73 (varios_modificadores)
-
-
-Estado 198
-
-   70 componente: varios_modificadores declaracion_subprograma .
-
-    $default  reduce usando la regla 70 (componente)
-
-
-Estado 199
-
-   53 elemento_enumeracion: IDENTIFICADOR cero_o_uno_elemento_enumeracion .
-
-    $default  reduce usando la regla 53 (elemento_enumeracion)
-
-
-Estado 200
-
-   50 tipo_enumerado: ENUMERACION DE tipo_escalar varios_elemento_enumeracion FIN . ENUMERACION
+   57 tipo_enumerado: ENUMERACION varios_elemento_enumeracion FIN . ENUMERACION
 
     ENUMERACION  desplazar e ir al estado 206
 
 
+Estado 171
+
+   60 varios_elemento_enumeracion: varios_elemento_enumeracion ',' . elemento_enumeracion
+
+    IDENTIFICADOR  desplazar e ir al estado 134
+
+    elemento_enumeracion  ir al estado 207
+
+
+Estado 172
+
+   56 campo: varios_identificadores ':' . especificacion_tipo ';'
+
+    DICCIONARIO    desplazar e ir al estado 63
+    LISTA          desplazar e ir al estado 64
+    SIGNO          desplazar e ir al estado 65
+    IDENTIFICADOR  desplazar e ir al estado 36
+
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+    $default       reduce usando la regla 37 (cero_o_uno_signo)
+
+    nombre                   ir al estado 66
+    varios_identificadores2  ir al estado 38
+    especificacion_tipo      ir al estado 208
+    tipo_no_estructurado     ir al estado 68
+    tipo_escalar             ir al estado 69
+    cero_o_uno_signo         ir al estado 70
+    tipo_tabla               ir al estado 71
+    tipo_diccionario         ir al estado 72
+
+
+Estado 173
+
+   53 tipo_registro: REGISTRO varios_campos FIN . REGISTRO
+
+    REGISTRO  desplazar e ir al estado 209
+
+
+Estado 174
+
+   55 varios_campos: varios_campos campo .
+
+    $default  reduce usando la regla 55 (varios_campos)
+
+
+Estado 175
+
+   36 tipo_escalar: cero_o_uno_signo tipo_basico cero_o_uno_longitud cero_o_uno_rango .
+
+    $default  reduce usando la regla 36 (tipo_escalar)
+
+
+Estado 176
+
+  133 clausula_excepcion_especifica: EXCEPCION '(' . nombre ')' varias_instrucciones
+
+    IDENTIFICADOR  desplazar e ir al estado 36
+
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+
+    nombre                   ir al estado 210
+    varios_identificadores2  ir al estado 38
+
+
+Estado 177
+
+  108 varias_instrucciones: varias_instrucciones . instruccion
+  135 clausula_finalmente: FINALMENTE varias_instrucciones .
+
+    DEVOLVER       desplazar e ir al estado 73
+    LANZA          desplazar e ir al estado 74
+    PRUEBA         desplazar e ir al estado 75
+    SALIR          desplazar e ir al estado 76
+    SIGUIENTE      desplazar e ir al estado 77
+    IDENTIFICADOR  desplazar e ir al estado 36
+    ';'            desplazar e ir al estado 78
+
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+    $default       reduce usando la regla 135 (clausula_finalmente)
+
+    nombre                             ir al estado 79
+    varios_identificadores2            ir al estado 38
+    instruccion                        ir al estado 123
+    instruccion_devolver               ir al estado 82
+    instruccion_llamada                ir al estado 83
+    llamada_subprograma                ir al estado 84
+    instruccion_interrupcion           ir al estado 85
+    instruccion_lanzamiento_excepcion  ir al estado 86
+    instruccion_captura_excepcion      ir al estado 87
+
+
+Estado 178
+
+  125 instruccion_captura_excepcion: PRUEBA instruccion clausulas FIN . PRUEBA
+
+    PRUEBA  desplazar e ir al estado 211
+
+
+Estado 179
+
+  127 clausulas: clausulas_excepcion clausula_finalmente .
+
+    $default  reduce usando la regla 127 (clausulas)
+
+
+Estado 180
+
+  133 clausula_excepcion_especifica: EXCEPCION . '(' nombre ')' varias_instrucciones
+  134 clausula_excepcion_general: EXCEPCION . varias_instrucciones
+
+    DEVOLVER       desplazar e ir al estado 73
+    LANZA          desplazar e ir al estado 74
+    PRUEBA         desplazar e ir al estado 75
+    SALIR          desplazar e ir al estado 76
+    SIGUIENTE      desplazar e ir al estado 77
+    IDENTIFICADOR  desplazar e ir al estado 36
+    ';'            desplazar e ir al estado 78
+    '('            desplazar e ir al estado 176
+
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+
+    nombre                             ir al estado 79
+    varios_identificadores2            ir al estado 38
+    varias_instrucciones               ir al estado 212
+    instruccion                        ir al estado 81
+    instruccion_devolver               ir al estado 82
+    instruccion_llamada                ir al estado 83
+    llamada_subprograma                ir al estado 84
+    instruccion_interrupcion           ir al estado 85
+    instruccion_lanzamiento_excepcion  ir al estado 86
+    instruccion_captura_excepcion      ir al estado 87
+
+
+Estado 181
+
+  132 varias_clausula_excepcion_especifica: varias_clausula_excepcion_especifica clausula_excepcion_especifica .
+
+    $default  reduce usando la regla 132 (varias_clausula_excepcion_especifica)
+
+
+Estado 182
+
+  129 clausulas_excepcion: varias_clausula_excepcion_especifica clausula_excepcion_general .
+
+    $default  reduce usando la regla 129 (clausulas_excepcion)
+
+
+Estado 183
+
+  120 instruccion_interrupcion: SALIR cero_o_uno_de_identificador cero_o_uno_cuando ';' .
+
+    $default  reduce usando la regla 120 (instruccion_interrupcion)
+
+
+Estado 184
+
+  117 llamada_subprograma: nombre '(' varias_definicion_parametro ')' .
+
+    $default  reduce usando la regla 117 (llamada_subprograma)
+
+
+Estado 185
+
+   95 declaracion_parametros: varios_identificadores ':' especificacion_tipo cero_uno_expresion .
+
+    $default  reduce usando la regla 95 (declaracion_parametros)
+
+
+Estado 186
+
+   96 declaracion_parametros: varios_identificadores ':' modo especificacion_tipo . cero_uno_expresion
+
+    $default  reduce usando la regla 62 (cero_uno_expresion)
+
+    cero_uno_expresion  ir al estado 213
+
+
+Estado 187
+
+   24 varios_nombres: varios_nombres . ',' nombre
+   68 superclases: '(' varios_nombres . ')'
+
+    ','  desplazar e ir al estado 56
+    ')'  desplazar e ir al estado 214
+
+
+Estado 188
+
+   85 modificador: ABSTRACTO .
+
+    $default  reduce usando la regla 85 (modificador)
+
+
+Estado 189
+
+   82 modificador: CONSTRUCTOR .
+
+    $default  reduce usando la regla 82 (modificador)
+
+
+Estado 190
+
+   83 modificador: DESTRUCTOR .
+
+    $default  reduce usando la regla 83 (modificador)
+
+
+Estado 191
+
+   86 modificador: ESPECIFICO .
+
+    $default  reduce usando la regla 86 (modificador)
+
+
+Estado 192
+
+   87 modificador: FINAL .
+
+    $default  reduce usando la regla 87 (modificador)
+
+
+Estado 193
+
+   84 modificador: GENERICO .
+
+    $default  reduce usando la regla 84 (modificador)
+
+
+Estado 194
+
+   75 visibilidad: PRIVADO .
+
+    $default  reduce usando la regla 75 (visibilidad)
+
+
+Estado 195
+
+   74 visibilidad: PROTEGIDO .
+
+    $default  reduce usando la regla 74 (visibilidad)
+
+
+Estado 196
+
+   73 visibilidad: PUBLICO .
+
+    $default  reduce usando la regla 73 (visibilidad)
+
+
+Estado 197
+
+   77 componente: declaracion_objeto .
+
+    $default  reduce usando la regla 77 (componente)
+
+
+Estado 198
+
+   76 componente: declaracion_tipo .
+
+    $default  reduce usando la regla 76 (componente)
+
+
+Estado 199
+
+   71 varias_declaraciones_componente: declaracion_componente .
+
+    $default  reduce usando la regla 71 (varias_declaraciones_componente)
+
+
+Estado 200
+
+   63 clase: CLASE cero_uno_ultima cero_uno_superclases varias_declaraciones_componente . FIN CLASE
+   72 varias_declaraciones_componente: varias_declaraciones_componente . declaracion_componente
+
+    ABSTRACTO      desplazar e ir al estado 188
+    CONSTRUCTOR    desplazar e ir al estado 189
+    DESTRUCTOR     desplazar e ir al estado 190
+    ESPECIFICO     desplazar e ir al estado 191
+    FIN            desplazar e ir al estado 215
+    FINAL          desplazar e ir al estado 192
+    GENERICO       desplazar e ir al estado 193
+    PRIVADO        desplazar e ir al estado 194
+    PROTEGIDO      desplazar e ir al estado 195
+    PUBLICO        desplazar e ir al estado 196
+    TIPO           desplazar e ir al estado 22
+    IDENTIFICADOR  desplazar e ir al estado 23
+
+    $default  reduce usando la regla 79 (varios_modificadores)
+
+    varios_identificadores  ir al estado 25
+    declaracion_objeto      ir al estado 197
+    declaracion_tipo        ir al estado 198
+    declaracion_componente  ir al estado 216
+    visibilidad             ir al estado 201
+    componente              ir al estado 202
+    varios_modificadores    ir al estado 203
+    modificador             ir al estado 204
+
+
 Estado 201
 
-   52 varios_elemento_enumeracion: varios_elemento_enumeracion elemento_enumeracion .
+   70 declaracion_componente: visibilidad . componente
 
-    $default  reduce usando la regla 52 (varios_elemento_enumeracion)
+    ABSTRACTO      desplazar e ir al estado 188
+    CONSTRUCTOR    desplazar e ir al estado 189
+    DESTRUCTOR     desplazar e ir al estado 190
+    ESPECIFICO     desplazar e ir al estado 191
+    FINAL          desplazar e ir al estado 192
+    GENERICO       desplazar e ir al estado 193
+    TIPO           desplazar e ir al estado 22
+    IDENTIFICADOR  desplazar e ir al estado 23
+
+    $default  reduce usando la regla 79 (varios_modificadores)
+
+    varios_identificadores  ir al estado 25
+    declaracion_objeto      ir al estado 197
+    declaracion_tipo        ir al estado 198
+    componente              ir al estado 217
+    varios_modificadores    ir al estado 203
+    modificador             ir al estado 204
 
 
 Estado 202
 
-   49 campo: varios_identificadores ':' especificacion_tipo ASIGNACION . cero_uno_expresion ';'
+   69 declaracion_componente: componente .
 
-    $default  reduce usando la regla 91 (cero_uno_expresion)
-
-    cero_uno_expresion  ir al estado 207
+    $default  reduce usando la regla 69 (declaracion_componente)
 
 
 Estado 203
 
-   48 campo: varios_identificadores ':' especificacion_tipo ';' .
+   78 componente: varios_modificadores . declaracion_subprograma
+   81 varios_modificadores: varios_modificadores . ',' modificador
 
-    $default  reduce usando la regla 48 (campo)
+    SUBPROGRAMA  desplazar e ir al estado 21
+    ','          desplazar e ir al estado 218
+
+    declaracion_subprograma  ir al estado 219
 
 
 Estado 204
 
-  123 clausula_excepcion_especifica: EXCEPCION '(' nombre ')' . varias_instrucciones
+   80 varios_modificadores: modificador .
 
-    DEVOLVER       desplazar e ir al estado 70
-    LANZA          desplazar e ir al estado 71
-    PRUEBA         desplazar e ir al estado 72
-    SALIR          desplazar e ir al estado 73
-    SIGUIENTE      desplazar e ir al estado 74
-    IDENTIFICADOR  desplazar e ir al estado 12
-    ';'            desplazar e ir al estado 75
-
-    nombre                             ir al estado 76
-    varias_instrucciones               ir al estado 208
-    instruccion                        ir al estado 78
-    instruccion_devolver               ir al estado 79
-    instruccion_llamada                ir al estado 80
-    llamada_subprograma                ir al estado 81
-    instruccion_interrupcion           ir al estado 82
-    instruccion_lanzamiento_excepcion  ir al estado 83
-    instruccion_captura_excepcion      ir al estado 84
+    $default  reduce usando la regla 80 (varios_modificadores)
 
 
 Estado 205
 
-   55 clase: CLASE cero_uno_ultima cero_uno_superclases varias_declaraciones_componente FIN CLASE .
+   58 tipo_enumerado: ENUMERACION DE tipo_escalar varios_elemento_enumeracion . FIN ENUMERACION
+   60 varios_elemento_enumeracion: varios_elemento_enumeracion . ',' elemento_enumeracion
 
-    $default  reduce usando la regla 55 (clase)
+    FIN  desplazar e ir al estado 220
+    ','  desplazar e ir al estado 171
 
 
 Estado 206
 
-   50 tipo_enumerado: ENUMERACION DE tipo_escalar varios_elemento_enumeracion FIN ENUMERACION .
+   57 tipo_enumerado: ENUMERACION varios_elemento_enumeracion FIN ENUMERACION .
 
-    $default  reduce usando la regla 50 (tipo_enumerado)
+    $default  reduce usando la regla 57 (tipo_enumerado)
 
 
 Estado 207
 
-   49 campo: varios_identificadores ':' especificacion_tipo ASIGNACION cero_uno_expresion . ';'
+   60 varios_elemento_enumeracion: varios_elemento_enumeracion ',' elemento_enumeracion .
 
-    ';'  desplazar e ir al estado 209
+    $default  reduce usando la regla 60 (varios_elemento_enumeracion)
 
 
 Estado 208
 
-   97 varias_instrucciones: varias_instrucciones . instruccion
-  123 clausula_excepcion_especifica: EXCEPCION '(' nombre ')' varias_instrucciones .
+   56 campo: varios_identificadores ':' especificacion_tipo . ';'
 
-    DEVOLVER       desplazar e ir al estado 70
-    LANZA          desplazar e ir al estado 71
-    PRUEBA         desplazar e ir al estado 72
-    SALIR          desplazar e ir al estado 73
-    SIGUIENTE      desplazar e ir al estado 74
-    IDENTIFICADOR  desplazar e ir al estado 12
-    ';'            desplazar e ir al estado 75
-
-    $default  reduce usando la regla 123 (clausula_excepcion_especifica)
-
-    nombre                             ir al estado 76
-    instruccion                        ir al estado 113
-    instruccion_devolver               ir al estado 79
-    instruccion_llamada                ir al estado 80
-    llamada_subprograma                ir al estado 81
-    instruccion_interrupcion           ir al estado 82
-    instruccion_lanzamiento_excepcion  ir al estado 83
-    instruccion_captura_excepcion      ir al estado 84
+    ';'  desplazar e ir al estado 221
 
 
 Estado 209
 
-   49 campo: varios_identificadores ':' especificacion_tipo ASIGNACION cero_uno_expresion ';' .
+   53 tipo_registro: REGISTRO varios_campos FIN REGISTRO .
 
-    $default  reduce usando la regla 49 (campo)
+    $default  reduce usando la regla 53 (tipo_registro)
+
+
+Estado 210
+
+  133 clausula_excepcion_especifica: EXCEPCION '(' nombre . ')' varias_instrucciones
+
+    ')'  desplazar e ir al estado 222
+
+
+Estado 211
+
+  125 instruccion_captura_excepcion: PRUEBA instruccion clausulas FIN PRUEBA .
+
+    $default  reduce usando la regla 125 (instruccion_captura_excepcion)
+
+
+Estado 212
+
+  108 varias_instrucciones: varias_instrucciones . instruccion
+  134 clausula_excepcion_general: EXCEPCION varias_instrucciones .
+
+    DEVOLVER       desplazar e ir al estado 73
+    LANZA          desplazar e ir al estado 74
+    PRUEBA         desplazar e ir al estado 75
+    SALIR          desplazar e ir al estado 76
+    SIGUIENTE      desplazar e ir al estado 77
+    IDENTIFICADOR  desplazar e ir al estado 36
+    ';'            desplazar e ir al estado 78
+
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+    $default       reduce usando la regla 134 (clausula_excepcion_general)
+
+    nombre                             ir al estado 79
+    varios_identificadores2            ir al estado 38
+    instruccion                        ir al estado 123
+    instruccion_devolver               ir al estado 82
+    instruccion_llamada                ir al estado 83
+    llamada_subprograma                ir al estado 84
+    instruccion_interrupcion           ir al estado 85
+    instruccion_lanzamiento_excepcion  ir al estado 86
+    instruccion_captura_excepcion      ir al estado 87
+
+
+Estado 213
+
+   96 declaracion_parametros: varios_identificadores ':' modo especificacion_tipo cero_uno_expresion .
+
+    $default  reduce usando la regla 96 (declaracion_parametros)
+
+
+Estado 214
+
+   68 superclases: '(' varios_nombres ')' .
+
+    $default  reduce usando la regla 68 (superclases)
+
+
+Estado 215
+
+   63 clase: CLASE cero_uno_ultima cero_uno_superclases varias_declaraciones_componente FIN . CLASE
+
+    CLASE  desplazar e ir al estado 223
+
+
+Estado 216
+
+   72 varias_declaraciones_componente: varias_declaraciones_componente declaracion_componente .
+
+    $default  reduce usando la regla 72 (varias_declaraciones_componente)
+
+
+Estado 217
+
+   70 declaracion_componente: visibilidad componente .
+
+    $default  reduce usando la regla 70 (declaracion_componente)
+
+
+Estado 218
+
+   81 varios_modificadores: varios_modificadores ',' . modificador
+
+    ABSTRACTO    desplazar e ir al estado 188
+    CONSTRUCTOR  desplazar e ir al estado 189
+    DESTRUCTOR   desplazar e ir al estado 190
+    ESPECIFICO   desplazar e ir al estado 191
+    FINAL        desplazar e ir al estado 192
+    GENERICO     desplazar e ir al estado 193
+
+    modificador  ir al estado 224
+
+
+Estado 219
+
+   78 componente: varios_modificadores declaracion_subprograma .
+
+    $default  reduce usando la regla 78 (componente)
+
+
+Estado 220
+
+   58 tipo_enumerado: ENUMERACION DE tipo_escalar varios_elemento_enumeracion FIN . ENUMERACION
+
+    ENUMERACION  desplazar e ir al estado 225
+
+
+Estado 221
+
+   56 campo: varios_identificadores ':' especificacion_tipo ';' .
+
+    $default  reduce usando la regla 56 (campo)
+
+
+Estado 222
+
+  133 clausula_excepcion_especifica: EXCEPCION '(' nombre ')' . varias_instrucciones
+
+    DEVOLVER       desplazar e ir al estado 73
+    LANZA          desplazar e ir al estado 74
+    PRUEBA         desplazar e ir al estado 75
+    SALIR          desplazar e ir al estado 76
+    SIGUIENTE      desplazar e ir al estado 77
+    IDENTIFICADOR  desplazar e ir al estado 36
+    ';'            desplazar e ir al estado 78
+
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+
+    nombre                             ir al estado 79
+    varios_identificadores2            ir al estado 38
+    varias_instrucciones               ir al estado 226
+    instruccion                        ir al estado 81
+    instruccion_devolver               ir al estado 82
+    instruccion_llamada                ir al estado 83
+    llamada_subprograma                ir al estado 84
+    instruccion_interrupcion           ir al estado 85
+    instruccion_lanzamiento_excepcion  ir al estado 86
+    instruccion_captura_excepcion      ir al estado 87
+
+
+Estado 223
+
+   63 clase: CLASE cero_uno_ultima cero_uno_superclases varias_declaraciones_componente FIN CLASE .
+
+    $default  reduce usando la regla 63 (clase)
+
+
+Estado 224
+
+   81 varios_modificadores: varios_modificadores ',' modificador .
+
+    $default  reduce usando la regla 81 (varios_modificadores)
+
+
+Estado 225
+
+   58 tipo_enumerado: ENUMERACION DE tipo_escalar varios_elemento_enumeracion FIN ENUMERACION .
+
+    $default  reduce usando la regla 58 (tipo_enumerado)
+
+
+Estado 226
+
+  108 varias_instrucciones: varias_instrucciones . instruccion
+  133 clausula_excepcion_especifica: EXCEPCION '(' nombre ')' varias_instrucciones .
+
+    DEVOLVER       desplazar e ir al estado 73
+    LANZA          desplazar e ir al estado 74
+    PRUEBA         desplazar e ir al estado 75
+    SALIR          desplazar e ir al estado 76
+    SIGUIENTE      desplazar e ir al estado 77
+    IDENTIFICADOR  desplazar e ir al estado 36
+    ';'            desplazar e ir al estado 78
+
+    IDENTIFICADOR  [reduce usando la regla 15 (varios_identificadores2)]
+    $default       reduce usando la regla 133 (clausula_excepcion_especifica)
+
+    nombre                             ir al estado 79
+    varios_identificadores2            ir al estado 38
+    instruccion                        ir al estado 123
+    instruccion_devolver               ir al estado 82
+    instruccion_llamada                ir al estado 83
+    llamada_subprograma                ir al estado 84
+    instruccion_interrupcion           ir al estado 85
+    instruccion_lanzamiento_excepcion  ir al estado 86
+    instruccion_captura_excepcion      ir al estado 87
