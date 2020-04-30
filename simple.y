@@ -60,7 +60,7 @@ nombre
 varios_identificadores2
 : varios_identificadores2 identificador_cuatro     { printf ("varios_identificadores2 -> varios_identificadores2 IDENTIFICADOR CUATRO_PUNTOS \n"); }
 ;
-
+////REGLA CREADA ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 identificador_cuatro
 : IDENTIFICADOR CUATRO_PUNTOS
 |
