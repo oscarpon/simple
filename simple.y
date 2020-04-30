@@ -37,9 +37,8 @@ codigo_programa
 ;
 /****DUDA SOBRE COMO PNER VACIO EN LIBRERIA****/
 varias_librerias
-	 :
-   | libreria                         { printf ("  varias_librerias -> libreria\n"); }
-	 | varias_librerias  libreria       { printf ("  varias_librerias ->  varias_libreria  libreria\n"); }
+	 : varias_librerias libreria        { printf ("  varias_librerias -> varias_librerias libreria\n"); }
+   |
 	 ;
    
  libreria 
@@ -49,19 +48,18 @@ varias_librerias
   ;
 
 varios_identificadores
-	 : IDENTIFICADOR                               { printf ("  varios_identificadores -> IDENTIFICADOR\n"); }
-	 | varios_identificadores ',' IDENTIFICADOR       { printf ("  varios_identificadores ->  varios_identificadores  IDENTIFICADOR\n"); }
+   : varios_identificadores ',' IDENTIFICADOR       { printf ("  varios_identificadores ->  varios_identificadores  IDENTIFICADOR\n"); }
+	 | IDENTIFICADOR                                  { printf ("  varios_identificadores -> IDENTIFICADOR\n"); }
 	 ;
 
 nombre
-: IDENTIFICADOR { printf ("nombre -> IDENTIFICADOR\n"); }                            
-| varios_identificadores2 IDENTIFICADOR  { printf ("nombre -> varios_identificadores2 IDENTIFICADOR\n"); }
+: varios_identificadores2 IDENTIFICADOR  { printf ("nombre -> varios_identificadores2 IDENTIFICADOR\n"); }
+|                           
 ;
 
-
 varios_identificadores2
-	 :      
-	 | varios_identificadores2 IDENTIFICADOR CUATRO_PUNTOS      { printf ("varios_identificadores2 ->  IDENTIFICADOR CUATRO_PUNTOS \n"); }
+	 : varios_identificadores2 IDENTIFICADOR CUATRO_PUNTOS      { printf ("varios_identificadores2 -> varios_identificadores2 IDENTIFICADOR CUATRO_PUNTOS \n"); }
+   | 
    ;
 
 definicion_libreria 
