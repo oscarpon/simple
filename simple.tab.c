@@ -456,16 +456,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  8
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   291
+#define YYLAST   272
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  111
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  73
+#define YYNNTS  72
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  135
+#define YYNRULES  129
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  225
+#define YYNSTATES  217
 
 /* YYTRANSLATE[YYX] -- Symbol number corresponding to YYX as returned
    by yylex, with out-of-bounds checking.  */
@@ -521,19 +521,18 @@ static const yytype_uint8 yytranslate[] =
 static const yytype_uint16 yyrline[] =
 {
        0,    27,    27,    28,    32,    36,    40,    41,    45,    46,
-      47,    51,    52,    56,    57,    61,    62,    66,    71,    72,
-      77,    78,    83,    87,    88,    92,    93,    94,   100,   105,
-     106,   111,   112,   116,   117,   118,   122,   125,   127,   130,
-     132,   135,   141,   142,   146,   147,   148,   149,   159,   163,
-     167,   168,   169,   173,   177,   178,   182,   188,   189,   193,
-     194,   198,   201,   209,   212,   214,   217,   219,   223,   228,
-     229,   233,   234,   239,   240,   241,   245,   246,   247,   251,
-     253,   254,   258,   259,   260,   261,   262,   263,   271,   275,
-     278,   280,   283,   285,   289,   293,   294,   297,   299,   300,
-     304,   305,   309,   314,   317,   319,   320,   324,   325,   334,
-     335,   339,   340,   341,   342,   365,   370,   374,   377,   466,
-     467,   475,   480,   482,   486,   490,   494,   495,   496,   501,
-     504,   506,   507,   511,   515,   519
+      47,    51,    52,    57,    70,    75,    76,    81,    82,    87,
+      91,    92,    96,    97,    98,   104,   109,   110,   115,   116,
+     120,   121,   122,   126,   130,   131,   135,   136,   141,   145,
+     146,   150,   151,   152,   153,   163,   167,   171,   172,   173,
+     177,   181,   182,   187,   193,   194,   198,   199,   204,   209,
+     215,   219,   220,   224,   225,   229,   234,   235,   239,   240,
+     245,   246,   247,   251,   252,   253,   258,   259,   260,   264,
+     265,   266,   267,   268,   269,   277,   281,   285,   286,   290,
+     291,   295,   299,   300,   304,   305,   309,   310,   314,   319,
+     323,   324,   328,   329,   338,   339,   343,   344,   345,   346,
+     369,   374,   378,   381,   468,   469,   479,   483,   484,   488,
+     492,   496,   497,   498,   503,   507,   508,   512,   516,   520
 };
 #endif
 
@@ -560,13 +559,13 @@ static const char *const yytname[] =
   "':'", "'('", "')'", "'^'", "'-'", "'.'", "'['", "']'", "'{'", "'}'",
   "'~'", "'<'", "'>'", "'='", "'+'", "'*'", "'/'", "'\\\\'", "$accept",
   "programa", "definicion_programa", "codigo_programa", "varias_librerias",
-  "libreria", "varios_identificadores", "nombre",
-  "varios_identificadores2", "definicion_libreria", "codigo_libreria",
-  "varias_declaraciones", "exportaciones", "varios_nombres", "declaracion",
-  "declaracion_objeto", "especificacion_tipo", "declaracion_tipo",
-  "tipo_no_estructurado", "tipo_escalar", "cero_o_uno_signo",
-  "cero_o_uno_longitud", "cero_o_uno_rango", "longitud", "tipo_basico",
-  "tipo_tabla", "tipo_diccionario", "tipo_estructurado", "tipo_registro",
+  "libreria", "varios_identificadores", "nombre", "definicion_libreria",
+  "codigo_libreria", "varias_declaraciones", "exportaciones",
+  "varios_nombres", "declaracion", "declaracion_objeto",
+  "especificacion_tipo", "declaracion_tipo", "tipo_no_estructurado",
+  "tipo_escalar", "cero_o_uno_signo", "cero_o_uno_longitud",
+  "cero_o_uno_rango", "longitud", "tipo_basico", "tipo_tabla",
+  "tipo_diccionario", "tipo_estructurado", "tipo_registro",
   "varios_campos", "campo", "tipo_enumerado",
   "varios_elemento_enumeracion", "elemento_enumeracion",
   "cero_uno_expresion", "clase", "cero_uno_ultima", "cero_uno_superclases",
@@ -607,12 +606,12 @@ static const yytype_uint16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF -149
+#define YYPACT_NINF -144
 
 #define yypact_value_is_default(Yystate) \
-  (!!((Yystate) == (-149)))
+  (!!((Yystate) == (-144)))
 
-#define YYTABLE_NINF -136
+#define YYTABLE_NINF -130
 
 #define yytable_value_is_error(Yytable_value) \
   0
@@ -621,29 +620,28 @@ static const yytype_uint16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-      -8,   -41,   -34,    43,  -149,  -149,   -39,   -29,  -149,  -149,
-    -149,   163,  -149,  -149,    53,    36,    16,    48,    25,    27,
-    -149,  -149,    24,   127,   127,  -149,  -149,  -149,  -149,   127,
-      55,  -149,    59,    16,  -149,    60,   -80,    16,     7,   127,
-      90,    69,   117,  -149,   127,    63,   145,    88,    73,  -149,
-      16,    -5,    94,   133,  -149,   104,   119,  -149,   160,   167,
-    -149,  -149,    92,  -149,  -149,     9,  -149,  -149,    96,    16,
-     145,   171,  -149,  -149,    99,   111,  -149,  -149,  -149,   103,
-    -149,  -149,  -149,    94,  -149,  -149,   131,  -149,    29,   107,
-      94,   234,  -149,  -149,  -149,   141,    -6,    94,   112,  -149,
-    -149,  -149,  -149,   234,   234,  -149,  -149,  -149,  -149,  -149,
-      -3,  -149,   116,    81,   144,  -149,   120,  -149,  -149,  -149,
-    -149,    39,   124,     0,  -149,   -17,  -149,  -149,   129,   170,
-    -149,   -23,  -149,    72,   -21,  -149,  -149,  -149,  -149,  -149,
-    -149,  -149,  -149,  -149,   147,   145,   193,   195,   210,  -149,
-    -149,  -149,   136,  -149,   150,  -149,  -149,  -149,  -149,  -149,
-      28,  -149,  -149,    16,   202,  -149,   174,  -149,   227,   174,
-     117,   208,  -149,  -149,    16,   115,   214,  -149,    11,  -149,
-    -149,  -149,  -149,  -149,  -149,   -15,  -149,  -149,  -149,  -149,
-    -149,  -149,  -149,  -149,  -149,  -149,  -149,  -149,   188,   226,
-    -149,   -32,  -149,   -22,  -149,  -149,   169,  -149,   168,  -149,
-       3,  -149,  -149,   254,  -149,  -149,   240,  -149,   243,  -149,
-     145,  -149,  -149,  -149,   123
+     -29,   -54,   -50,    33,  -144,  -144,   -49,   -31,  -144,  -144,
+    -144,   171,  -144,  -144,   154,    32,  -144,    39,    11,    14,
+    -144,  -144,    35,   178,   178,  -144,  -144,  -144,  -144,   178,
+    -144,    45,  -144,  -144,    56,  -144,    16,   178,    98,    59,
+      21,  -144,   178,    92,    18,   104,  -144,  -144,    -6,  -144,
+     122,  -144,    87,    12,  -144,   146,   149,  -144,  -144,    74,
+    -144,  -144,   102,  -144,  -144,    79,  -144,    18,   158,  -144,
+    -144,    93,    85,  -144,  -144,  -144,   110,  -144,  -144,  -144,
+     108,  -144,   142,  -144,   108,   196,  -144,  -144,  -144,   161,
+     -10,   108,   127,  -144,  -144,  -144,  -144,   196,   196,  -144,
+    -144,  -144,  -144,  -144,    82,  -144,   131,    71,   159,  -144,
+     135,  -144,  -144,  -144,  -144,    67,   136,    91,   -69,  -144,
+    -144,   137,   180,  -144,   -20,  -144,    97,    -1,  -144,  -144,
+    -144,  -144,  -144,  -144,  -144,  -144,  -144,    18,   211,   212,
+     216,  -144,  -144,   155,  -144,   152,  -144,  -144,    -8,  -144,
+    -144,  -144,   164,  -144,   183,  -144,   223,   183,    21,   199,
+    -144,  -144,    86,   206,  -144,     4,  -144,  -144,  -144,  -144,
+    -144,  -144,  -144,   -11,   -63,  -144,  -144,  -144,  -144,  -144,
+    -144,  -144,  -144,  -144,  -144,  -144,  -144,   150,   140,  -144,
+     -45,  -144,   -15,  -144,  -144,   162,  -144,  -144,  -144,     6,
+    -144,  -144,  -144,   244,  -144,  -144,   209,  -144,   232,  -144,
+     160,  -144,  -144,  -144,  -144,    18,   100
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -652,54 +650,53 @@ static const yytype_int16 yypact[] =
 static const yytype_uint8 yydefact[] =
 {
        0,     0,     0,     0,     2,     3,     0,     0,     1,     7,
-       7,     0,    17,     4,   104,     0,    14,     0,     0,     0,
-      12,     6,     0,    18,     0,    20,    25,    26,    27,     0,
-      20,     5,     0,    14,    23,     0,     0,    14,    90,   104,
-       0,     0,    37,    21,    19,    21,    14,     0,    13,    22,
-      14,     0,     0,    92,    91,     0,    37,    11,     0,     0,
-      38,    29,     0,    30,    33,     0,    34,    35,     0,    14,
-      14,   122,   121,   114,     0,    14,   107,   109,   110,     0,
-     111,   112,   113,     0,    15,    24,     0,     8,     0,     0,
-       0,    14,    89,    93,    88,    64,     0,     0,     0,    32,
-      50,    51,    52,    14,    14,    28,    44,    45,    46,    47,
-      39,   115,     0,    14,     0,   121,     0,   118,   103,   108,
-     116,     0,     0,    37,    98,     0,   102,    65,    66,    37,
-      62,     0,    59,     0,     0,    54,    31,    49,    48,    42,
-      43,    41,    40,   124,     0,    14,     0,   126,     0,   131,
-     128,   123,     0,   119,     0,     9,    10,   101,   100,    62,
-      37,    99,    94,    14,    79,    67,     0,    61,     0,     0,
-      37,     0,    55,    36,    14,    14,     0,   127,    16,   132,
-     129,   120,   117,    95,    62,     0,    85,    82,    83,    86,
-      87,    84,    75,    74,    73,    77,    76,    71,    79,    79,
-      69,     0,    80,     0,    57,    60,     0,    53,     0,   125,
-     134,    96,    68,     0,    72,    70,     0,    78,     0,    56,
-      14,    63,    81,    58,    14
+       7,     0,    14,     4,   101,     0,    13,     0,     0,     0,
+      12,     6,     0,    15,     0,    17,    22,    23,    24,     0,
+       5,     0,    13,    20,     0,    13,    88,   101,     0,     0,
+      35,    18,    16,    18,    13,     0,    19,    13,     0,    95,
+      90,    87,     0,    35,    11,     0,     0,    34,    26,     0,
+      27,    30,     0,    31,    32,     0,    13,    13,   118,   116,
+     109,     0,    13,   102,   104,   105,     0,   106,   107,   108,
+       0,    21,     0,     8,     0,    13,    86,    89,    85,    62,
+       0,     0,     0,    29,    47,    48,    49,    13,    13,    25,
+      41,    42,    43,    44,    37,   110,     0,    13,     0,   116,
+       0,   113,    99,   103,   111,     0,     0,     0,     0,    98,
+      61,    64,    35,    59,     0,    57,     0,     0,    52,    28,
+      46,    45,    39,    40,    38,    36,   119,    13,     0,   121,
+       0,   123,   117,     0,   114,     0,     9,    10,    35,    94,
+      91,    13,    78,    63,     0,    58,     0,     0,    35,     0,
+      51,    33,    13,     0,   122,     0,   125,   124,   115,   112,
+      97,    96,    59,    35,     0,    82,    79,    80,    83,    84,
+      81,    72,    71,    70,    74,    73,    69,    78,    78,    66,
+       0,    77,     0,    54,    56,     0,    50,   120,    13,   128,
+      92,    59,    65,     0,    68,    67,     0,    75,     0,    53,
+       0,    93,    60,    76,    55,    13,    13
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int16 yypgoto[] =
 {
-    -149,  -149,  -149,  -149,   256,  -149,   -50,   -16,  -149,  -149,
-    -149,     8,  -149,   105,    85,  -148,   -81,  -126,   216,   146,
-    -149,  -149,  -149,  -149,  -149,  -149,  -149,  -149,  -149,  -149,
-     139,  -149,   108,   109,  -145,  -149,  -149,  -149,  -149,    78,
-    -149,  -149,    80,  -149,    61,    79,  -149,  -149,  -149,  -149,
-     191,  -149,  -149,  -149,   244,  -149,   -69,   -72,  -149,  -149,
-    -149,  -149,  -149,   172,  -149,  -149,  -149,  -149,  -149,  -149,
-     138,  -149,   137
+    -144,  -144,  -144,  -144,   246,  -144,    27,   -16,  -144,  -144,
+      80,  -144,   106,   175,  -143,   -80,   -98,   205,   138,  -144,
+    -144,  -144,  -144,  -144,  -144,  -144,  -144,  -144,  -144,   132,
+    -144,   107,   105,  -136,  -144,  -144,  -144,  -144,    76,  -144,
+    -144,    77,  -144,    58,    78,  -144,  -144,  -144,  -144,  -144,
+    -144,  -144,  -144,   229,  -144,   -66,   -70,  -144,  -144,  -144,
+    -144,  -144,   163,  -144,  -144,  -144,  -144,  -144,  -144,  -144,
+    -144,   128
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int16 yydefgoto[] =
 {
-      -1,     3,     4,    13,    11,    21,    22,    74,    35,     5,
-      12,    29,    24,    36,    25,    26,    62,    27,    63,    64,
-      65,   141,   173,   142,   110,    66,    67,    99,   100,   134,
-     135,   101,   131,   132,   167,   102,   128,   164,   165,   197,
-     198,   199,   200,   201,   202,    28,    39,    53,    92,    54,
-      89,    90,   160,    93,    31,    32,    75,    76,    77,    78,
-      79,   154,    80,   116,   115,    81,    82,   146,   147,   148,
-     149,   180,   150
+      -1,     3,     4,    13,    11,    21,    22,    71,     5,    12,
+      29,    24,    34,    25,    26,    59,    27,    60,    61,    62,
+     134,   161,   135,   104,    63,    64,    93,    94,   127,   128,
+      95,   124,   125,   155,    96,   121,   152,   153,   186,   187,
+     188,   189,   190,   191,    28,    37,    50,    86,    51,   118,
+      84,   173,    87,    30,    31,    72,    73,    74,    75,    76,
+     145,    77,   110,   109,    78,    79,   138,   139,   140,   166,
+     167,   141
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -707,137 +704,130 @@ static const yytype_int16 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int16 yytable[] =
 {
-      34,   113,    88,   119,    86,   168,   218,   171,   129,   139,
-     126,    49,    50,   106,   183,   107,   195,    47,    58,    23,
-      68,    51,   137,   138,     6,    18,    61,     1,    68,   108,
-     140,     7,    44,   121,    85,     2,    59,    69,   196,   211,
-      88,   119,   159,     8,    20,    69,    58,   133,    70,   157,
-     195,   195,     9,   112,    60,    71,    70,   109,    72,   130,
-     216,   158,    10,    71,    59,   -16,    72,    15,   -16,   169,
-     169,    33,   196,   196,   161,    61,   175,    50,   162,   184,
-     212,   -16,    60,    37,   133,    17,    87,    61,    61,   206,
-      38,   -14,    40,   -16,    73,   -14,  -105,   -14,    68,    30,
-      46,    52,    73,   119,  -106,   174,   144,    61,    43,   210,
-      18,   145,    19,    56,    45,    69,    41,    42,    20,   -14,
-      83,    41,   123,   -14,    30,    48,    70,    95,    68,    43,
-     155,    41,    68,    71,    57,    58,    72,    58,   119,   118,
-      68,    96,    84,  -135,    61,    69,   -16,    34,  -133,    69,
-      91,   224,   119,    59,    61,    59,    70,    69,   208,    20,
-      70,    94,    68,    71,    41,   170,    72,    71,    70,    97,
-      72,    60,    73,    60,   103,    71,   -16,    15,    72,    69,
-     -16,   104,   -16,   105,    18,   114,    19,   111,   -16,    16,
-      70,   186,    20,   117,   120,    17,   122,    71,   124,   187,
-      72,   127,    73,   136,   188,   186,    73,   143,   -14,   151,
-     -16,   153,   189,   187,    73,   156,   213,   190,   188,   191,
-      18,   176,    19,   163,    60,   145,   189,   181,    20,   186,
-     192,   190,   193,   191,   194,   178,    73,   187,   -37,   130,
-     -37,   174,   188,   186,   192,   182,   193,    19,   194,   204,
-     189,   187,    58,    20,   -37,   190,   188,   191,   207,   209,
-     219,    19,   221,   220,   189,   223,    14,    20,   185,   190,
-      59,   191,    98,   172,   203,   166,   214,   222,   205,   215,
-     217,   125,   -37,    55,   177,    19,   179,   152,    60,     0,
-       0,    20
+      33,   107,   113,    82,   122,   119,     1,    55,   156,   184,
+      55,     6,    18,   208,     2,     7,    45,   130,   131,    48,
+      89,    65,   149,    65,    58,    56,   150,   159,    56,    47,
+      55,    81,   202,     8,    90,    65,   200,   113,    66,    55,
+      66,   170,     9,    57,   184,   184,    57,   206,    56,    67,
+     106,    67,    66,   171,   185,   123,    68,    56,    68,    69,
+      10,    69,    91,    67,    20,   211,    57,    32,   172,    58,
+      68,   162,   157,    69,    35,    57,    36,   157,   195,    38,
+     -13,    58,    58,   -13,   -13,    83,    44,   -13,    65,   185,
+     185,    23,   113,   201,   132,    70,  -126,    70,   198,   199,
+     -13,   137,    65,    65,    42,    66,   100,   115,   101,    70,
+      49,   117,   -13,   112,  -129,   133,    67,    65,   126,    66,
+      66,    53,   102,    68,    54,  -127,    69,    39,    40,   113,
+      67,    67,    58,  -100,    66,    33,    80,    68,    68,    85,
+      69,    69,    58,   175,    88,    67,   113,    46,    47,   216,
+     103,   176,    68,   175,   126,    69,   177,    58,   146,    39,
+      97,   176,    70,    98,   178,    99,   177,   175,    15,   179,
+     105,   180,   108,    20,   178,   176,    70,    70,   203,   179,
+     177,   180,   210,    39,   148,    15,    17,   111,   178,    39,
+     158,    70,   181,   179,   182,   180,   183,    16,    41,    19,
+     -35,   114,   -35,    17,    43,    20,   181,   116,   182,    19,
+     183,    18,   175,    19,    55,    20,   -35,    41,   129,    20,
+     176,   120,   136,    19,   142,   177,   144,   147,    18,    20,
+      19,   151,    56,   178,    57,    18,    20,    19,   179,   163,
+     180,   165,   137,    20,   -35,   193,   168,   169,   123,   196,
+      57,   197,   212,   209,   214,   215,    14,   174,    92,   160,
+     154,   192,   194,   204,   213,   205,    52,   164,   207,     0,
+       0,     0,   143
 };
 
 static const yytype_int16 yycheck[] =
 {
-      16,    70,    52,    75,     9,    28,    28,    28,    14,    12,
-      91,    91,    92,     4,   159,     6,   164,    33,    18,    11,
-      17,    37,   103,   104,    65,    57,    42,    35,    17,    20,
-      33,    65,    24,    83,    50,    43,    36,    34,   164,   184,
-      90,   113,   123,     0,    65,    34,    18,    97,    45,    49,
-     198,   199,    91,    69,    54,    52,    45,    48,    55,    65,
-      92,    61,    91,    52,    36,    65,    55,    14,    65,    92,
-      92,    35,   198,   199,    91,    91,   145,    92,    95,   160,
-      95,    65,    54,    35,   134,    32,    91,   103,   104,   170,
-      65,    91,    65,    65,    91,    95,    41,    94,    17,    14,
-      41,    94,    91,   175,    41,    94,    25,   123,    23,   178,
-      57,    30,    59,    23,    29,    34,    92,    93,    65,    91,
-      32,    92,    93,    95,    39,    65,    45,     8,    17,    44,
-      91,    92,    17,    52,    65,    18,    55,    18,   210,    28,
-      17,    22,    69,    28,   160,    34,    65,   163,    25,    34,
-      17,   220,   224,    36,   170,    36,    45,    34,   174,    65,
-      45,    57,    17,    52,    92,    93,    55,    52,    45,    50,
-      55,    54,    91,    54,    14,    52,    65,    14,    55,    34,
-      65,    14,    65,    91,    57,    14,    59,    91,    65,    26,
-      45,     3,    65,    94,    91,    32,    65,    52,    91,    11,
-      55,    60,    91,    91,    16,     3,    91,    91,    91,    65,
-      65,    91,    24,    11,    91,    91,    28,    29,    16,    31,
-      57,    28,    59,    94,    54,    30,    24,    91,    65,     3,
-      42,    29,    44,    31,    46,    25,    91,    11,     4,    65,
-       6,    94,    16,     3,    42,    95,    44,    59,    46,    22,
-      24,    11,    18,    65,    20,    29,    16,    31,    50,    45,
-      91,    59,     8,    95,    24,    22,    10,    65,   163,    29,
-      36,    31,    56,   134,   166,   129,   198,   216,   169,   199,
-     201,    90,    48,    39,   147,    59,   148,   115,    54,    -1,
-      -1,    65
+      16,    67,    72,     9,    14,    85,    35,    18,    28,   152,
+      18,    65,    57,    28,    43,    65,    32,    97,    98,    35,
+       8,    17,    91,    17,    40,    36,    95,    28,    36,    92,
+      18,    47,    95,     0,    22,    17,   172,   107,    34,    18,
+      34,    49,    91,    54,   187,   188,    54,    92,    36,    45,
+      66,    45,    34,    61,   152,    65,    52,    36,    52,    55,
+      91,    55,    50,    45,    65,   201,    54,    35,   148,    85,
+      52,   137,    92,    55,    35,    54,    65,    92,   158,    65,
+      91,    97,    98,    91,    95,    91,    41,    95,    17,   187,
+     188,    11,   162,   173,    12,    91,    25,    91,    94,   165,
+      94,    30,    17,    17,    24,    34,     4,    80,     6,    91,
+      94,    84,    91,    28,    28,    33,    45,    17,    91,    34,
+      34,    23,    20,    52,    65,    25,    55,    92,    93,   199,
+      45,    45,   148,    41,    34,   151,    32,    52,    52,    17,
+      55,    55,   158,     3,    57,    45,   216,    91,    92,   215,
+      48,    11,    52,     3,   127,    55,    16,   173,    91,    92,
+      14,    11,    91,    14,    24,    91,    16,     3,    14,    29,
+      91,    31,    14,    65,    24,    11,    91,    91,    28,    29,
+      16,    31,   198,    92,    93,    14,    32,    94,    24,    92,
+      93,    91,    42,    29,    44,    31,    46,    26,    23,    59,
+       4,    91,     6,    32,    29,    65,    42,    65,    44,    59,
+      46,    57,     3,    59,    18,    65,    20,    42,    91,    65,
+      11,    60,    91,    59,    65,    16,    91,    91,    57,    65,
+      59,    94,    36,    24,    54,    57,    65,    59,    29,    28,
+      31,    25,    30,    65,    48,    22,    91,    95,    65,    50,
+      54,    45,     8,    91,    22,    95,    10,   151,    53,   127,
+     122,   154,   157,   187,   206,   188,    37,   139,   190,    -1,
+      -1,    -1,   109
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_uint8 yystos[] =
 {
-       0,    35,    43,   112,   113,   120,    65,    65,     0,    91,
-      91,   115,   121,   114,   115,    14,    26,    32,    57,    59,
-      65,   116,   117,   122,   123,   125,   126,   128,   156,   122,
-     125,   165,   166,    35,   118,   119,   124,    35,    65,   157,
-      65,    92,    93,   125,   122,   125,    41,   118,    65,    91,
-      92,   118,    94,   158,   160,   165,    23,    65,    18,    36,
-      54,   118,   127,   129,   130,   131,   136,   137,    17,    34,
-      45,    52,    55,    91,   118,   167,   168,   169,   170,   171,
-     173,   176,   177,    32,    69,   118,     9,    91,   117,   161,
-     162,    17,   159,   164,    57,     8,    22,    50,   129,   138,
-     139,   142,   146,    14,    14,    91,     4,     6,    20,    48,
-     135,    91,   118,   167,    14,   175,   174,    94,    28,   168,
-      91,   117,    65,    93,    91,   161,   127,    60,   147,    14,
-      65,   143,   144,   117,   140,   141,    91,   127,   127,    12,
-      33,   132,   134,    91,    25,    30,   178,   179,   180,   181,
-     183,    65,   174,    91,   172,    91,    91,    49,    61,   127,
-     163,    91,    95,    94,   148,   149,   130,   145,    28,    92,
-      93,    28,   141,   133,    94,   167,    28,   183,    25,   181,
-     182,    91,    95,   145,   127,   124,     3,    11,    16,    24,
-      29,    31,    42,    44,    46,   126,   128,   150,   151,   152,
-     153,   154,   155,   143,    22,   144,   127,    50,   118,    45,
-     167,   145,    95,    28,   150,   153,    92,   156,    28,    91,
-      95,     8,   155,    22,   167
+       0,    35,    43,   112,   113,   119,    65,    65,     0,    91,
+      91,   115,   120,   114,   115,    14,    26,    32,    57,    59,
+      65,   116,   117,   121,   122,   124,   125,   127,   155,   121,
+     164,   165,    35,   118,   123,    35,    65,   156,    65,    92,
+      93,   124,   121,   124,    41,   118,    91,    92,   118,    94,
+     157,   159,   164,    23,    65,    18,    36,    54,   118,   126,
+     128,   129,   130,   135,   136,    17,    34,    45,    52,    55,
+      91,   118,   166,   167,   168,   169,   170,   172,   175,   176,
+      32,   118,     9,    91,   161,    17,   158,   163,    57,     8,
+      22,    50,   128,   137,   138,   141,   145,    14,    14,    91,
+       4,     6,    20,    48,   134,    91,   118,   166,    14,   174,
+     173,    94,    28,   167,    91,   117,    65,   117,   160,   126,
+      60,   146,    14,    65,   142,   143,   117,   139,   140,    91,
+     126,   126,    12,    33,   131,   133,    91,    30,   177,   178,
+     179,   182,    65,   173,    91,   171,    91,    91,    93,    91,
+      95,    94,   147,   148,   129,   144,    28,    92,    93,    28,
+     140,   132,   166,    28,   182,    25,   180,   181,    91,    95,
+      49,    61,   126,   162,   123,     3,    11,    16,    24,    29,
+      31,    42,    44,    46,   125,   127,   149,   150,   151,   152,
+     153,   154,   142,    22,   143,   126,    50,    45,    94,   166,
+     144,   126,    95,    28,   149,   152,    92,   155,    28,    91,
+     118,   144,     8,   154,    22,    95,   166
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_uint8 yyr1[] =
 {
        0,   111,   112,   112,   113,   114,   115,   115,   116,   116,
-     116,   117,   117,   118,   118,   119,   119,   120,   121,   121,
-     122,   122,   123,   124,   124,   125,   125,   125,   126,   127,
-     127,   128,   128,   129,   129,   129,   130,   131,   131,   132,
-     132,   133,   134,   134,   135,   135,   135,   135,   136,   137,
-     138,   138,   138,   139,   140,   140,   141,   142,   142,   143,
-     143,   144,   145,   146,   147,   147,   148,   148,   149,   150,
-     150,   151,   151,   152,   152,   152,   153,   153,   153,   154,
-     154,   154,   155,   155,   155,   155,   155,   155,   156,   157,
-     158,   158,   159,   159,   160,   161,   161,   162,   162,   162,
-     163,   163,   164,   165,   166,   166,   166,   167,   167,   168,
-     168,   168,   168,   168,   168,   169,   170,   171,   172,   173,
-     173,   174,   175,   175,   176,   177,   178,   178,   178,   179,
-     180,   180,   180,   181,   182,   183
+     116,   117,   117,   118,   119,   120,   120,   121,   121,   122,
+     123,   123,   124,   124,   124,   125,   126,   126,   127,   127,
+     128,   128,   128,   129,   130,   130,   131,   131,   132,   133,
+     133,   134,   134,   134,   134,   135,   136,   137,   137,   137,
+     138,   139,   139,   140,   141,   141,   142,   142,   143,   144,
+     145,   146,   146,   147,   147,   148,   149,   149,   150,   150,
+     151,   151,   151,   152,   152,   152,   153,   153,   153,   154,
+     154,   154,   154,   154,   154,   155,   156,   157,   157,   158,
+     158,   159,   160,   160,   161,   161,   162,   162,   163,   164,
+     165,   165,   166,   166,   167,   167,   167,   167,   167,   167,
+     168,   169,   170,   171,   172,   172,   173,   174,   174,   175,
+     176,   177,   177,   177,   178,   179,   179,   180,   181,   182
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
        0,     2,     1,     1,     4,     2,     2,     0,     4,     6,
-       6,     3,     1,     2,     0,     3,     0,     4,     2,     3,
-       1,     2,     3,     1,     3,     1,     1,     1,     4,     1,
-       1,     5,     4,     1,     1,     1,     4,     0,     1,     0,
-       1,     0,     1,     1,     1,     1,     1,     1,     3,     3,
-       1,     1,     1,     4,     1,     2,     4,     4,     6,     1,
-       3,     2,     0,     6,     0,     1,     0,     1,     3,     1,
-       2,     1,     2,     1,     1,     1,     1,     1,     2,     0,
-       1,     3,     1,     1,     1,     1,     1,     1,     4,     3,
-       0,     1,     0,     1,     4,     4,     5,     0,     2,     3,
-       1,     1,     2,     4,     0,     1,     2,     1,     2,     1,
-       1,     1,     1,     1,     1,     2,     2,     4,     0,     3,
-       4,     0,     0,     2,     3,     5,     1,     2,     1,     2,
-       0,     1,     2,     5,     2,     2
+       6,     3,     1,     0,     4,     2,     3,     1,     2,     3,
+       1,     3,     1,     1,     1,     4,     1,     1,     5,     4,
+       1,     1,     1,     4,     1,     0,     1,     0,     0,     1,
+       1,     1,     1,     1,     1,     3,     3,     1,     1,     1,
+       4,     2,     1,     4,     4,     6,     3,     1,     2,     0,
+       6,     1,     0,     1,     0,     3,     1,     2,     2,     1,
+       1,     1,     1,     1,     1,     2,     3,     1,     0,     1,
+       1,     1,     1,     1,     1,     4,     3,     1,     0,     1,
+       0,     4,     4,     5,     3,     0,     1,     1,     2,     4,
+       2,     0,     1,     2,     1,     1,     1,     1,     1,     1,
+       2,     2,     4,     0,     3,     4,     0,     2,     0,     3,
+       5,     1,     2,     1,     2,     2,     0,     5,     2,     2
 };
 
 
@@ -1516,701 +1506,671 @@ yyreduce:
         case 2:
 #line 27 "simple.y" /* yacc.c:1646  */
     { printf ("EXITO: Programa -> definicion_programa\n"); }
-#line 1520 "simple.tab.c" /* yacc.c:1646  */
+#line 1510 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
 #line 28 "simple.y" /* yacc.c:1646  */
     { printf ("EXITO: Libreria -> definicion_libreria\n"); }
-#line 1526 "simple.tab.c" /* yacc.c:1646  */
+#line 1516 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
 #line 32 "simple.y" /* yacc.c:1646  */
     { printf ("definicion_programa -> programa IDENTIFICADOR ; codigo_programa\n"); }
-#line 1532 "simple.tab.c" /* yacc.c:1646  */
+#line 1522 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
 #line 36 "simple.y" /* yacc.c:1646  */
     { printf ("  codigo_programa -> varias_librerias cuerpo_subprograma\n"); }
-#line 1538 "simple.tab.c" /* yacc.c:1646  */
+#line 1528 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
 #line 40 "simple.y" /* yacc.c:1646  */
     { printf ("  varias_librerias -> varias_librerias libreria\n"); }
-#line 1544 "simple.tab.c" /* yacc.c:1646  */
+#line 1534 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
 #line 45 "simple.y" /* yacc.c:1646  */
     { printf ("  libreria -> IMPORTAR LIBRERIA nombre ;\n"); }
-#line 1550 "simple.tab.c" /* yacc.c:1646  */
+#line 1540 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
 #line 46 "simple.y" /* yacc.c:1646  */
     { printf ("  libreria -> DE LIBRERIA nombre IMPORTAR varios_identificadores ; \n"); }
-#line 1556 "simple.tab.c" /* yacc.c:1646  */
+#line 1546 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
 #line 47 "simple.y" /* yacc.c:1646  */
     { printf ("  libreria -> IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ; \n"); }
-#line 1562 "simple.tab.c" /* yacc.c:1646  */
+#line 1552 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
 #line 51 "simple.y" /* yacc.c:1646  */
     { printf ("  varios_identificadores ->  varios_identificadores  IDENTIFICADOR\n"); }
-#line 1568 "simple.tab.c" /* yacc.c:1646  */
+#line 1558 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
 #line 52 "simple.y" /* yacc.c:1646  */
     { printf ("  varios_identificadores -> IDENTIFICADOR\n"); }
-#line 1574 "simple.tab.c" /* yacc.c:1646  */
+#line 1564 "simple.tab.c" /* yacc.c:1646  */
     break;
 
-  case 13:
-#line 56 "simple.y" /* yacc.c:1646  */
-    { printf ("nombre -> varios_identificadores2 IDENTIFICADOR\n"); }
-#line 1580 "simple.tab.c" /* yacc.c:1646  */
+  case 14:
+#line 70 "simple.y" /* yacc.c:1646  */
+    { printf ("definicion_libreria -> libreria IDENTIFICADOR ; codigo_libreria\n"); }
+#line 1570 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 61 "simple.y" /* yacc.c:1646  */
-    { printf ("varios_identificadores2 -> varios_identificadores2 IDENTIFICADOR CUATRO_PUNTOS \n"); }
-#line 1586 "simple.tab.c" /* yacc.c:1646  */
+#line 75 "simple.y" /* yacc.c:1646  */
+    { printf ("  codigo_libreria -> varias_librerias  varias_declaraciones\n"); }
+#line 1576 "simple.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 16:
+#line 76 "simple.y" /* yacc.c:1646  */
+    { printf ("  codigo_libreria -> varias_librerias exportaciones varias_declaraciones\n"); }
+#line 1582 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 66 "simple.y" /* yacc.c:1646  */
-    { printf ("definicion_libreria -> libreria IDENTIFICADOR ; codigo_libreria\n"); }
-#line 1592 "simple.tab.c" /* yacc.c:1646  */
+#line 81 "simple.y" /* yacc.c:1646  */
+    { printf ("  varias_declaraciones -> declaracion \n"); }
+#line 1588 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 71 "simple.y" /* yacc.c:1646  */
-    { printf ("  codigo_libreria -> varias_librerias  varias_declaraciones\n"); }
-#line 1598 "simple.tab.c" /* yacc.c:1646  */
+#line 82 "simple.y" /* yacc.c:1646  */
+    { printf ("  varias_declaraciones ->  varias_declaraciones  declaracion\n"); }
+#line 1594 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
-#line 72 "simple.y" /* yacc.c:1646  */
-    { printf ("  codigo_libreria -> varias_librerias exportaciones varias_declaraciones\n"); }
-#line 1604 "simple.tab.c" /* yacc.c:1646  */
+#line 87 "simple.y" /* yacc.c:1646  */
+    { printf ("  exportaciones -> EXPORTAR  varios_nombres ; \n"); }
+#line 1600 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 77 "simple.y" /* yacc.c:1646  */
-    { printf ("  varias_declaraciones -> declaracion \n"); }
-#line 1610 "simple.tab.c" /* yacc.c:1646  */
+#line 91 "simple.y" /* yacc.c:1646  */
+    { printf ("  varios_nombres -> nombre ; \n"); }
+#line 1606 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 78 "simple.y" /* yacc.c:1646  */
-    { printf ("  varias_declaraciones ->  varias_declaraciones  declaracion\n"); }
-#line 1616 "simple.tab.c" /* yacc.c:1646  */
+#line 92 "simple.y" /* yacc.c:1646  */
+    { printf ("  varios_nombres -> varios_nombres ',' nombre ; \n"); }
+#line 1612 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 83 "simple.y" /* yacc.c:1646  */
-    { printf ("  exportaciones -> EXPORTAR  varios_nombres ; \n"); }
-#line 1622 "simple.tab.c" /* yacc.c:1646  */
+#line 96 "simple.y" /* yacc.c:1646  */
+    { printf ("  declaracion -> declaracion_objeto \n"); }
+#line 1618 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 87 "simple.y" /* yacc.c:1646  */
-    { printf ("  varios_nombres -> nombre ; \n"); }
-#line 1628 "simple.tab.c" /* yacc.c:1646  */
+#line 97 "simple.y" /* yacc.c:1646  */
+    { printf ("  declaracion ->  declaracion_tipo \n"); }
+#line 1624 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 88 "simple.y" /* yacc.c:1646  */
-    { printf ("  varios_nombres -> varios_nombres ',' nombre ; \n"); }
-#line 1634 "simple.tab.c" /* yacc.c:1646  */
+#line 98 "simple.y" /* yacc.c:1646  */
+    { printf ("  declaracion -> declaracion_subprograma\n"); }
+#line 1630 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 92 "simple.y" /* yacc.c:1646  */
-    { printf ("  declaracion -> declaracion_objeto \n"); }
-#line 1640 "simple.tab.c" /* yacc.c:1646  */
+#line 104 "simple.y" /* yacc.c:1646  */
+    { printf ("  declaracion_objeto -> varios_identificadores : especificacion_tipo ;\n"); }
+#line 1636 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 93 "simple.y" /* yacc.c:1646  */
-    { printf ("  declaracion ->  declaracion_tipo \n"); }
-#line 1646 "simple.tab.c" /* yacc.c:1646  */
+#line 109 "simple.y" /* yacc.c:1646  */
+    { printf ("  especificacion_tipo -> nombre\n"); }
+#line 1642 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
-#line 94 "simple.y" /* yacc.c:1646  */
-    { printf ("  declaracion -> declaracion_subprograma\n"); }
-#line 1652 "simple.tab.c" /* yacc.c:1646  */
+#line 110 "simple.y" /* yacc.c:1646  */
+    { printf ("  especificacion_tipo -> tipo_no_estructurado\n"); }
+#line 1648 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 100 "simple.y" /* yacc.c:1646  */
-    { printf ("  declaracion_objeto -> varios_identificadores : especificacion_tipo ;\n"); }
-#line 1658 "simple.tab.c" /* yacc.c:1646  */
+#line 115 "simple.y" /* yacc.c:1646  */
+    { printf ("  declaracion_tipo -> TIPO IDENTIFICADOR ES tipo_no_estructurado ;\n"); }
+#line 1654 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
-#line 105 "simple.y" /* yacc.c:1646  */
-    { printf ("  especificacion_tipo -> nombre\n"); }
-#line 1664 "simple.tab.c" /* yacc.c:1646  */
+#line 116 "simple.y" /* yacc.c:1646  */
+    { printf ("  declaracion_tipo -> TIPO IDENTIFICADOR ES tipo_estructurado\n"); }
+#line 1660 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 30:
-#line 106 "simple.y" /* yacc.c:1646  */
-    { printf ("  especificacion_tipo -> tipo_no_estructurado\n"); }
-#line 1670 "simple.tab.c" /* yacc.c:1646  */
+#line 120 "simple.y" /* yacc.c:1646  */
+    { printf ("  tipo_no_estructurado -> tipo_escalar\n"); }
+#line 1666 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
-#line 111 "simple.y" /* yacc.c:1646  */
-    { printf ("  declaracion_tipo -> TIPO IDENTIFICADOR ES tipo_no_estructurado ;\n"); }
-#line 1676 "simple.tab.c" /* yacc.c:1646  */
+#line 121 "simple.y" /* yacc.c:1646  */
+    { printf ("  tipo_no_estructurado -> tipo_tabla\n"); }
+#line 1672 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 112 "simple.y" /* yacc.c:1646  */
-    { printf ("  declaracion_tipo -> TIPO IDENTIFICADOR ES tipo_estructurado\n"); }
-#line 1682 "simple.tab.c" /* yacc.c:1646  */
+#line 122 "simple.y" /* yacc.c:1646  */
+    { printf ("  tipo_no_estructurado -> tipo_diccionario\n"); }
+#line 1678 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
-#line 116 "simple.y" /* yacc.c:1646  */
-    { printf ("  tipo_no_estructurado -> tipo_escalar\n"); }
-#line 1688 "simple.tab.c" /* yacc.c:1646  */
+#line 126 "simple.y" /* yacc.c:1646  */
+    { printf ("  tipo_escalar-> cero_o_uno_signo tipo_basico cero_o_uno_longitud cero_o_uno_rango\n"); }
+#line 1684 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 34:
-#line 117 "simple.y" /* yacc.c:1646  */
-    { printf ("  tipo_no_estructurado -> tipo_tabla\n"); }
-#line 1694 "simple.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 35:
-#line 118 "simple.y" /* yacc.c:1646  */
-    { printf ("  tipo_no_estructurado -> tipo_diccionario\n"); }
-#line 1700 "simple.tab.c" /* yacc.c:1646  */
+#line 130 "simple.y" /* yacc.c:1646  */
+    { printf ("   cero_o_uno_signo -> SIGNO\n"); }
+#line 1690 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 122 "simple.y" /* yacc.c:1646  */
-    { printf ("  tipo_escalar-> cero_o_uno_signo tipo_basico cero_o_uno_longitud cero_o_uno_rango\n"); }
-#line 1706 "simple.tab.c" /* yacc.c:1646  */
+#line 135 "simple.y" /* yacc.c:1646  */
+    { printf ("  cero_o_uno_longitud -> longitud\n"); }
+#line 1696 "simple.tab.c" /* yacc.c:1646  */
     break;
 
-  case 38:
-#line 127 "simple.y" /* yacc.c:1646  */
-    { printf ("   cero_o_uno_signo -> SIGNO\n"); }
-#line 1712 "simple.tab.c" /* yacc.c:1646  */
+  case 39:
+#line 145 "simple.y" /* yacc.c:1646  */
+    { printf ("  longitud -> CORTO\n"); }
+#line 1702 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 40:
-#line 132 "simple.y" /* yacc.c:1646  */
-    { printf ("  cero_o_uno_longitud -> longitud\n"); }
-#line 1718 "simple.tab.c" /* yacc.c:1646  */
+#line 146 "simple.y" /* yacc.c:1646  */
+    { printf ("  longitud -> LARGO\n"); }
+#line 1708 "simple.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 41:
+#line 150 "simple.y" /* yacc.c:1646  */
+    { printf ("  tipo_basico -> BOOLEANO\n"); }
+#line 1714 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 141 "simple.y" /* yacc.c:1646  */
-    { printf ("  longitud -> CORTO\n"); }
-#line 1724 "simple.tab.c" /* yacc.c:1646  */
+#line 151 "simple.y" /* yacc.c:1646  */
+    { printf ("  tipo_basico -> CARACTER\n"); }
+#line 1720 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 43:
-#line 142 "simple.y" /* yacc.c:1646  */
-    { printf ("  longitud -> LARGO\n"); }
-#line 1730 "simple.tab.c" /* yacc.c:1646  */
+#line 152 "simple.y" /* yacc.c:1646  */
+    { printf ("  tipo_basico -> ENTERO\n"); }
+#line 1726 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 146 "simple.y" /* yacc.c:1646  */
-    { printf ("  tipo_basico -> BOOLEANO\n"); }
-#line 1736 "simple.tab.c" /* yacc.c:1646  */
+#line 153 "simple.y" /* yacc.c:1646  */
+    { printf ("  tipo_basico -> REAL\n"); }
+#line 1732 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 45:
-#line 147 "simple.y" /* yacc.c:1646  */
-    { printf ("  tipo_basico -> CARACTER\n"); }
-#line 1742 "simple.tab.c" /* yacc.c:1646  */
+#line 163 "simple.y" /* yacc.c:1646  */
+    { printf ("  tipo_tabla -> LISTA DE especificacion_tipo\n"); }
+#line 1738 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 148 "simple.y" /* yacc.c:1646  */
-    { printf ("  tipo_basico -> ENTERO\n"); }
-#line 1748 "simple.tab.c" /* yacc.c:1646  */
+#line 167 "simple.y" /* yacc.c:1646  */
+    { printf ("  tipo_diccionario -> DICCIONARIO DE especificacion_tipo\n"); }
+#line 1744 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
-#line 149 "simple.y" /* yacc.c:1646  */
-    { printf ("  tipo_basico -> REAL\n"); }
-#line 1754 "simple.tab.c" /* yacc.c:1646  */
+#line 171 "simple.y" /* yacc.c:1646  */
+    { printf ("  tipo_estructurado -> tipo_registro\n"); }
+#line 1750 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 159 "simple.y" /* yacc.c:1646  */
-    { printf ("  tipo_tabla -> LISTA DE especificacion_tipo\n"); }
-#line 1760 "simple.tab.c" /* yacc.c:1646  */
+#line 172 "simple.y" /* yacc.c:1646  */
+    { printf ("  tipo_estructurado -> tipo_enumerado\n"); }
+#line 1756 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 49:
-#line 163 "simple.y" /* yacc.c:1646  */
-    { printf ("  tipo_diccionario -> DICCIONARIO DE especificacion_tipo\n"); }
-#line 1766 "simple.tab.c" /* yacc.c:1646  */
+#line 173 "simple.y" /* yacc.c:1646  */
+    { printf ("  tipo_estructurado -> clase\n"); }
+#line 1762 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 167 "simple.y" /* yacc.c:1646  */
-    { printf ("  tipo_estructurado -> tipo_registro\n"); }
-#line 1772 "simple.tab.c" /* yacc.c:1646  */
+#line 177 "simple.y" /* yacc.c:1646  */
+    { printf ("  tipo_registro -> REGISTRO varios_campos FIN REGISTRO\n"); }
+#line 1768 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 51:
-#line 168 "simple.y" /* yacc.c:1646  */
-    { printf ("  tipo_estructurado -> tipo_enumerado\n"); }
-#line 1778 "simple.tab.c" /* yacc.c:1646  */
+#line 181 "simple.y" /* yacc.c:1646  */
+    { printf ("  varios_campos -> varios_campos campo\n"); }
+#line 1774 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 169 "simple.y" /* yacc.c:1646  */
-    { printf ("  tipo_estructurado -> clase\n"); }
-#line 1784 "simple.tab.c" /* yacc.c:1646  */
+#line 182 "simple.y" /* yacc.c:1646  */
+    { printf ("  varios_campos -> campo\n"); }
+#line 1780 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 53:
-#line 173 "simple.y" /* yacc.c:1646  */
-    { printf ("  tipo_registro -> REGISTRO varios_campos FIN REGISTRO\n"); }
-#line 1790 "simple.tab.c" /* yacc.c:1646  */
+#line 187 "simple.y" /* yacc.c:1646  */
+    { printf ("  campo -> varios_identificadores : especificacion_tipo ;\n"); }
+#line 1786 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 177 "simple.y" /* yacc.c:1646  */
-    { printf ("  varios_campos -> campo\n"); }
-#line 1796 "simple.tab.c" /* yacc.c:1646  */
+#line 193 "simple.y" /* yacc.c:1646  */
+    { printf ("  tipo_enumerado -> ENUMERACION varios_campos FIN ENUMERACION\n"); }
+#line 1792 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 55:
-#line 178 "simple.y" /* yacc.c:1646  */
-    { printf ("  varios_campos -> varios_campos campo\n"); }
-#line 1802 "simple.tab.c" /* yacc.c:1646  */
+#line 194 "simple.y" /* yacc.c:1646  */
+    { printf ("  tipo_enumerado -> ENUMERACION DE tipo_escalar varios_campos FIN ENUMERACION\n"); }
+#line 1798 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 182 "simple.y" /* yacc.c:1646  */
-    { printf ("  campo -> varios_identificadores : especificacion_tipo ;\n"); }
-#line 1808 "simple.tab.c" /* yacc.c:1646  */
+#line 198 "simple.y" /* yacc.c:1646  */
+    { printf ("  varios_elemento_enumeracion -> varios_elemento_enumeracion , elemento_enumeracion\n"); }
+#line 1804 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 188 "simple.y" /* yacc.c:1646  */
-    { printf ("  tipo_enumerado -> ENUMERACION varios_campos FIN ENUMERACION\n"); }
-#line 1814 "simple.tab.c" /* yacc.c:1646  */
+#line 199 "simple.y" /* yacc.c:1646  */
+    { printf ("  varios_elemento_enumeracion -> elemento_enumeracion\n"); }
+#line 1810 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 58:
-#line 189 "simple.y" /* yacc.c:1646  */
-    { printf ("  tipo_enumerado -> ENUMERACION DE tipo_escalar varios_campos FIN ENUMERACION\n"); }
-#line 1820 "simple.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 59:
-#line 193 "simple.y" /* yacc.c:1646  */
-    { printf ("  varios_elemento_enumeracion -> elemento_enumeracion\n"); }
-#line 1826 "simple.tab.c" /* yacc.c:1646  */
+#line 204 "simple.y" /* yacc.c:1646  */
+    { printf ("  elemento_enumeracion -> IDENTIFICADOR cero_uno_expresion\n"); }
+#line 1816 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 60:
-#line 194 "simple.y" /* yacc.c:1646  */
-    { printf ("  varios_elemento_enumeracion -> varios_elemento_enumeracion , elemento_enumeracion\n"); }
-#line 1832 "simple.tab.c" /* yacc.c:1646  */
+#line 215 "simple.y" /* yacc.c:1646  */
+    { printf ("  clase -> CLASE cero_uno_ultima cero_uno_superclases varias_declaraciones_componente FIN CLASE\n"); }
+#line 1822 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 61:
-#line 198 "simple.y" /* yacc.c:1646  */
-    { printf ("  elemento_enumeracion -> IDENTIFICADOR cero_uno_expresion\n"); }
-#line 1838 "simple.tab.c" /* yacc.c:1646  */
+#line 219 "simple.y" /* yacc.c:1646  */
+    { printf ("  cero_uno_ultima -> ULTIMA\n"); }
+#line 1828 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 63:
-#line 209 "simple.y" /* yacc.c:1646  */
-    { printf ("  clase -> CLASE cero_uno_ultima cero_uno_superclases varias_declaraciones_componente FIN CLASE\n"); }
-#line 1844 "simple.tab.c" /* yacc.c:1646  */
+#line 224 "simple.y" /* yacc.c:1646  */
+    { printf ("  cero_uno_superclases -> superclases\n"); }
+#line 1834 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 65:
-#line 214 "simple.y" /* yacc.c:1646  */
-    { printf ("  cero_uno_ultima -> ULTIMA\n"); }
-#line 1850 "simple.tab.c" /* yacc.c:1646  */
+#line 229 "simple.y" /* yacc.c:1646  */
+    { printf ("  superclases -> ( varios_nombres ) \n"); }
+#line 1840 "simple.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 66:
+#line 234 "simple.y" /* yacc.c:1646  */
+    { printf ("  declaracion_componente -> componente"); }
+#line 1846 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 67:
-#line 219 "simple.y" /* yacc.c:1646  */
-    { printf ("  cero_uno_superclases -> superclases\n"); }
-#line 1856 "simple.tab.c" /* yacc.c:1646  */
+#line 235 "simple.y" /* yacc.c:1646  */
+    { printf ("  declaracion_componente -> visibilidad componente"); }
+#line 1852 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 68:
-#line 223 "simple.y" /* yacc.c:1646  */
-    { printf ("  superclases -> ( varios_nombres ) \n"); }
-#line 1862 "simple.tab.c" /* yacc.c:1646  */
+#line 239 "simple.y" /* yacc.c:1646  */
+    { printf ("  varias_declaraciones_componente -> varias_declaraciones_componente declaracion_componente"); }
+#line 1858 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 69:
-#line 228 "simple.y" /* yacc.c:1646  */
-    { printf ("  declaracion_componente -> componente"); }
-#line 1868 "simple.tab.c" /* yacc.c:1646  */
+#line 240 "simple.y" /* yacc.c:1646  */
+    { printf ("  varias_declaraciones_componente -> declaracion_componente"); }
+#line 1864 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 70:
-#line 229 "simple.y" /* yacc.c:1646  */
-    { printf ("  declaracion_componente -> visibilidad componente"); }
-#line 1874 "simple.tab.c" /* yacc.c:1646  */
+#line 245 "simple.y" /* yacc.c:1646  */
+    { printf ("  visibilidad -> PUBLICO \n"); }
+#line 1870 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 71:
-#line 233 "simple.y" /* yacc.c:1646  */
-    { printf ("  varias_declaraciones_componente -> declaracion_componente"); }
-#line 1880 "simple.tab.c" /* yacc.c:1646  */
+#line 246 "simple.y" /* yacc.c:1646  */
+    { printf ("  visibilidad ->  PROTEGIDO \n"); }
+#line 1876 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 72:
-#line 234 "simple.y" /* yacc.c:1646  */
-    { printf ("  varias_declaraciones_componente -> varias_declaraciones_componente declaracion_componente"); }
-#line 1886 "simple.tab.c" /* yacc.c:1646  */
+#line 247 "simple.y" /* yacc.c:1646  */
+    { printf ("  visibilidad ->  PRIVADO\n"); }
+#line 1882 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 73:
-#line 239 "simple.y" /* yacc.c:1646  */
-    { printf ("  visibilidad -> PUBLICO \n"); }
-#line 1892 "simple.tab.c" /* yacc.c:1646  */
+#line 251 "simple.y" /* yacc.c:1646  */
+    { printf ("  componente -> declaracion_tipo"); }
+#line 1888 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 74:
-#line 240 "simple.y" /* yacc.c:1646  */
-    { printf ("  visibilidad ->  PROTEGIDO \n"); }
-#line 1898 "simple.tab.c" /* yacc.c:1646  */
+#line 252 "simple.y" /* yacc.c:1646  */
+    { printf ("  componente -> declaracion_objeto"); }
+#line 1894 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 75:
-#line 241 "simple.y" /* yacc.c:1646  */
-    { printf ("  visibilidad ->  PRIVADO\n"); }
-#line 1904 "simple.tab.c" /* yacc.c:1646  */
+#line 253 "simple.y" /* yacc.c:1646  */
+    { printf ("  componente -> varios_modificadores declaracion_subprograma"); }
+#line 1900 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 76:
-#line 245 "simple.y" /* yacc.c:1646  */
-    { printf ("  componente -> declaracion_tipo"); }
-#line 1910 "simple.tab.c" /* yacc.c:1646  */
+#line 258 "simple.y" /* yacc.c:1646  */
+    { printf ("  varios_modificadores ->  varios_modificadores , modificador\n"); }
+#line 1906 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 77:
-#line 246 "simple.y" /* yacc.c:1646  */
-    { printf ("  componente -> declaracion_objeto"); }
-#line 1916 "simple.tab.c" /* yacc.c:1646  */
+#line 259 "simple.y" /* yacc.c:1646  */
+    { printf ("  varios_modificadores -> modificador\n"); }
+#line 1912 "simple.tab.c" /* yacc.c:1646  */
     break;
 
-  case 78:
-#line 247 "simple.y" /* yacc.c:1646  */
-    { printf ("  componente -> varios_modificadores declaracion_subprograma"); }
-#line 1922 "simple.tab.c" /* yacc.c:1646  */
+  case 79:
+#line 264 "simple.y" /* yacc.c:1646  */
+    { printf ("  modificador -> CONSTRUCTOR "); }
+#line 1918 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 80:
-#line 253 "simple.y" /* yacc.c:1646  */
-    { printf ("  varios_modificadores -> modificador\n"); }
-#line 1928 "simple.tab.c" /* yacc.c:1646  */
+#line 265 "simple.y" /* yacc.c:1646  */
+    { printf ("  modificador ->  DESTRUCTOR "); }
+#line 1924 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 81:
-#line 254 "simple.y" /* yacc.c:1646  */
-    { printf ("  varios_modificadores ->  varios_modificadores , modificador\n"); }
-#line 1934 "simple.tab.c" /* yacc.c:1646  */
+#line 266 "simple.y" /* yacc.c:1646  */
+    { printf ("  modificador ->  GENERICO "); }
+#line 1930 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 82:
-#line 258 "simple.y" /* yacc.c:1646  */
-    { printf ("  modificador -> CONSTRUCTOR "); }
-#line 1940 "simple.tab.c" /* yacc.c:1646  */
+#line 267 "simple.y" /* yacc.c:1646  */
+    { printf ("  modificador -> ABSTRACTO "); }
+#line 1936 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 83:
-#line 259 "simple.y" /* yacc.c:1646  */
-    { printf ("  modificador ->  DESTRUCTOR "); }
-#line 1946 "simple.tab.c" /* yacc.c:1646  */
+#line 268 "simple.y" /* yacc.c:1646  */
+    { printf ("  modificador ->  ESPECIFICO "); }
+#line 1942 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 84:
-#line 260 "simple.y" /* yacc.c:1646  */
-    { printf ("  modificador ->  GENERICO "); }
-#line 1952 "simple.tab.c" /* yacc.c:1646  */
+#line 269 "simple.y" /* yacc.c:1646  */
+    { printf ("  modificador -> FINAL"); }
+#line 1948 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 85:
-#line 261 "simple.y" /* yacc.c:1646  */
-    { printf ("  modificador -> ABSTRACTO "); }
-#line 1958 "simple.tab.c" /* yacc.c:1646  */
+#line 277 "simple.y" /* yacc.c:1646  */
+    { printf ("  declaracion_subprograma -> SUBPROGRAMA cabecera_subprograma cuerpo_subprograma SUBPROGRAMA"); }
+#line 1954 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 86:
-#line 262 "simple.y" /* yacc.c:1646  */
-    { printf ("  modificador ->  ESPECIFICO "); }
-#line 1964 "simple.tab.c" /* yacc.c:1646  */
+#line 281 "simple.y" /* yacc.c:1646  */
+    { printf ("  cabecera_subprograma -> IDENTIFICADOR cero_uno_parametrizacion cero_uno_tipoResultado\n"); }
+#line 1960 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 87:
-#line 263 "simple.y" /* yacc.c:1646  */
-    { printf ("  modificador -> FINAL"); }
-#line 1970 "simple.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 88:
-#line 271 "simple.y" /* yacc.c:1646  */
-    { printf ("  declaracion_subprograma -> SUBPROGRAMA cabecera_subprograma cuerpo_subprograma SUBPROGRAMA"); }
-#line 1976 "simple.tab.c" /* yacc.c:1646  */
+#line 285 "simple.y" /* yacc.c:1646  */
+    { printf ("  cero_uno_parametrizacion -> parametrizacion\n"); }
+#line 1966 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 89:
-#line 275 "simple.y" /* yacc.c:1646  */
-    { printf ("  cabecera_subprograma -> IDENTIFICADOR cero_uno_parametrizacion cero_uno_tipoResultado\n"); }
-#line 1982 "simple.tab.c" /* yacc.c:1646  */
+#line 290 "simple.y" /* yacc.c:1646  */
+    { printf ("  cero_uno_tipoResultado -> tipo_resultado\n"); }
+#line 1972 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 91:
-#line 280 "simple.y" /* yacc.c:1646  */
-    { printf ("  cero_uno_parametrizacion -> parametrizacion\n"); }
-#line 1988 "simple.tab.c" /* yacc.c:1646  */
+#line 295 "simple.y" /* yacc.c:1646  */
+    { printf ("parametrizacion -> ( varias_declaraciones_parametros declaracion_parametros ) \n"); }
+#line 1978 "simple.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 92:
+#line 299 "simple.y" /* yacc.c:1646  */
+    { printf ("declaracion_parametros -> varios_identificadores : especificacion_tipo cero_uno_expresion"); }
+#line 1984 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 93:
-#line 285 "simple.y" /* yacc.c:1646  */
-    { printf ("  cero_uno_tipoResultado -> tipo_resultado\n"); }
-#line 1994 "simple.tab.c" /* yacc.c:1646  */
+#line 300 "simple.y" /* yacc.c:1646  */
+    { printf ("declaracion_parametros -> varios_identificadores : modo especificacion_tipo cero_uno_expresion"); }
+#line 1990 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 94:
-#line 289 "simple.y" /* yacc.c:1646  */
-    { printf ("parametrizacion -> ( varias_declaraciones_parametros declaracion_parametros ) \n"); }
-#line 2000 "simple.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 95:
-#line 293 "simple.y" /* yacc.c:1646  */
-    { printf ("declaracion_parametros -> varios_identificadores : especificacion_tipo cero_uno_expresion"); }
-#line 2006 "simple.tab.c" /* yacc.c:1646  */
+#line 304 "simple.y" /* yacc.c:1646  */
+    {printf ("varias_declaraciones_parametros -> varias_declaraciones_parametros declaracion_parametros ;\n");}
+#line 1996 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 96:
-#line 294 "simple.y" /* yacc.c:1646  */
-    { printf ("declaracion_parametros -> varios_identificadores : modo especificacion_tipo cero_uno_expresion"); }
-#line 2012 "simple.tab.c" /* yacc.c:1646  */
+#line 309 "simple.y" /* yacc.c:1646  */
+    { printf ("modo -> VALOR\n"); }
+#line 2002 "simple.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 97:
+#line 310 "simple.y" /* yacc.c:1646  */
+    { printf ("modo -> REFERENCIA\n"); }
+#line 2008 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 98:
-#line 299 "simple.y" /* yacc.c:1646  */
-    {printf ("varias_declaraciones_parametros -> declaracion_parametros ;\n");}
-#line 2018 "simple.tab.c" /* yacc.c:1646  */
+#line 314 "simple.y" /* yacc.c:1646  */
+    { printf ("  tipo_resultado -> DEVOLVER especificacion_tipo\n"); }
+#line 2014 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 99:
-#line 300 "simple.y" /* yacc.c:1646  */
-    {printf ("varias_declaraciones_parametros -> varias_declaraciones_parametros declaracion_parametros ;\n");}
-#line 2024 "simple.tab.c" /* yacc.c:1646  */
+#line 319 "simple.y" /* yacc.c:1646  */
+    { printf ("  cuerpo_subprograma -> cero_o_mas_declaraciones PRINCIPIO varias_instrucciones FIN"); }
+#line 2020 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 100:
-#line 304 "simple.y" /* yacc.c:1646  */
-    { printf ("modo -> VALOR\n"); }
-#line 2030 "simple.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 101:
-#line 305 "simple.y" /* yacc.c:1646  */
-    { printf ("modo -> REFERENCIA\n"); }
-#line 2036 "simple.tab.c" /* yacc.c:1646  */
+#line 323 "simple.y" /* yacc.c:1646  */
+    { printf ("  varias_declaraciones ->  varias_declaraciones  declaracion\n"); }
+#line 2026 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 102:
-#line 309 "simple.y" /* yacc.c:1646  */
-    { printf ("  tipo_resultado -> DEVOLVER especificacion_tipo\n"); }
-#line 2042 "simple.tab.c" /* yacc.c:1646  */
+#line 328 "simple.y" /* yacc.c:1646  */
+    { printf ("  varias_instrucciones -> instruccion\n"); }
+#line 2032 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 103:
-#line 314 "simple.y" /* yacc.c:1646  */
-    { printf ("  cuerpo_subprograma -> cero_o_mas_declaraciones PRINCIPIO varias_instrucciones FIN"); }
-#line 2048 "simple.tab.c" /* yacc.c:1646  */
+#line 329 "simple.y" /* yacc.c:1646  */
+    { printf ("  varias_instrucciones -> varias_instrucciones  instruccion\n"); }
+#line 2038 "simple.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 104:
+#line 338 "simple.y" /* yacc.c:1646  */
+    { printf ("instruccion -> instruccion_devolver\n"); }
+#line 2044 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 105:
-#line 319 "simple.y" /* yacc.c:1646  */
-    { printf ("  varias_declaraciones -> declaracion \n"); }
-#line 2054 "simple.tab.c" /* yacc.c:1646  */
+#line 339 "simple.y" /* yacc.c:1646  */
+    { printf ("instruccion -> instruccion_llamada\n"); }
+#line 2050 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 106:
-#line 320 "simple.y" /* yacc.c:1646  */
-    { printf ("  varias_declaraciones ->  varias_declaraciones  declaracion\n"); }
-#line 2060 "simple.tab.c" /* yacc.c:1646  */
+#line 343 "simple.y" /* yacc.c:1646  */
+    { printf ("instruccion -> instruccion_interrupcion\n"); }
+#line 2056 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 107:
-#line 324 "simple.y" /* yacc.c:1646  */
-    { printf ("  varias_instrucciones -> instruccion\n"); }
-#line 2066 "simple.tab.c" /* yacc.c:1646  */
+#line 344 "simple.y" /* yacc.c:1646  */
+    { printf ("instruccion -> instruccion_lanzamiento_excepcion\n"); }
+#line 2062 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 108:
-#line 325 "simple.y" /* yacc.c:1646  */
-    { printf ("  varias_instrucciones -> varias_instrucciones  instruccion\n"); }
-#line 2072 "simple.tab.c" /* yacc.c:1646  */
+#line 345 "simple.y" /* yacc.c:1646  */
+    { printf ("instruccion -> instruccion_captura_excepcion\n"); }
+#line 2068 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 109:
-#line 334 "simple.y" /* yacc.c:1646  */
-    { printf ("instruccion -> instruccion_devolver\n"); }
-#line 2078 "simple.tab.c" /* yacc.c:1646  */
+#line 346 "simple.y" /* yacc.c:1646  */
+    { printf ("instruccion -> ;\n"); }
+#line 2074 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 110:
-#line 335 "simple.y" /* yacc.c:1646  */
-    { printf ("instruccion -> instruccion_llamada\n"); }
-#line 2084 "simple.tab.c" /* yacc.c:1646  */
+#line 369 "simple.y" /* yacc.c:1646  */
+    { printf ("  instruccion_devolver -> DEVOLVER ;\n"); }
+#line 2080 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 111:
-#line 339 "simple.y" /* yacc.c:1646  */
-    { printf ("instruccion -> instruccion_interrupcion\n"); }
-#line 2090 "simple.tab.c" /* yacc.c:1646  */
+#line 374 "simple.y" /* yacc.c:1646  */
+    { printf ("  instruccion_llamada ->  llamada_subprograma ;\n"); }
+#line 2086 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 112:
-#line 340 "simple.y" /* yacc.c:1646  */
-    { printf ("instruccion -> instruccion_lanzamiento_excepcion\n"); }
-#line 2096 "simple.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 113:
-#line 341 "simple.y" /* yacc.c:1646  */
-    { printf ("instruccion -> instruccion_captura_excepcion\n"); }
-#line 2102 "simple.tab.c" /* yacc.c:1646  */
+#line 378 "simple.y" /* yacc.c:1646  */
+    { printf ("llamada_subprograma ->  nombre ( varias_definicion_parametro )\n"); }
+#line 2092 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 114:
-#line 342 "simple.y" /* yacc.c:1646  */
-    { printf ("instruccion -> ;\n"); }
-#line 2108 "simple.tab.c" /* yacc.c:1646  */
+#line 468 "simple.y" /* yacc.c:1646  */
+    { printf ("instruccion_interrupcion ->  SIGUIENTE cero_o_uno_cuando ;\n");}
+#line 2098 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 115:
-#line 365 "simple.y" /* yacc.c:1646  */
-    { printf ("  instruccion_devolver -> DEVOLVER ;\n"); }
-#line 2114 "simple.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 116:
-#line 370 "simple.y" /* yacc.c:1646  */
-    { printf ("  instruccion_llamada ->  llamada_subprograma ;\n"); }
-#line 2120 "simple.tab.c" /* yacc.c:1646  */
+#line 469 "simple.y" /* yacc.c:1646  */
+    { printf ("instruccion_interrupcion ->  SALIR cero_o_uno_de_identificador cero_o_uno_cuando ;\n");}
+#line 2104 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 117:
-#line 374 "simple.y" /* yacc.c:1646  */
-    { printf ("llamada_subprograma ->  nombre ( varias_definicion_parametro )\n"); }
-#line 2126 "simple.tab.c" /* yacc.c:1646  */
+#line 483 "simple.y" /* yacc.c:1646  */
+    {printf ("cero_o_uno_de_identificador -> DE IDENTIFICADOR\n");}
+#line 2110 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 119:
-#line 466 "simple.y" /* yacc.c:1646  */
-    { printf ("instruccion_interrupcion ->  SIGUIENTE cero_o_uno_cuando ;\n");}
-#line 2132 "simple.tab.c" /* yacc.c:1646  */
+#line 488 "simple.y" /* yacc.c:1646  */
+    { printf ("instruccion_lanzamiento_excepcion ->LANZA nombre ;"); }
+#line 2116 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 120:
-#line 467 "simple.y" /* yacc.c:1646  */
-    { printf ("instruccion_interrupcion ->  SALIR cero_o_uno_de_identificador cero_o_uno_cuando ;\n");}
-#line 2138 "simple.tab.c" /* yacc.c:1646  */
+#line 492 "simple.y" /* yacc.c:1646  */
+    { printf ("instruccion_captura_excepcion ->PRUEBA varias_instrucciones clausulas FIN PRUEBA"); }
+#line 2122 "simple.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 121:
+#line 496 "simple.y" /* yacc.c:1646  */
+    { printf ("clausulas ->clausulas_excepcion\n"); }
+#line 2128 "simple.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 122:
+#line 497 "simple.y" /* yacc.c:1646  */
+    { printf ("clausulas ->clausulas_excepcion clausula_finalmente\n"); }
+#line 2134 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 123:
-#line 482 "simple.y" /* yacc.c:1646  */
-    {printf ("cero_o_uno_de_identificador -> DE IDENTIFICADOR\n");}
-#line 2144 "simple.tab.c" /* yacc.c:1646  */
+#line 498 "simple.y" /* yacc.c:1646  */
+    { printf ("clausulas ->clausula_finalmente\n"); }
+#line 2140 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 124:
-#line 486 "simple.y" /* yacc.c:1646  */
-    { printf ("instruccion_lanzamiento_excepcion ->LANZA nombre ;"); }
-#line 2150 "simple.tab.c" /* yacc.c:1646  */
+#line 503 "simple.y" /* yacc.c:1646  */
+    { printf ("clausulas_excepcion ->varias_clausula_excepcion_especifica clausula_excepcion_general "); }
+#line 2146 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 125:
-#line 490 "simple.y" /* yacc.c:1646  */
-    { printf ("instruccion_captura_excepcion ->PRUEBA varias_instrucciones clausulas FIN PRUEBA"); }
-#line 2156 "simple.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 126:
-#line 494 "simple.y" /* yacc.c:1646  */
-    { printf ("clausulas ->clausulas_excepcion\n"); }
-#line 2162 "simple.tab.c" /* yacc.c:1646  */
+#line 507 "simple.y" /* yacc.c:1646  */
+    { printf ("varias_clausula_excepcion_especifica ->varias_clausula_excepcion_especifica clausula_excepcion_especifica\n"); }
+#line 2152 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 127:
-#line 495 "simple.y" /* yacc.c:1646  */
-    { printf ("clausulas ->clausulas_excepcion clausula_finalmente\n"); }
-#line 2168 "simple.tab.c" /* yacc.c:1646  */
+#line 512 "simple.y" /* yacc.c:1646  */
+    { printf ("clausulas_excepcion_especifica -> EXCEPCION ( nombre ) varias_instrucciones "); }
+#line 2158 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 128:
-#line 496 "simple.y" /* yacc.c:1646  */
-    { printf ("clausulas ->clausula_finalmente\n"); }
-#line 2174 "simple.tab.c" /* yacc.c:1646  */
+#line 516 "simple.y" /* yacc.c:1646  */
+    { printf ("clausula_excepcion_general ->EXCEPCION varias_instruccion"); }
+#line 2164 "simple.tab.c" /* yacc.c:1646  */
     break;
 
   case 129:
-#line 501 "simple.y" /* yacc.c:1646  */
-    { printf ("clausulas_excepcion ->varias_clausula_excepcion_especifica clausula_excepcion_general "); }
-#line 2180 "simple.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 131:
-#line 506 "simple.y" /* yacc.c:1646  */
-    { printf ("varias_clausula_excepcion_especifica ->clausula_excepcion_especifica\n"); }
-#line 2186 "simple.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 132:
-#line 507 "simple.y" /* yacc.c:1646  */
-    { printf ("varias_clausula_excepcion_especifica ->varias_clausula_excepcion_especifica clausula_excepcion_especifica\n"); }
-#line 2192 "simple.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 133:
-#line 511 "simple.y" /* yacc.c:1646  */
-    { printf ("clausulas_excepcion_especifica -> EXCEPCION ( nombre ) varias_instrucciones "); }
-#line 2198 "simple.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 134:
-#line 515 "simple.y" /* yacc.c:1646  */
-    { printf ("clausula_excepcion_general ->EXCEPCION varias_instruccion"); }
-#line 2204 "simple.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 135:
-#line 519 "simple.y" /* yacc.c:1646  */
+#line 520 "simple.y" /* yacc.c:1646  */
     { printf ("clausula_finalmente ->FINALMENTE varias_instrucciones"); }
-#line 2210 "simple.tab.c" /* yacc.c:1646  */
+#line 2170 "simple.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 2214 "simple.tab.c" /* yacc.c:1646  */
+#line 2174 "simple.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2438,7 +2398,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 683 "simple.y" /* yacc.c:1906  */
+#line 684 "simple.y" /* yacc.c:1906  */
 
 
 
