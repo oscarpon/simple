@@ -78,8 +78,8 @@ codigo_libreria
 ;
 
 varias_declaraciones
-   : declaracion                         { printf ("  varias_declaraciones -> declaracion \n"); }
-	 | varias_declaraciones  declaracion   { printf ("  varias_declaraciones ->  varias_declaraciones  declaracion\n"); }
+   : varias_declaraciones  declaracion   { printf ("  varias_declaraciones ->  varias_declaraciones  declaracion\n"); }
+   | declaracion                         { printf ("  varias_declaraciones -> declaracion \n"); }
 	 ;
 
 
@@ -88,8 +88,8 @@ exportaciones
     ;
 
 varios_nombres
-  : nombre                                        { printf ("  varios_nombres -> nombre ; \n"); } 
-  | varios_nombres ',' nombre                         { printf ("  varios_nombres -> varios_nombres ',' nombre ; \n"); } 
+  : varios_nombres ',' nombre                         { printf ("  varios_nombres -> varios_nombres ',' nombre ; \n"); } 
+  | nombre                                        { printf ("  varios_nombres -> nombre ; \n"); } 
   ;
 
 declaracion 
@@ -197,7 +197,6 @@ tipo_enumerado
 varios_elemento_enumeracion
   : varios_elemento_enumeracion ',' elemento_enumeracion         { printf ("  varios_elemento_enumeracion -> varios_elemento_enumeracion , elemento_enumeracion\n"); }
   | elemento_enumeracion                                     { printf ("  varios_elemento_enumeracion -> elemento_enumeracion\n"); }
- 
   ;
 
 elemento_enumeracion
@@ -251,14 +250,15 @@ componente
 : declaracion_tipo   { printf ("  componente -> declaracion_tipo"); }
 | declaracion_objeto   { printf ("  componente -> declaracion_objeto"); }
 | varios_modificadores  declaracion_subprograma { printf ("  componente -> varios_modificadores declaracion_subprograma"); }
+| declaracion_subprograma                       { printf ("  componente -> declaracion_subprograma"); }
 ;
 
 /**AQUI TENEMOS QUE MIRAR LA SINTAXIS CORRECTAMENTE**/
 varios_modificadores
 :varios_modificadores ',' modificador      { printf ("  varios_modificadores ->  varios_modificadores , modificador\n"); }
 | modificador                              { printf ("  varios_modificadores -> modificador\n"); } 
-|
 ;
+
 
 modificador 
 : CONSTRUCTOR                                 { printf ("  modificador -> CONSTRUCTOR "); }
@@ -324,10 +324,10 @@ cero_o_mas_declaraciones
   |
 	;
 
-varias_instrucciones                         
-   : instruccion                             { printf ("  varias_instrucciones -> instruccion\n"); }
-	 | varias_instrucciones  instruccion       { printf ("  varias_instrucciones -> varias_instrucciones  instruccion\n"); }
-	 ;
+varias_instrucciones
+ : varias_instrucciones  instruccion       { printf ("  varias_instrucciones -> varias_instrucciones  instruccion\n"); }                       
+ | instruccion                             { printf ("  varias_instrucciones -> instruccion\n"); }
+ ;
 
 
 /*************************************INSTRUCCIONES***************************************/
@@ -376,13 +376,14 @@ instruccion_devolver
 
  llamada_subprograma 
   : nombre '(' varias_definicion_parametro ')'{ printf ("llamada_subprograma ->  nombre ( varias_definicion_parametro )\n"); }
+  | nombre '(' ')'                            { printf ("llamada_subprograma ->  nombre (  )\n"); }
   ;
+
 ///////////////////////////////////////////////////////////////////////////////
   varias_definicion_parametro
-	 : 
-   | definicion_parametro                             { printf ("  varias_definicion_parametro -> definicion_parametro\n"); }
-	 | varias_definicion_parametro ','  definicion_parametro       { printf ("  varias_definicion_parametro ->  varias_definicion_parametro ',' definicion_parametro\n"); }
-	 ;
+  : varias_definicion_parametro ','  definicion_parametro       { printf ("  varias_definicion_parametro ->  varias_definicion_parametro ',' definicion_parametro\n"); }
+	| definicion_parametro                             { printf ("  varias_definicion_parametro -> definicion_parametro\n"); }
+  ;
 
 definicion_parametro 
 : cero_uno_identificador  expresion       { printf ("definicion_parametro ->  cero_uno_identificador expresion\n"); }
@@ -571,8 +572,8 @@ objeto
 
 varias_expresiones
   : varias_expresiones ',' expresion       { printf ("  varias_expresiones ->  varias_expresiones , expresion\n"); }
-	| expresion                        { printf ("  varias_expresiones -> expresion\n"); }	 
-	 ;
+	| expresion                              { printf ("  varias_expresiones -> expresion\n"); }	 
+	;
 
 varias_ctc_cadena
  : varias_ctc_cadena ',' CTC_CADENA                                        { printf ("  varias_ctc_cadena -> varias_ctc_cadena , CTC_CADENA\n"); }
