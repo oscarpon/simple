@@ -549,21 +549,23 @@ varias_ctc_cadena
  ;
 
 enumeraciones
-  : '[' expresion_condicional varias_clausulas_iteracion ']'            { printf ("  enumeraciones -> [ expresion_condicional varias_clausulas_iteracion ]\n"); }
+  : '[' expresion_condicional  ']'            { printf ("  enumeraciones -> [ expresion_condicional varias_clausulas_iteracion ]\n"); }
   | '[' varias_expresiones ']'                                          { printf ("  enumeraciones -> [ expresion ]\n"); }
   | '{' varias_clave_valor '}'                                          { printf ("  enumeraciones -> { varias_clave_valor }\n"); }
   | '{' varias_campo_valor '}'                                          { printf ("  enumeraciones -> { varias_campo_valor }\n"); }
   ;
 
+/*
+varias_clausulas_iteracion
+: varias_clausulas_iteracion clausula_iteracion                       { printf ("  varias_clausulas_iteracion -> varias_clausulas_iteracion clausula_iteracion\n"); }
+| varias_clausulas_iteracion                                          { printf ("  varias_clausulas_iteracion -> varias_clausulas_iteracion\n"); }
+;
+*/
+
 varias_expresiones
   : varias_expresiones ',' expresion       { printf ("  varias_expresiones ->  varias_expresiones , expresion\n"); }
 	| expresion                              { printf ("  varias_expresiones -> expresion\n"); }	 
 	;
-
-varias_clausulas_iteracion
-: varias_clausulas_iteracion clausula_iteracion                       { printf ("  varias_clausulas_iteracion -> varias_clausulas_iteracion clausula_iteracion\n"); }
-| varias_clausulas_iteracion                                          { printf ("  varias_clausulas_iteracion -> IDENTIFICADOR ASIGNACION expresion\n"); }
-;
 
 varias_clave_valor
 :varias_clave_valor ',' clave_valor                                      { printf ("  varias_clave_valor -> varias_clave_valor , clave_valor\n"); }
@@ -577,8 +579,8 @@ varias_campo_valor
   
 
 expresion_condicional
-  : expresion                                                           { printf ("  expresion_condicional -> expresion\n"); }
-  | SI expresion ENTONCES expresion                                     { printf ("  expresion_condicional -> SI expresion ENTONCES expresion\n"); }
+  //: expresion                                                           { printf ("  expresion_condicional -> expresion\n"); }
+  : SI expresion ENTONCES expresion                                     { printf ("  expresion_condicional -> SI expresion ENTONCES expresion\n"); }
   | SI expresion ENTONCES expresion SINO expresion                      { printf ("  expresion_condicional -> SI expresion ENTONCES expresion SINO expresion\n"); }
   ;
 
