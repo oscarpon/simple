@@ -1,10 +1,11 @@
 %{
 
   #include <stdio.h>
+  #define YYDEBUG 1
   extern FILE *yyin;
   extern int yylex();
   int yyerror(char *s);
-  #define YYDEBUG 1
+  
 
 %}
 
@@ -50,11 +51,11 @@ nombre
 
 varios_identificadores2
 : varios_identificadores2 identificador_cuatro     { printf ("varios_identificadores2 -> varios_identificadores2 IDENTIFICADOR CUATRO_PUNTOS \n"); }
-|
 ;
 
-identificador_cuatro
-: IDENTIFICADOR CUATRO_PUNTOS
+identificador_cuatro                
+: IDENTIFICADOR CUATRO_PUNTOS                           { printf ("identificador_cuatro -> IDENTIFICADOR CUATRO_PUNTOS\n"); }
+|
 ;
 
 definicion_libreria 
@@ -172,7 +173,6 @@ tipo_registro
 varios_campos
   : varios_campos campo                                      { printf ("  varios_campos -> varios_campos campo\n"); }
   | campo                                                    { printf ("  varios_campos -> campo\n"); }
-  
   ;
 
 campo
@@ -243,10 +243,13 @@ visibilidad
 componente 
 : declaracion_tipo   { printf ("  componente -> declaracion_tipo"); }
 | declaracion_objeto   { printf ("  componente -> declaracion_objeto"); }
-| varios_modificadores  declaracion_subprograma { printf ("  componente -> varios_modificadores declaracion_subprograma"); }
-| declaracion_subprograma                       { printf ("  componente -> declaracion_subprograma"); }
+| cero_modificadores  declaracion_subprograma { printf ("  componente -> varios_modificadores declaracion_subprograma"); }
 ;
 
+cero_modificadores
+: varios_modificadores                      { printf ("  cero_modificadores ->  cero_modificadores varios_modificadores\n"); }
+|
+;
 
 varios_modificadores
 :varios_modificadores ',' modificador      { printf ("  varios_modificadores ->  varios_modificadores , modificador\n"); }
@@ -369,10 +372,13 @@ instruccion_devolver
     ;
 
  llamada_subprograma 
-  : nombre '(' varias_definicion_parametro ')'{ printf ("llamada_subprograma ->  nombre ( varias_definicion_parametro )\n"); }
-  | nombre '(' ')'                            { printf ("llamada_subprograma ->  nombre (  )\n"); }
+  : nombre '(' cero_definicion_parametro ')'{ printf ("llamada_subprograma ->  nombre ( varias_definicion_parametro )\n"); }
   ;
 
+  cero_definicion_parametro
+  : varias_definicion_parametro                               { printf ("  cero_definicion_parametro ->  varias_definicion_parametro\n"); }
+  |
+  ;
 
   varias_definicion_parametro
   : varias_definicion_parametro ','  definicion_parametro       { printf ("  varias_definicion_parametro ->  varias_definicion_parametro ',' definicion_parametro\n"); }
@@ -517,27 +523,6 @@ clausula_finalmente
 
 /********************EXPRESIONES************************************/
 
-
-expresion_potencia
-  : expresion_posfija                                                   { printf ("  expresion_potencia-> expresion_posfija\n"); }
-  | expresion_posfija '^' expresion_potencia                            { printf ("  expresion_potencia-> expresion_posfija ^ expresion_potencia\n"); }
-  ;
-
-expresion_posfija
-  : expresion_unaria                                                    { printf ("  expresion_posfija -> expresion_unaria\n"); }
-  | expresion_unaria operador_posfijo                                   { printf ("  expresion_posfija -> expresion_unaria operador_posfijo\n"); }
-  ;
-
-operador_posfijo
-  : INC                                                                 { printf ("  operador_posfijo -> INC\n"); }
-  | DEC                                                                 { printf ("  operador_posfijo -> DEC\n"); }
-  ;
-
-expresion_unaria
-  : primario                                                            { printf ("  expresion_unaria -> primario\n"); }
-  | '-' primario                                                        { printf ("  expresion_unaria -> - primario\n"); }
-  ;
-
 primario
   : literal                                                             { printf ("  primario -> literal\n"); }
   | objeto                                                              { printf ("  primario -> objeto\n"); }
@@ -563,10 +548,6 @@ objeto
   | objeto '{' varias_ctc_cadena '}'                                    { printf ("  objeto -> objeto { varias_ctc_cadena }\n"); }
   ;
 
-varias_expresiones
-  : varias_expresiones ',' expresion       { printf ("  varias_expresiones ->  varias_expresiones , expresion\n"); }
-	| expresion                              { printf ("  varias_expresiones -> expresion\n"); }	 
-	;
 
 varias_ctc_cadena
  : varias_ctc_cadena ',' CTC_CADENA                                        { printf ("  varias_ctc_cadena -> varias_ctc_cadena , CTC_CADENA\n"); }
@@ -580,6 +561,10 @@ enumeraciones
   | '{' varias_campo_valor '}'                                          { printf ("  enumeraciones -> { varias_campo_valor }\n"); }
   ;
 
+varias_expresiones
+  : varias_expresiones ',' expresion       { printf ("  varias_expresiones ->  varias_expresiones , expresion\n"); }
+	| expresion                              { printf ("  varias_expresiones -> expresion\n"); }	 
+	;
 
 varias_clausulas_iteracion
 : varias_clausulas_iteracion clausula_iteracion                       { printf ("  varias_clausulas_iteracion -> varias_clausulas_iteracion clausula_iteracion\n"); }
@@ -612,30 +597,31 @@ campo_valor
   ;
 
 
+
 expresion
 	: operadorOR		                         { printf("  expresion ->  operadorOR\n"); }
   ;
 operadorOR
-	: operadorOR OR operadorAND	             { printf("  operadorOR ->  operadorOR OR operadorAND\n"); }
+	: operadorAND OR 	             { printf("  operadorOR ->  operadorOR OR operadorAND\n"); }
 	| operadorAND			                      
 ;
 operadorAND
-	: operadorAND AND operadorNEG         { printf("  operadorAND ->  operadorAND AND operadorNEG\n"); }
+	: operadorNEG AND          { printf("  operadorAND ->  operadorAND AND operadorNEG\n"); }
 	| operadorNEG			                      
   ;
 operadorNEG
-	: '~' operadorASIG		                   { printf("  operadorNEG ->  '~' operadorASIG\n"); }
-	| operadorASIG			                     
+	: '~' operadorDES  		                   { printf("  operadorNEG -> operadorASIG ~\n"); }
+	| operadorDES			                     
   ;
 
 
 operadorASIG
-	: '<' operadorDES	       { printf("  operadorASIG ->  operadorASIG '<' operadorDES\n"); }
-	| '>' operadorDES	       { printf("  operadorASIG ->  operadorASIG '>' operadorDES\n"); }
-	| LEQ operadorDES	       { printf("  operadorASIG ->  operadorASIG LEQ operadorDES\n"); }
-	| FLECHA operadorDES	       { printf("  operadorASIG ->  operadorASIG FLECHA operadorDES\n"); }
-	| '=' operadorDES		       { printf("  operadorASIG ->  operadorASIG '=' operadorDES\n"); }
-	| NEQ operadorDES	       { printf("  operadorASIG ->  operadorASIG NEQ operadorDES\n"); }
+	: operadorDES '<' 	       { printf("  operadorASIG ->   operadorDES '<' \n"); }
+	| operadorDES '>' 	       { printf("  operadorASIG ->   operadorDES '>' \n"); }
+	| operadorDES LEQ 	       { printf("  operadorASIG ->   operadorDES LEQ \n"); }
+	| operadorDES FLECHA 	       { printf("  operadorASIG ->   operadorDES FLECHA \n"); }
+	| operadorDES '=' 		       { printf("  operadorASIG ->   operadorDES'=' \n"); }
+	| operadorDES NEQ 	       { printf("  operadorASIG ->   operadorDES NEQ \n"); }
 	| operadorDES				                 
   ;
 
@@ -665,14 +651,15 @@ operadorPOT
 
 
 operadorINCDEC
-	:  INC operadorMDM		         { printf("  operadorINCDEC ->  operadorINCDEC INC operadorMDM\n"); }
-	|  DEC operadorMDM		         { printf("  operadorINCDEC ->  operadorINCDEC DEC operadorMDM\n"); }
-	| operadorMDM				                     //{ printf("  operadorSR ->  operadorMDM\n"); }
+	: INC  operadorUN       { printf("  operadorINCDEC ->   INC operadorUN\n"); }
+	| DEC  operadorUN    { printf("  operadorINCDEC ->  DEC operadorUN\n"); }
+	| operadorUN			                     
 ;
 
+
 operadorUN
-	: '-' primario		             { printf("  operadorUN ->  '-' primario\n"); }
-	| primario			               { printf("  operadorUN ->  primario\n"); }
+	: '-' primario		             { printf("  operadorUN -> - primario \n"); }
+	| primario			               { printf("  operadorUN -> primario \n"); }
 ;
 
 

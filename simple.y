@@ -29,33 +29,32 @@ codigo_programa
 : varias_librerias cuerpo_subprograma  { printf ("  codigo_programa -> varias_librerias cuerpo_subprograma\n"); }
 ;
 
-varias_librerias
-	 : varias_librerias libreria        { printf ("  varias_librerias -> varias_librerias libreria\n"); }
-   |
-	 ;
-   
+
+
  libreria 
   : IMPORTAR LIBRERIA nombre ';'                              { printf ("  libreria -> IMPORTAR LIBRERIA nombre ;\n"); }
+  | IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ';'           { printf ("  libreria -> IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ; \n"); } 
   | DE LIBRERIA nombre IMPORTAR varios_identificadores  ';'  { printf ("  libreria -> DE LIBRERIA nombre IMPORTAR varios_identificadores ; \n"); }
-  | IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ';'           { printf ("  libreria -> IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ; \n"); }                                          
   ;
 
+
+  /*cero_o_uno_como_identificador
+  : COMO IDENTIFICADOR
+  ;*/
+
+varias_librerias
+  : varias_librerias libreria        { printf ("  varias_librerias -> varias_librerias libreria\n"); }
+  |
+	;
+   
 varios_identificadores
 : varios_identificadores ',' IDENTIFICADOR       { printf ("  varios_identificadores ->  varios_identificadores  IDENTIFICADOR\n"); }
 | IDENTIFICADOR                                  { printf ("  varios_identificadores -> IDENTIFICADOR\n"); }
 ;
 
 nombre
-: varios_identificadores2 IDENTIFICADOR  { printf ("nombre -> varios_identificadores2 IDENTIFICADOR\n"); }                          
-;
-
-varios_identificadores2
-: varios_identificadores2 identificador_cuatro     { printf ("varios_identificadores2 -> varios_identificadores2 IDENTIFICADOR CUATRO_PUNTOS \n"); }
-;
-
-identificador_cuatro                
-: IDENTIFICADOR CUATRO_PUNTOS                           { printf ("identificador_cuatro -> IDENTIFICADOR CUATRO_PUNTOS\n"); }
-|
+: IDENTIFICADOR  { printf ("nombre -> IDENTIFICADOR\n"); } 
+| IDENTIFICADOR CUATRO_PUNTOS IDENTIFICADOR       { printf ("nombre -> IDENTIFICADOR CUATRO_PUNTOS IDENTIFICADOR\n"); }                    
 ;
 
 definicion_libreria 
@@ -347,7 +346,6 @@ instruccion
 instruccion_asignacion 
 : objeto op_asignacion expresion ';'  { printf ("  instruccion_asignacion -> objeto op_asignacion expresion;"); }
 ;
-      
 
 op_asignacion 
   :  ASIGNACION  { printf ("  op_asignacion -> ASIGNACION"); }
@@ -386,12 +384,8 @@ instruccion_devolver
   ;
 
 definicion_parametro 
-: cero_uno_identificador  expresion       { printf ("definicion_parametro ->  cero_uno_identificador expresion\n"); }
-;
-
-cero_uno_identificador
-: IDENTIFICADOR ASIGNACION  { printf ("cero_uno_identificador -> IDENTIFICADOR :=\n"); }
-|
+:  expresion       { printf ("definicion_parametro ->  expresion\n"); }
+| IDENTIFICADOR ASIGNACION expresion { printf ("definicion_parametro ->  IDENTIFICADOR ASIGNACION expresion\n"); }
 ;
 
 instruccion_si 
@@ -588,6 +582,7 @@ expresion_condicional
   | SI expresion ENTONCES expresion SINO expresion                      { printf ("  expresion_condicional -> SI expresion ENTONCES expresion SINO expresion\n"); }
   ;
 
+
 clave_valor
   : CTC_CADENA FLECHA expresion                                         { printf ("  clave_valor -> CTC_CADENA FLECHA expresion\n"); }
   ;
@@ -596,7 +591,8 @@ campo_valor
   : IDENTIFICADOR FLECHA expresion                                      { printf ("  campo_valor -> IDENTIFICADOR FLECHA expresion\n"); }
   ;
 
-
+/*No estamos seguros de si hemos cumplido con las asociatividades. No hemos entendido muy bien la base. Esto es 
+lo que hemos podido hacer:*/
 
 expresion
 	: operadorOR		                         { printf("  expresion ->  operadorOR\n"); }
@@ -611,7 +607,7 @@ operadorAND
   ;
 operadorNEG
 	: '~' operadorDES  		                   { printf("  operadorNEG -> operadorASIG ~\n"); }
-	| operadorDES			                     
+	| operadorASIG			                     
   ;
 
 
@@ -661,6 +657,7 @@ operadorUN
 	: '-' primario		             { printf("  operadorUN -> - primario \n"); }
 	| primario			               { printf("  operadorUN -> primario \n"); }
 ;
+
 
 
 %%
