@@ -426,7 +426,7 @@ varias_entradas
 ;
 
 cero_mas_expresiones1
-: DOS_PTOS expresion { printf ("cero_mas_expresiones1 -> .. expresion\n"); }
+: DOS_PTOS expresion { printf ("cero_mas_expresiones1 -> DOS_PTOS expresion\n"); }
 |
 ;
 
