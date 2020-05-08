@@ -525,11 +525,11 @@ expresion_primaria
 ;
 expresion
 	: operadorOR		                         { printf("  expresion ->  operadorOR\n"); }
-;
+  ;
 operadorOR
 	: operadorOR OR operadorAND	             { printf("  operadorOR ->  operadorOR OR operadorAND\n"); }
 	| operadorAND			                       //{ printf("  operadorOR ->  operadorAND\n"); }
-;
+  ;
 operadorAND
 	: operadorAND AND operadorNEG	           { printf("  operadorAND ->  operadorAND AND operadorNEG\n"); }
 	| operadorNEG			                       //{ printf("  operadorAND ->  operadorNEG\n"); }
