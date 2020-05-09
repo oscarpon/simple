@@ -4,7 +4,7 @@
 #include "simple.tab.h"
 int lineas = 1;
 %}
-/*PREGUNTAR */
+
 
 IDENTIFICADOR [a-zA-Z|_]+[0-9]*
 DELIMITADORES (\(|\)|:|\;|\,|\.\.|\||=>)
