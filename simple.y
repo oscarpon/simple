@@ -626,7 +626,7 @@ operadorASIG
 	| operadorDES '>' 	       { printf("  operadorASIG ->   operadorDES '>' \n"); }
 	| operadorDES LEQ 	       { printf("  operadorASIG ->   operadorDES LEQ \n"); }
 	| operadorDES CEQ 	       { printf("  operadorASIG ->   operadorDES CEQ \n"); }
-	| operadorDES '=' 		       { printf("  operadorASIG ->   operadorDES'=' \n"); }
+	| operadorDES '=' 		       { printf("  operadorASIG ->   operadorDES '=' \n"); }
 	| operadorDES NEQ 	       { printf("  operadorASIG ->   operadorDES NEQ \n"); }
 	| operadorDES				                 
   ;
