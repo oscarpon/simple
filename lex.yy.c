@@ -351,8 +351,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 90
-#define YY_END_OF_BUFFER 91
+#define YY_NUM_RULES 91
+#define YY_END_OF_BUFFER 92
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -362,10 +362,10 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[465] =
     {   0,
-       67,   67,   91,   89,   89,    2,    3,   89,   66,   89,
-       89,   89,   89,   65,   89,   89,   89,   89,   64,   64,
+       67,   67,   92,   90,   90,    2,    3,   90,   66,   90,
+       90,   90,   90,   65,   89,   90,   90,   90,   64,   64,
        64,   64,   64,   64,   64,   64,   64,   64,   64,   64,
-       64,   64,   64,   64,   64,   64,   89,   89,    0,   67,
+       64,   64,   64,   64,   64,   64,   90,   90,    0,   67,
         0,    0,    0,    0,    0,    1,   66,    0,   65,    0,
         0,   85,   65,   69,   78,    0,   68,   65,   65,   65,
        75,    0,   65,   65,   71,   83,   87,   76,   73,   88,
@@ -1729,15 +1729,20 @@ printf("linea %d, Operador: %s\n",lineas,yytext);return(ASIG_DESPI);
 	YY_BREAK
 case 89:
 YY_RULE_SETUP
+#line 127 "simple.l"
+printf("linea %d, Operador: %s\n",lineas,yytext);return(DOS_PUNTOS);
+	YY_BREAK
+case 90:
+YY_RULE_SETUP
 #line 130 "simple.l"
 printf ("linea %d, ERROR\n",lineas);
 	YY_BREAK
-case 90:
+case 91:
 YY_RULE_SETUP
 #line 132 "simple.l"
 ECHO;
 	YY_BREAK
-#line 1741 "lex.yy.c"
+#line 1746 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 

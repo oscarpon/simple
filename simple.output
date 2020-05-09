@@ -1,15 +1,3 @@
-Terminales no usados en la gramática
-
-   CEQ
-   ASIG_DESP
-   LONGITUD
-   TIPO_BASICO
-
-
-Estado 76 conflictos: 1 desplazamiento/reducción
-Estado 146 conflictos: 1 desplazamiento/reducción
-
-
 Gramática
 
     0 $accept: programa $end
@@ -31,8 +19,8 @@ Gramática
    10 varios_identificadores: varios_identificadores ',' IDENTIFICADOR
    11                       | IDENTIFICADOR
 
-   12 nombre: IDENTIFICADOR
-   13       | IDENTIFICADOR CUATRO_PUNTOS IDENTIFICADOR
+   12 nombre: IDENTIFICADOR CUATRO_PUNTOS IDENTIFICADOR
+   13       | IDENTIFICADOR
 
    14 definicion_libreria: LIBRERIA IDENTIFICADOR ';' codigo_libreria
 
@@ -204,7 +192,7 @@ Gramática
   129              | ASIG_RESTO
   130              | ASIG_POT
   131              | ASIG_DESPI
-  132              | ':'
+  132              | ASIG_DESP
 
   133 instruccion_devolver: DEVOLVER ';'
   134                     | DEVOLVER expresion ';'
@@ -247,14 +235,14 @@ Gramática
 
   157 instruccion_bucle: cero_mas_identificador1 clausula_iteracion varias_instrucciones FIN BUCLE
 
-  158 cero_mas_identificador1: IDENTIFICADOR ':'
+  158 cero_mas_identificador1: IDENTIFICADOR DOS_PUNTOS
   159                        | %empty
 
   160 clausula_iteracion: PARA IDENTIFICADOR cero_o_uno_especificacion_tipo EN expresion
   161                   | REPETIR IDENTIFICADOR cero_o_uno_especificacion_tipo EN rango cero_o_uno_descendente
   162                   | MIENTRAS expresion
 
-  163 cero_o_uno_especificacion_tipo: ':' especificacion_tipo
+  163 cero_o_uno_especificacion_tipo: DOS_PUNTOS especificacion_tipo
   164                               | %empty
 
   165 cero_o_uno_descendente: DESCENDENTE
@@ -312,68 +300,72 @@ Gramática
   201 varias_ctc_cadena: varias_ctc_cadena ',' CTC_CADENA
   202                  | CTC_CADENA
 
-  203 enumeraciones: '[' expresion_condicional ']'
-  204              | '[' varias_expresiones ']'
-  205              | '{' varias_clave_valor '}'
-  206              | '{' varias_campo_valor '}'
+  203 varias_clausulas_iteracion: varias_clausulas_iteracion clausula_iteracion
+  204                           | clausula_iteracion
 
-  207 varias_expresiones: varias_expresiones ',' expresion
-  208                   | expresion
+  205 enumeraciones: '[' expresion_condicional ']'
+  206              | '[' expresion_condicional varias_clausulas_iteracion ']'
+  207              | '[' varias_expresiones ']'
+  208              | '{' varias_clave_valor '}'
+  209              | '{' varias_campo_valor '}'
 
-  209 varias_clave_valor: varias_clave_valor ',' clave_valor
-  210                   | clave_valor
+  210 varias_expresiones: varias_expresiones ',' expresion
+  211                   | expresion
 
-  211 varias_campo_valor: varias_campo_valor ',' campo_valor
-  212                   | campo_valor
+  212 varias_clave_valor: varias_clave_valor ',' clave_valor
+  213                   | clave_valor
 
-  213 expresion_condicional: SI expresion ENTONCES expresion
-  214                      | SI expresion ENTONCES expresion SINO expresion
+  214 varias_campo_valor: varias_campo_valor ',' campo_valor
+  215                   | campo_valor
 
-  215 clave_valor: CTC_CADENA FLECHA expresion
+  216 expresion_condicional: SI expresion ENTONCES expresion
+  217                      | SI expresion ENTONCES expresion SINO expresion
 
-  216 campo_valor: IDENTIFICADOR FLECHA expresion
+  218 clave_valor: CTC_CADENA FLECHA expresion
 
-  217 expresion: operadorOR
+  219 campo_valor: IDENTIFICADOR FLECHA expresion
 
-  218 operadorOR: operadorAND OR
-  219           | operadorAND
+  220 expresion: operadorOR
 
-  220 operadorAND: operadorNEG AND
-  221            | operadorNEG
+  221 operadorOR: operadorAND OR
+  222           | operadorAND
 
-  222 operadorNEG: '~' operadorDES
-  223            | operadorASIG
+  223 operadorAND: operadorNEG AND
+  224            | operadorNEG
 
-  224 operadorASIG: operadorDES '<'
-  225             | operadorDES '>'
-  226             | operadorDES LEQ
-  227             | operadorDES FLECHA
-  228             | operadorDES '='
-  229             | operadorDES NEQ
-  230             | operadorDES
+  225 operadorNEG: '~' operadorDES
+  226            | operadorASIG
 
-  231 operadorDES: operadorDES DESPI operadorSR
-  232            | operadorDES DESPD operadorSR
-  233            | operadorSR
+  227 operadorASIG: operadorDES '<'
+  228             | operadorDES '>'
+  229             | operadorDES LEQ
+  230             | operadorDES CEQ
+  231             | operadorDES '='
+  232             | operadorDES NEQ
+  233             | operadorDES
 
-  234 operadorSR: operadorSR '+' operadorMDM
-  235           | operadorSR '-' operadorMDM
-  236           | operadorMDM
+  234 operadorDES: operadorDES DESPI operadorSR
+  235            | operadorDES DESPD operadorSR
+  236            | operadorSR
 
-  237 operadorMDM: operadorMDM '*' operadorPOT
-  238            | operadorMDM '/' operadorPOT
-  239            | operadorMDM '\\' operadorPOT
-  240            | operadorPOT
+  237 operadorSR: operadorSR '+' operadorMDM
+  238           | operadorSR '-' operadorMDM
+  239           | operadorMDM
 
-  241 operadorPOT: operadorINCDEC '^' operadorPOT
-  242            | operadorINCDEC
+  240 operadorMDM: operadorMDM '*' operadorPOT
+  241            | operadorMDM '/' operadorPOT
+  242            | operadorMDM '\\' operadorPOT
+  243            | operadorPOT
 
-  243 operadorINCDEC: INC operadorUN
-  244               | DEC operadorUN
-  245               | operadorUN
+  244 operadorPOT: operadorINCDEC '^' operadorPOT
+  245            | operadorINCDEC
 
-  246 operadorUN: '-' primario
-  247           | primario
+  246 operadorINCDEC: INC operadorUN
+  247               | DEC operadorUN
+  248               | operadorUN
+
+  249 operadorUN: '-' primario
+  250           | primario
 
 
 Terminales con las reglas donde aparecen
@@ -381,25 +373,25 @@ Terminales con las reglas donde aparecen
 $end (0) 0
 '(' (40) 50 73 100 136 182 190
 ')' (41) 50 73 100 136 182 190
-'*' (42) 237
-'+' (43) 234
-',' (44) 10 20 63 86 139 201 207 209 211
-'-' (45) 235 246
+'*' (42) 240
+'+' (43) 237
+',' (44) 10 20 63 86 139 201 210 212 214
+'-' (45) 238 249
 '.' (46) 198
-'/' (47) 238
-':' (58) 25 26 27 59 60 101 102 132 153 154 158 163
+'/' (47) 241
+':' (58) 25 26 27 59 60 101 102 153 154
 ';' (59) 3 5 6 7 14 19 25 26 27 30 59 60 103 122 123 133 134 135 167
     168 174
-'<' (60) 224
-'=' (61) 228
-'>' (62) 225
-'[' (91) 199 203 204
-'\\' (92) 239
-']' (93) 199 203 204
-'^' (94) 241
-'{' (123) 200 205 206
-'}' (125) 200 205 206
-'~' (126) 222
+'<' (60) 227
+'=' (61) 231
+'>' (62) 228
+'[' (91) 199 205 206 207
+'\\' (92) 242
+']' (93) 199 205 206 207
+'^' (94) 244
+'{' (123) 200 208 209
+'}' (125) 200 208 209
+'~' (126) 225
 error (256)
 ABSTRACTO (258) 91
 BOOLEANO (259) 44
@@ -419,7 +411,7 @@ DEVOLVER (272) 107 133 134
 DICCIONARIO (273) 52
 EN (274) 160 161
 ENTERO (275) 46
-ENTONCES (276) 143 213 214
+ENTONCES (276) 143 216 217
 ENUMERACION (277) 61 62
 ES (278) 30 31 146
 ESPECIFICO (279) 92
@@ -451,10 +443,10 @@ REFERENCIA (304) 106
 REGISTRO (305) 56
 REPETIR (306) 161
 SALIR (307) 168
-SI (308) 143 213 214
+SI (308) 143 216 217
 SIGNO (309) 36
 SIGUIENTE (310) 167
-SINO (311) 144 214
+SINO (311) 144 217
 SUBPROGRAMA (312) 94
 TABLA (313) 50
 TIPO (314) 30 31
@@ -462,278 +454,279 @@ ULTIMA (315) 69
 VALOR (316) 105
 VERDADERO (317) 191
 CTC_CARACTER (318) 195
-CTC_CADENA (319) 196 201 202 215
+CTC_CADENA (319) 196 201 202 218
 IDENTIFICADOR (320) 3 6 10 11 12 13 14 30 31 65 95 142 158 160 161
-    172 198 216
+    172 198 219
 CTC_ENTERA (321) 193
 CTC_REAL (322) 194
 DOS_PTOS (323) 48 49 50 155
-CUATRO_PUNTOS (324) 13
+CUATRO_PUNTOS (324) 12
 ASIGNACION (325) 25 27 60 66 124 142
-FLECHA (326) 147 215 216 227
-INC (327) 243
-DEC (328) 244
-DESPI (329) 231
-DESPD (330) 232
-LEQ (331) 226
-CEQ (332)
-NEQ (333) 229
-AND (334) 220
-OR (335) 218
+FLECHA (326) 147 218 219
+INC (327) 246
+DEC (328) 247
+DESPI (329) 234
+DESPD (330) 235
+LEQ (331) 229
+CEQ (332) 230
+NEQ (333) 232
+AND (334) 223
+OR (335) 221
 ASIG_SUMA (336) 125
 ASIG_RESTA (337) 126
 ASIG_MULT (338) 127
-ASIG_DIV (339) 128
-ASIG_RESTO (340) 129
-ASIG_POT (341) 130
-ASIG_DESPI (342) 131
-ASIG_DESP (343)
-LONGITUD (344)
-TIPO_BASICO (345)
+DOS_PUNTOS (339) 158 163
+ASIG_DIV (340) 128
+ASIG_RESTO (341) 129
+ASIG_POT (342) 130
+ASIG_DESPI (343) 131
+ASIG_DESP (344) 132
 
 
 No terminales con las reglas donde aparecen
 
-$accept (111)
+$accept (110)
     en la izquierda: 0
-programa (112)
+programa (111)
     en la izquierda: 1 2, en la derecha: 0
-definicion_programa (113)
+definicion_programa (112)
     en la izquierda: 3, en la derecha: 1
-codigo_programa (114)
+codigo_programa (113)
     en la izquierda: 4, en la derecha: 3
-libreria (115)
+libreria (114)
     en la izquierda: 5 6 7, en la derecha: 8
-varias_librerias (116)
+varias_librerias (115)
     en la izquierda: 8 9, en la derecha: 4 8 15 16
-varios_identificadores (117)
+varios_identificadores (116)
     en la izquierda: 10 11, en la derecha: 7 10 25 26 27 59 60 101
     102
-nombre (118)
+nombre (117)
     en la izquierda: 12 13, en la derecha: 5 6 7 20 21 28 136 174 182
     197
-definicion_libreria (119)
+definicion_libreria (118)
     en la izquierda: 14, en la derecha: 2
-codigo_libreria (120)
+codigo_libreria (119)
     en la izquierda: 15 16, en la derecha: 14
-varias_declaraciones (121)
+varias_declaraciones (120)
     en la izquierda: 17 18, en la derecha: 15 16 17 109
-exportaciones (122)
+exportaciones (121)
     en la izquierda: 19, en la derecha: 16
-varios_nombres (123)
+varios_nombres (122)
     en la izquierda: 20 21, en la derecha: 19 20 73
-declaracion (124)
+declaracion (123)
     en la izquierda: 22 23 24, en la derecha: 17 18 109
-declaracion_objeto (125)
+declaracion_objeto (124)
     en la izquierda: 25 26 27, en la derecha: 22 82
-especificacion_tipo (126)
+especificacion_tipo (125)
     en la izquierda: 28 29, en la derecha: 25 26 27 50 51 52 59 60
     101 102 107 163
-declaracion_tipo (127)
+declaracion_tipo (126)
     en la izquierda: 30 31, en la derecha: 23 81
-tipo_no_estructurado (128)
+tipo_no_estructurado (127)
     en la izquierda: 32 33 34, en la derecha: 29 30
-tipo_escalar (129)
+tipo_escalar (128)
     en la izquierda: 35, en la derecha: 32 62
-cero_o_uno_signo (130)
+cero_o_uno_signo (129)
     en la izquierda: 36 37, en la derecha: 35
-cero_o_uno_longitud (131)
+cero_o_uno_longitud (130)
     en la izquierda: 38 39, en la derecha: 35
-cero_o_uno_rango (132)
+cero_o_uno_rango (131)
     en la izquierda: 40 41, en la derecha: 35
-longitud (133)
+longitud (132)
     en la izquierda: 42 43, en la derecha: 38
-tipo_basico (134)
+tipo_basico (133)
     en la izquierda: 44 45 46 47, en la derecha: 35
-rango (135)
+rango (134)
     en la izquierda: 48 49, en la derecha: 40 161
-tipo_tabla (136)
+tipo_tabla (135)
     en la izquierda: 50 51, en la derecha: 33
-tipo_diccionario (137)
+tipo_diccionario (136)
     en la izquierda: 52, en la derecha: 34
-tipo_estructurado (138)
+tipo_estructurado (137)
     en la izquierda: 53 54 55, en la derecha: 31
-tipo_registro (139)
+tipo_registro (138)
     en la izquierda: 56, en la derecha: 53
-varios_campos (140)
+varios_campos (139)
     en la izquierda: 57 58, en la derecha: 56 57
-campo (141)
+campo (140)
     en la izquierda: 59 60, en la derecha: 57 58
-tipo_enumerado (142)
+tipo_enumerado (141)
     en la izquierda: 61 62, en la derecha: 54
-varios_elemento_enumeracion (143)
+varios_elemento_enumeracion (142)
     en la izquierda: 63 64, en la derecha: 61 62 63
-elemento_enumeracion (144)
+elemento_enumeracion (143)
     en la izquierda: 65, en la derecha: 63 64
-cero_uno_expresion (145)
+cero_uno_expresion (144)
     en la izquierda: 66 67, en la derecha: 65 101 102
-clase (146)
+clase (145)
     en la izquierda: 68, en la derecha: 55
-cero_uno_ultima (147)
+cero_uno_ultima (146)
     en la izquierda: 69 70, en la derecha: 68
-cero_uno_superclases (148)
+cero_uno_superclases (147)
     en la izquierda: 71 72, en la derecha: 68
-superclases (149)
+superclases (148)
     en la izquierda: 73, en la derecha: 71
-declaracion_componente (150)
+declaracion_componente (149)
     en la izquierda: 74 75, en la derecha: 76 77
-varias_declaraciones_componente (151)
+varias_declaraciones_componente (150)
     en la izquierda: 76 77, en la derecha: 68 76
-visibilidad (152)
+visibilidad (151)
     en la izquierda: 78 79 80, en la derecha: 75
-componente (153)
+componente (152)
     en la izquierda: 81 82 83, en la derecha: 74 75
-cero_modificadores (154)
+cero_modificadores (153)
     en la izquierda: 84 85, en la derecha: 83
-varios_modificadores (155)
+varios_modificadores (154)
     en la izquierda: 86 87, en la derecha: 84 86
-modificador (156)
+modificador (155)
     en la izquierda: 88 89 90 91 92 93, en la derecha: 86 87
-declaracion_subprograma (157)
+declaracion_subprograma (156)
     en la izquierda: 94, en la derecha: 24 83
-cabecera_subprograma (158)
+cabecera_subprograma (157)
     en la izquierda: 95, en la derecha: 94
-cero_uno_parametrizacion (159)
+cero_uno_parametrizacion (158)
     en la izquierda: 96 97, en la derecha: 95
-cero_uno_tipoResultado (160)
+cero_uno_tipoResultado (159)
     en la izquierda: 98 99, en la derecha: 95
-parametrizacion (161)
+parametrizacion (160)
     en la izquierda: 100, en la derecha: 96
-declaracion_parametros (162)
+declaracion_parametros (161)
     en la izquierda: 101 102, en la derecha: 100 103
-varias_declaraciones_parametros (163)
+varias_declaraciones_parametros (162)
     en la izquierda: 103 104, en la derecha: 100 103
-modo (164)
+modo (163)
     en la izquierda: 105 106, en la derecha: 102
-tipo_resultado (165)
+tipo_resultado (164)
     en la izquierda: 107, en la derecha: 98
-cuerpo_subprograma (166)
+cuerpo_subprograma (165)
     en la izquierda: 108, en la derecha: 4 94
-cero_o_mas_declaraciones (167)
+cero_o_mas_declaraciones (166)
     en la izquierda: 109 110, en la derecha: 108
-varias_instrucciones (168)
+varias_instrucciones (167)
     en la izquierda: 111 112, en la derecha: 108 111 143 144 147 157
     175 182 183 184
-instruccion (169)
+instruccion (168)
     en la izquierda: 113 114 115 116 117 118 119 120 121 122, en la derecha:
     111 112
-instruccion_asignacion (170)
+instruccion_asignacion (169)
     en la izquierda: 123, en la derecha: 113
-op_asignacion (171)
+op_asignacion (170)
     en la izquierda: 124 125 126 127 128 129 130 131 132, en la derecha:
     123
-instruccion_devolver (172)
+instruccion_devolver (171)
     en la izquierda: 133 134, en la derecha: 114
-instruccion_llamada (173)
+instruccion_llamada (172)
     en la izquierda: 135, en la derecha: 115
-llamada_subprograma (174)
+llamada_subprograma (173)
     en la izquierda: 136, en la derecha: 135 187 188
-cero_definicion_parametro (175)
+cero_definicion_parametro (174)
     en la izquierda: 137 138, en la derecha: 136
-varias_definicion_parametro (176)
+varias_definicion_parametro (175)
     en la izquierda: 139 140, en la derecha: 137 139
-definicion_parametro (177)
+definicion_parametro (176)
     en la izquierda: 141 142, en la derecha: 139 140
-instruccion_si (178)
+instruccion_si (177)
     en la izquierda: 143, en la derecha: 116
-cero_mas_instrucciones (179)
+cero_mas_instrucciones (178)
     en la izquierda: 144 145, en la derecha: 143
-instruccion_casos (180)
+instruccion_casos (179)
     en la izquierda: 146, en la derecha: 117
-caso (181)
+caso (180)
     en la izquierda: 147, en la derecha: 148 149
-uno_o_mas_casos (182)
+uno_o_mas_casos (181)
     en la izquierda: 148 149, en la derecha: 146 148
-entradas (183)
+entradas (182)
     en la izquierda: 150, en la derecha: 147
-entrada (184)
+entrada (183)
     en la izquierda: 151 152, en la derecha: 150 153 154
-varias_entradas (185)
+varias_entradas (184)
     en la izquierda: 153 154, en la derecha: 150 153
-cero_mas_expresiones1 (186)
+cero_mas_expresiones1 (185)
     en la izquierda: 155 156, en la derecha: 151
-instruccion_bucle (187)
+instruccion_bucle (186)
     en la izquierda: 157, en la derecha: 118
-cero_mas_identificador1 (188)
+cero_mas_identificador1 (187)
     en la izquierda: 158 159, en la derecha: 157
-clausula_iteracion (189)
-    en la izquierda: 160 161 162, en la derecha: 157
-cero_o_uno_especificacion_tipo (190)
+clausula_iteracion (188)
+    en la izquierda: 160 161 162, en la derecha: 157 203 204
+cero_o_uno_especificacion_tipo (189)
     en la izquierda: 163 164, en la derecha: 160 161
-cero_o_uno_descendente (191)
+cero_o_uno_descendente (190)
     en la izquierda: 165 166, en la derecha: 161
-instruccion_interrupcion (192)
+instruccion_interrupcion (191)
     en la izquierda: 167 168, en la derecha: 119
-cuando (193)
+cuando (192)
     en la izquierda: 169, en la derecha: 170
-cero_o_uno_cuando (194)
+cero_o_uno_cuando (193)
     en la izquierda: 170 171, en la derecha: 167 168
-cero_o_uno_de_identificador (195)
+cero_o_uno_de_identificador (194)
     en la izquierda: 172 173, en la derecha: 168
-instruccion_lanzamiento_excepcion (196)
+instruccion_lanzamiento_excepcion (195)
     en la izquierda: 174, en la derecha: 120
-instruccion_captura_excepcion (197)
+instruccion_captura_excepcion (196)
     en la izquierda: 175, en la derecha: 121
-clausulas (198)
+clausulas (197)
     en la izquierda: 176 177 178, en la derecha: 175
-clausulas_excepcion (199)
+clausulas_excepcion (198)
     en la izquierda: 179, en la derecha: 176 177
-varias_clausula_excepcion_especifica (200)
+varias_clausula_excepcion_especifica (199)
     en la izquierda: 180 181, en la derecha: 179 180
-clausula_excepcion_especifica (201)
+clausula_excepcion_especifica (200)
     en la izquierda: 182, en la derecha: 180
-clausula_excepcion_general (202)
+clausula_excepcion_general (201)
     en la izquierda: 183, en la derecha: 179
-clausula_finalmente (203)
+clausula_finalmente (202)
     en la izquierda: 184, en la derecha: 177 178
-primario (204)
-    en la izquierda: 185 186 187 188 189 190, en la derecha: 246 247
-literal (205)
+primario (203)
+    en la izquierda: 185 186 187 188 189 190, en la derecha: 249 250
+literal (204)
     en la izquierda: 191 192 193 194 195 196, en la derecha: 185
-objeto (206)
+objeto (205)
     en la izquierda: 197 198 199 200, en la derecha: 123 186 198 199
     200
-varias_ctc_cadena (207)
+varias_ctc_cadena (206)
     en la izquierda: 201 202, en la derecha: 200 201
+varias_clausulas_iteracion (207)
+    en la izquierda: 203 204, en la derecha: 203 206
 enumeraciones (208)
-    en la izquierda: 203 204 205 206, en la derecha: 189
+    en la izquierda: 205 206 207 208 209, en la derecha: 189
 varias_expresiones (209)
-    en la izquierda: 207 208, en la derecha: 199 204 207
+    en la izquierda: 210 211, en la derecha: 199 207 210
 varias_clave_valor (210)
-    en la izquierda: 209 210, en la derecha: 205 209
+    en la izquierda: 212 213, en la derecha: 208 212
 varias_campo_valor (211)
-    en la izquierda: 211 212, en la derecha: 206 211
+    en la izquierda: 214 215, en la derecha: 209 214
 expresion_condicional (212)
-    en la izquierda: 213 214, en la derecha: 203
+    en la izquierda: 216 217, en la derecha: 205 206
 clave_valor (213)
-    en la izquierda: 215, en la derecha: 209 210
+    en la izquierda: 218, en la derecha: 212 213
 campo_valor (214)
-    en la izquierda: 216, en la derecha: 211 212
+    en la izquierda: 219, en la derecha: 214 215
 expresion (215)
-    en la izquierda: 217, en la derecha: 25 27 48 49 50 60 66 123 134
-    141 142 143 146 151 155 160 162 169 190 207 208 213 214 215 216
+    en la izquierda: 220, en la derecha: 25 27 48 49 50 60 66 123 134
+    141 142 143 146 151 155 160 162 169 190 210 211 216 217 218 219
 operadorOR (216)
-    en la izquierda: 218 219, en la derecha: 217
+    en la izquierda: 221 222, en la derecha: 220
 operadorAND (217)
-    en la izquierda: 220 221, en la derecha: 218 219
+    en la izquierda: 223 224, en la derecha: 221 222
 operadorNEG (218)
-    en la izquierda: 222 223, en la derecha: 220 221
+    en la izquierda: 225 226, en la derecha: 223 224
 operadorASIG (219)
-    en la izquierda: 224 225 226 227 228 229 230, en la derecha: 223
+    en la izquierda: 227 228 229 230 231 232 233, en la derecha: 226
 operadorDES (220)
-    en la izquierda: 231 232 233, en la derecha: 222 224 225 226 227
-    228 229 230 231 232
+    en la izquierda: 234 235 236, en la derecha: 225 227 228 229 230
+    231 232 233 234 235
 operadorSR (221)
-    en la izquierda: 234 235 236, en la derecha: 231 232 233 234 235
+    en la izquierda: 237 238 239, en la derecha: 234 235 236 237 238
 operadorMDM (222)
-    en la izquierda: 237 238 239 240, en la derecha: 234 235 236 237
-    238 239
+    en la izquierda: 240 241 242 243, en la derecha: 237 238 239 240
+    241 242
 operadorPOT (223)
-    en la izquierda: 241 242, en la derecha: 237 238 239 240 241
+    en la izquierda: 244 245, en la derecha: 240 241 242 243 244
 operadorINCDEC (224)
-    en la izquierda: 243 244 245, en la derecha: 241 242
+    en la izquierda: 246 247 248, en la derecha: 244 245
 operadorUN (225)
-    en la izquierda: 246 247, en la derecha: 243 244 245
+    en la izquierda: 249 250, en la derecha: 246 247 248
 
 
 Estado 0
@@ -1055,12 +1048,12 @@ Estado 32
 
 Estado 33
 
-   12 nombre: IDENTIFICADOR .
-   13       | IDENTIFICADOR . CUATRO_PUNTOS IDENTIFICADOR
+   12 nombre: IDENTIFICADOR . CUATRO_PUNTOS IDENTIFICADOR
+   13       | IDENTIFICADOR .
 
     CUATRO_PUNTOS  desplazar e ir al estado 47
 
-    $default  reduce usando la regla 12 (nombre)
+    $default  reduce usando la regla 13 (nombre)
 
 
 Estado 34
@@ -1236,7 +1229,7 @@ Estado 46
 
 Estado 47
 
-   13 nombre: IDENTIFICADOR CUATRO_PUNTOS . IDENTIFICADOR
+   12 nombre: IDENTIFICADOR CUATRO_PUNTOS . IDENTIFICADOR
 
     IDENTIFICADOR  desplazar e ir al estado 94
 
@@ -1625,15 +1618,14 @@ Estado 75
 
 Estado 76
 
-   12 nombre: IDENTIFICADOR .
-   13       | IDENTIFICADOR . CUATRO_PUNTOS IDENTIFICADOR
-  158 cero_mas_identificador1: IDENTIFICADOR . ':'
+   12 nombre: IDENTIFICADOR . CUATRO_PUNTOS IDENTIFICADOR
+   13       | IDENTIFICADOR .
+  158 cero_mas_identificador1: IDENTIFICADOR . DOS_PUNTOS
 
     CUATRO_PUNTOS  desplazar e ir al estado 47
-    ':'            desplazar e ir al estado 162
+    DOS_PUNTOS     desplazar e ir al estado 162
 
-    ':'       [reduce usando la regla 12 (nombre)]
-    $default  reduce usando la regla 12 (nombre)
+    $default  reduce usando la regla 13 (nombre)
 
 
 Estado 77
@@ -1790,7 +1782,7 @@ Estado 92
     ASIG_RESTO  desplazar e ir al estado 176
     ASIG_POT    desplazar e ir al estado 177
     ASIG_DESPI  desplazar e ir al estado 178
-    ':'         desplazar e ir al estado 179
+    ASIG_DESP   desplazar e ir al estado 179
     '.'         desplazar e ir al estado 180
     '['         desplazar e ir al estado 181
     '{'         desplazar e ir al estado 182
@@ -1809,9 +1801,9 @@ Estado 93
 
 Estado 94
 
-   13 nombre: IDENTIFICADOR CUATRO_PUNTOS IDENTIFICADOR .
+   12 nombre: IDENTIFICADOR CUATRO_PUNTOS IDENTIFICADOR .
 
-    $default  reduce usando la regla 13 (nombre)
+    $default  reduce usando la regla 12 (nombre)
 
 
 Estado 95
@@ -2186,7 +2178,7 @@ Estado 128
 
 Estado 129
 
-  243 operadorINCDEC: INC . operadorUN
+  246 operadorINCDEC: INC . operadorUN
 
     FALSO          desplazar e ir al estado 122
     OBJETO         desplazar e ir al estado 123
@@ -2212,7 +2204,7 @@ Estado 129
 
 Estado 130
 
-  244 operadorINCDEC: DEC . operadorUN
+  247 operadorINCDEC: DEC . operadorUN
 
     FALSO          desplazar e ir al estado 122
     OBJETO         desplazar e ir al estado 123
@@ -2277,8 +2269,9 @@ Estado 131
 
 Estado 132
 
-  203 enumeraciones: '[' . expresion_condicional ']'
-  204              | '[' . varias_expresiones ']'
+  205 enumeraciones: '[' . expresion_condicional ']'
+  206              | '[' . expresion_condicional varias_clausulas_iteracion ']'
+  207              | '[' . varias_expresiones ']'
 
     FALSO          desplazar e ir al estado 122
     OBJETO         desplazar e ir al estado 123
@@ -2320,8 +2313,8 @@ Estado 132
 
 Estado 133
 
-  205 enumeraciones: '{' . varias_clave_valor '}'
-  206              | '{' . varias_campo_valor '}'
+  208 enumeraciones: '{' . varias_clave_valor '}'
+  209              | '{' . varias_campo_valor '}'
 
     CTC_CADENA     desplazar e ir al estado 217
     IDENTIFICADOR  desplazar e ir al estado 218
@@ -2334,7 +2327,7 @@ Estado 133
 
 Estado 134
 
-  222 operadorNEG: '~' . operadorDES
+  225 operadorNEG: '~' . operadorDES
 
     FALSO          desplazar e ir al estado 122
     OBJETO         desplazar e ir al estado 123
@@ -2367,7 +2360,7 @@ Estado 134
 
 Estado 135
 
-  246 operadorUN: '-' . primario
+  249 operadorUN: '-' . primario
 
     FALSO          desplazar e ir al estado 122
     OBJETO         desplazar e ir al estado 123
@@ -2398,9 +2391,9 @@ Estado 136
 
 Estado 137
 
-  247 operadorUN: primario .
+  250 operadorUN: primario .
 
-    $default  reduce usando la regla 247 (operadorUN)
+    $default  reduce usando la regla 250 (operadorUN)
 
 
 Estado 138
@@ -2440,111 +2433,110 @@ Estado 141
 
 Estado 142
 
-  217 expresion: operadorOR .
+  220 expresion: operadorOR .
 
-    $default  reduce usando la regla 217 (expresion)
+    $default  reduce usando la regla 220 (expresion)
 
 
 Estado 143
 
-  218 operadorOR: operadorAND . OR
-  219           | operadorAND .
+  221 operadorOR: operadorAND . OR
+  222           | operadorAND .
 
     OR  desplazar e ir al estado 226
 
-    $default  reduce usando la regla 219 (operadorOR)
+    $default  reduce usando la regla 222 (operadorOR)
 
 
 Estado 144
 
-  220 operadorAND: operadorNEG . AND
-  221            | operadorNEG .
+  223 operadorAND: operadorNEG . AND
+  224            | operadorNEG .
 
     AND  desplazar e ir al estado 227
 
-    $default  reduce usando la regla 221 (operadorAND)
+    $default  reduce usando la regla 224 (operadorAND)
 
 
 Estado 145
 
-  223 operadorNEG: operadorASIG .
+  226 operadorNEG: operadorASIG .
 
-    $default  reduce usando la regla 223 (operadorNEG)
+    $default  reduce usando la regla 226 (operadorNEG)
 
 
 Estado 146
 
-  224 operadorASIG: operadorDES . '<'
-  225             | operadorDES . '>'
-  226             | operadorDES . LEQ
-  227             | operadorDES . FLECHA
-  228             | operadorDES . '='
-  229             | operadorDES . NEQ
-  230             | operadorDES .
-  231 operadorDES: operadorDES . DESPI operadorSR
-  232            | operadorDES . DESPD operadorSR
+  227 operadorASIG: operadorDES . '<'
+  228             | operadorDES . '>'
+  229             | operadorDES . LEQ
+  230             | operadorDES . CEQ
+  231             | operadorDES . '='
+  232             | operadorDES . NEQ
+  233             | operadorDES .
+  234 operadorDES: operadorDES . DESPI operadorSR
+  235            | operadorDES . DESPD operadorSR
 
-    FLECHA  desplazar e ir al estado 228
-    DESPI   desplazar e ir al estado 229
-    DESPD   desplazar e ir al estado 230
-    LEQ     desplazar e ir al estado 231
-    NEQ     desplazar e ir al estado 232
-    '<'     desplazar e ir al estado 233
-    '>'     desplazar e ir al estado 234
-    '='     desplazar e ir al estado 235
+    DESPI  desplazar e ir al estado 228
+    DESPD  desplazar e ir al estado 229
+    LEQ    desplazar e ir al estado 230
+    CEQ    desplazar e ir al estado 231
+    NEQ    desplazar e ir al estado 232
+    '<'    desplazar e ir al estado 233
+    '>'    desplazar e ir al estado 234
+    '='    desplazar e ir al estado 235
 
-    FLECHA    [reduce usando la regla 230 (operadorASIG)]
-    $default  reduce usando la regla 230 (operadorASIG)
+    $default  reduce usando la regla 233 (operadorASIG)
 
 
 Estado 147
 
-  233 operadorDES: operadorSR .
-  234 operadorSR: operadorSR . '+' operadorMDM
-  235           | operadorSR . '-' operadorMDM
+  236 operadorDES: operadorSR .
+  237 operadorSR: operadorSR . '+' operadorMDM
+  238           | operadorSR . '-' operadorMDM
 
     '+'  desplazar e ir al estado 236
     '-'  desplazar e ir al estado 237
 
-    $default  reduce usando la regla 233 (operadorDES)
+    $default  reduce usando la regla 236 (operadorDES)
 
 
 Estado 148
 
-  236 operadorSR: operadorMDM .
-  237 operadorMDM: operadorMDM . '*' operadorPOT
-  238            | operadorMDM . '/' operadorPOT
-  239            | operadorMDM . '\\' operadorPOT
+  239 operadorSR: operadorMDM .
+  240 operadorMDM: operadorMDM . '*' operadorPOT
+  241            | operadorMDM . '/' operadorPOT
+  242            | operadorMDM . '\\' operadorPOT
 
     '*'   desplazar e ir al estado 238
     '/'   desplazar e ir al estado 239
     '\\'  desplazar e ir al estado 240
 
-    $default  reduce usando la regla 236 (operadorSR)
+    $default  reduce usando la regla 239 (operadorSR)
 
 
 Estado 149
 
-  240 operadorMDM: operadorPOT .
+  243 operadorMDM: operadorPOT .
 
-    $default  reduce usando la regla 240 (operadorMDM)
+    $default  reduce usando la regla 243 (operadorMDM)
 
 
 Estado 150
 
-  241 operadorPOT: operadorINCDEC . '^' operadorPOT
-  242            | operadorINCDEC .
+  244 operadorPOT: operadorINCDEC . '^' operadorPOT
+  245            | operadorINCDEC .
 
     '^'  desplazar e ir al estado 241
 
-    $default  reduce usando la regla 242 (operadorPOT)
+    $default  reduce usando la regla 245 (operadorPOT)
 
 
 Estado 151
 
-  245 operadorINCDEC: operadorUN .
+  248 operadorINCDEC: operadorUN .
 
-    $default  reduce usando la regla 245 (operadorINCDEC)
+    $default  reduce usando la regla 248 (operadorINCDEC)
 
 
 Estado 152
@@ -2688,7 +2680,7 @@ Estado 161
 
 Estado 162
 
-  158 cero_mas_identificador1: IDENTIFICADOR ':' .
+  158 cero_mas_identificador1: IDENTIFICADOR DOS_PUNTOS .
 
     $default  reduce usando la regla 158 (cero_mas_identificador1)
 
@@ -2902,7 +2894,7 @@ Estado 178
 
 Estado 179
 
-  132 op_asignacion: ':' .
+  132 op_asignacion: ASIG_DESP .
 
     $default  reduce usando la regla 132 (op_asignacion)
 
@@ -3253,16 +3245,16 @@ Estado 209
 
 Estado 210
 
-  243 operadorINCDEC: INC operadorUN .
+  246 operadorINCDEC: INC operadorUN .
 
-    $default  reduce usando la regla 243 (operadorINCDEC)
+    $default  reduce usando la regla 246 (operadorINCDEC)
 
 
 Estado 211
 
-  244 operadorINCDEC: DEC operadorUN .
+  247 operadorINCDEC: DEC operadorUN .
 
-    $default  reduce usando la regla 244 (operadorINCDEC)
+    $default  reduce usando la regla 247 (operadorINCDEC)
 
 
 Estado 212
@@ -3274,8 +3266,8 @@ Estado 212
 
 Estado 213
 
-  213 expresion_condicional: SI . expresion ENTONCES expresion
-  214                      | SI . expresion ENTONCES expresion SINO expresion
+  216 expresion_condicional: SI . expresion ENTONCES expresion
+  217                      | SI . expresion ENTONCES expresion SINO expresion
 
     FALSO          desplazar e ir al estado 122
     OBJETO         desplazar e ir al estado 123
@@ -3314,8 +3306,8 @@ Estado 213
 
 Estado 214
 
-  204 enumeraciones: '[' varias_expresiones . ']'
-  207 varias_expresiones: varias_expresiones . ',' expresion
+  207 enumeraciones: '[' varias_expresiones . ']'
+  210 varias_expresiones: varias_expresiones . ',' expresion
 
     ','  desplazar e ir al estado 291
     ']'  desplazar e ir al estado 292
@@ -3323,117 +3315,117 @@ Estado 214
 
 Estado 215
 
-  203 enumeraciones: '[' expresion_condicional . ']'
+  205 enumeraciones: '[' expresion_condicional . ']'
+  206              | '[' expresion_condicional . varias_clausulas_iteracion ']'
 
-    ']'  desplazar e ir al estado 293
+    MIENTRAS  desplazar e ir al estado 167
+    PARA      desplazar e ir al estado 168
+    REPETIR   desplazar e ir al estado 169
+    ']'       desplazar e ir al estado 293
+
+    clausula_iteracion          ir al estado 294
+    varias_clausulas_iteracion  ir al estado 295
 
 
 Estado 216
 
-  208 varias_expresiones: expresion .
+  211 varias_expresiones: expresion .
 
-    $default  reduce usando la regla 208 (varias_expresiones)
+    $default  reduce usando la regla 211 (varias_expresiones)
 
 
 Estado 217
 
-  215 clave_valor: CTC_CADENA . FLECHA expresion
+  218 clave_valor: CTC_CADENA . FLECHA expresion
 
-    FLECHA  desplazar e ir al estado 294
+    FLECHA  desplazar e ir al estado 296
 
 
 Estado 218
 
-  216 campo_valor: IDENTIFICADOR . FLECHA expresion
+  219 campo_valor: IDENTIFICADOR . FLECHA expresion
 
-    FLECHA  desplazar e ir al estado 295
+    FLECHA  desplazar e ir al estado 297
 
 
 Estado 219
 
-  205 enumeraciones: '{' varias_clave_valor . '}'
-  209 varias_clave_valor: varias_clave_valor . ',' clave_valor
-
-    ','  desplazar e ir al estado 296
-    '}'  desplazar e ir al estado 297
-
-
-Estado 220
-
-  206 enumeraciones: '{' varias_campo_valor . '}'
-  211 varias_campo_valor: varias_campo_valor . ',' campo_valor
+  208 enumeraciones: '{' varias_clave_valor . '}'
+  212 varias_clave_valor: varias_clave_valor . ',' clave_valor
 
     ','  desplazar e ir al estado 298
     '}'  desplazar e ir al estado 299
 
 
+Estado 220
+
+  209 enumeraciones: '{' varias_campo_valor . '}'
+  214 varias_campo_valor: varias_campo_valor . ',' campo_valor
+
+    ','  desplazar e ir al estado 300
+    '}'  desplazar e ir al estado 301
+
+
 Estado 221
 
-  210 varias_clave_valor: clave_valor .
+  213 varias_clave_valor: clave_valor .
 
-    $default  reduce usando la regla 210 (varias_clave_valor)
+    $default  reduce usando la regla 213 (varias_clave_valor)
 
 
 Estado 222
 
-  212 varias_campo_valor: campo_valor .
+  215 varias_campo_valor: campo_valor .
 
-    $default  reduce usando la regla 212 (varias_campo_valor)
+    $default  reduce usando la regla 215 (varias_campo_valor)
 
 
 Estado 223
 
-  222 operadorNEG: '~' operadorDES .
-  231 operadorDES: operadorDES . DESPI operadorSR
-  232            | operadorDES . DESPD operadorSR
+  225 operadorNEG: '~' operadorDES .
+  234 operadorDES: operadorDES . DESPI operadorSR
+  235            | operadorDES . DESPD operadorSR
 
-    DESPI  desplazar e ir al estado 229
-    DESPD  desplazar e ir al estado 230
+    DESPI  desplazar e ir al estado 228
+    DESPD  desplazar e ir al estado 229
 
-    $default  reduce usando la regla 222 (operadorNEG)
+    $default  reduce usando la regla 225 (operadorNEG)
 
 
 Estado 224
 
-  246 operadorUN: '-' primario .
+  249 operadorUN: '-' primario .
 
-    $default  reduce usando la regla 246 (operadorUN)
+    $default  reduce usando la regla 249 (operadorUN)
 
 
 Estado 225
 
   146 instruccion_casos: CASOS expresion ES . uno_o_mas_casos FIN CASOS
 
-    CUANDO  desplazar e ir al estado 300
+    CUANDO  desplazar e ir al estado 302
 
-    caso             ir al estado 301
-    uno_o_mas_casos  ir al estado 302
+    caso             ir al estado 303
+    uno_o_mas_casos  ir al estado 304
 
 
 Estado 226
 
-  218 operadorOR: operadorAND OR .
+  221 operadorOR: operadorAND OR .
 
-    $default  reduce usando la regla 218 (operadorOR)
+    $default  reduce usando la regla 221 (operadorOR)
 
 
 Estado 227
 
-  220 operadorAND: operadorNEG AND .
+  223 operadorAND: operadorNEG AND .
 
-    $default  reduce usando la regla 220 (operadorAND)
+    $default  reduce usando la regla 223 (operadorAND)
 
 
 Estado 228
 
-  227 operadorASIG: operadorDES FLECHA .
-
-    $default  reduce usando la regla 227 (operadorASIG)
-
-
-Estado 229
-
-  231 operadorDES: operadorDES DESPI . operadorSR
+  234 operadorDES: operadorDES DESPI . operadorSR
 
     FALSO          desplazar e ir al estado 122
     OBJETO         desplazar e ir al estado 123
@@ -3456,7 +3448,39 @@ Estado 229
     literal              ir al estado 138
     objeto               ir al estado 139
     enumeraciones        ir al estado 140
-    operadorSR           ir al estado 303
+    operadorSR           ir al estado 305
+    operadorMDM          ir al estado 148
+    operadorPOT          ir al estado 149
+    operadorINCDEC       ir al estado 150
+    operadorUN           ir al estado 151
+
+
+Estado 229
+
+  235 operadorDES: operadorDES DESPD . operadorSR
+
+    FALSO          desplazar e ir al estado 122
+    OBJETO         desplazar e ir al estado 123
+    VERDADERO      desplazar e ir al estado 124
+    CTC_CARACTER   desplazar e ir al estado 125
+    CTC_CADENA     desplazar e ir al estado 126
+    IDENTIFICADOR  desplazar e ir al estado 33
+    CTC_ENTERA     desplazar e ir al estado 127
+    CTC_REAL       desplazar e ir al estado 128
+    INC            desplazar e ir al estado 129
+    DEC            desplazar e ir al estado 130
+    '('            desplazar e ir al estado 131
+    '['            desplazar e ir al estado 132
+    '{'            desplazar e ir al estado 133
+    '-'            desplazar e ir al estado 135
+
+    nombre               ir al estado 78
+    llamada_subprograma  ir al estado 136
+    primario             ir al estado 137
+    literal              ir al estado 138
+    objeto               ir al estado 139
+    enumeraciones        ir al estado 140
+    operadorSR           ir al estado 306
     operadorMDM          ir al estado 148
     operadorPOT          ir al estado 149
     operadorINCDEC       ir al estado 150
@@ -3465,74 +3489,49 @@ Estado 229
 
 Estado 230
 
-  232 operadorDES: operadorDES DESPD . operadorSR
-
-    FALSO          desplazar e ir al estado 122
-    OBJETO         desplazar e ir al estado 123
-    VERDADERO      desplazar e ir al estado 124
-    CTC_CARACTER   desplazar e ir al estado 125
-    CTC_CADENA     desplazar e ir al estado 126
-    IDENTIFICADOR  desplazar e ir al estado 33
-    CTC_ENTERA     desplazar e ir al estado 127
-    CTC_REAL       desplazar e ir al estado 128
-    INC            desplazar e ir al estado 129
-    DEC            desplazar e ir al estado 130
-    '('            desplazar e ir al estado 131
-    '['            desplazar e ir al estado 132
-    '{'            desplazar e ir al estado 133
-    '-'            desplazar e ir al estado 135
-
-    nombre               ir al estado 78
-    llamada_subprograma  ir al estado 136
-    primario             ir al estado 137
-    literal              ir al estado 138
-    objeto               ir al estado 139
-    enumeraciones        ir al estado 140
-    operadorSR           ir al estado 304
-    operadorMDM          ir al estado 148
-    operadorPOT          ir al estado 149
-    operadorINCDEC       ir al estado 150
-    operadorUN           ir al estado 151
-
-
-Estado 231
-
-  226 operadorASIG: operadorDES LEQ .
-
-    $default  reduce usando la regla 226 (operadorASIG)
-
-
-Estado 232
-
-  229 operadorASIG: operadorDES NEQ .
+  229 operadorASIG: operadorDES LEQ .
 
     $default  reduce usando la regla 229 (operadorASIG)
 
 
+Estado 231
+
+  230 operadorASIG: operadorDES CEQ .
+
+    $default  reduce usando la regla 230 (operadorASIG)
+
+
+Estado 232
+
+  232 operadorASIG: operadorDES NEQ .
+
+    $default  reduce usando la regla 232 (operadorASIG)
+
+
 Estado 233
 
-  224 operadorASIG: operadorDES '<' .
+  227 operadorASIG: operadorDES '<' .
 
-    $default  reduce usando la regla 224 (operadorASIG)
+    $default  reduce usando la regla 227 (operadorASIG)
 
 
 Estado 234
 
-  225 operadorASIG: operadorDES '>' .
-
-    $default  reduce usando la regla 225 (operadorASIG)
-
-
-Estado 235
-
-  228 operadorASIG: operadorDES '=' .
+  228 operadorASIG: operadorDES '>' .
 
     $default  reduce usando la regla 228 (operadorASIG)
 
 
+Estado 235
+
+  231 operadorASIG: operadorDES '=' .
+
+    $default  reduce usando la regla 231 (operadorASIG)
+
+
 Estado 236
 
-  234 operadorSR: operadorSR '+' . operadorMDM
+  237 operadorSR: operadorSR '+' . operadorMDM
 
     FALSO          desplazar e ir al estado 122
     OBJETO         desplazar e ir al estado 123
@@ -3555,7 +3554,7 @@ Estado 236
     literal              ir al estado 138
     objeto               ir al estado 139
     enumeraciones        ir al estado 140
-    operadorMDM          ir al estado 305
+    operadorMDM          ir al estado 307
     operadorPOT          ir al estado 149
     operadorINCDEC       ir al estado 150
     operadorUN           ir al estado 151
@@ -3563,7 +3562,7 @@ Estado 236
 
 Estado 237
 
-  235 operadorSR: operadorSR '-' . operadorMDM
+  238 operadorSR: operadorSR '-' . operadorMDM
 
     FALSO          desplazar e ir al estado 122
     OBJETO         desplazar e ir al estado 123
@@ -3586,7 +3585,7 @@ Estado 237
     literal              ir al estado 138
     objeto               ir al estado 139
     enumeraciones        ir al estado 140
-    operadorMDM          ir al estado 306
+    operadorMDM          ir al estado 308
     operadorPOT          ir al estado 149
     operadorINCDEC       ir al estado 150
     operadorUN           ir al estado 151
@@ -3594,67 +3593,7 @@ Estado 237
 
 Estado 238
 
-  237 operadorMDM: operadorMDM '*' . operadorPOT
-
-    FALSO          desplazar e ir al estado 122
-    OBJETO         desplazar e ir al estado 123
-    VERDADERO      desplazar e ir al estado 124
-    CTC_CARACTER   desplazar e ir al estado 125
-    CTC_CADENA     desplazar e ir al estado 126
-    IDENTIFICADOR  desplazar e ir al estado 33
-    CTC_ENTERA     desplazar e ir al estado 127
-    CTC_REAL       desplazar e ir al estado 128
-    INC            desplazar e ir al estado 129
-    DEC            desplazar e ir al estado 130
-    '('            desplazar e ir al estado 131
-    '['            desplazar e ir al estado 132
-    '{'            desplazar e ir al estado 133
-    '-'            desplazar e ir al estado 135
-
-    nombre               ir al estado 78
-    llamada_subprograma  ir al estado 136
-    primario             ir al estado 137
-    literal              ir al estado 138
-    objeto               ir al estado 139
-    enumeraciones        ir al estado 140
-    operadorPOT          ir al estado 307
-    operadorINCDEC       ir al estado 150
-    operadorUN           ir al estado 151
-
-
-Estado 239
-
-  238 operadorMDM: operadorMDM '/' . operadorPOT
-
-    FALSO          desplazar e ir al estado 122
-    OBJETO         desplazar e ir al estado 123
-    VERDADERO      desplazar e ir al estado 124
-    CTC_CARACTER   desplazar e ir al estado 125
-    CTC_CADENA     desplazar e ir al estado 126
-    IDENTIFICADOR  desplazar e ir al estado 33
-    CTC_ENTERA     desplazar e ir al estado 127
-    CTC_REAL       desplazar e ir al estado 128
-    INC            desplazar e ir al estado 129
-    DEC            desplazar e ir al estado 130
-    '('            desplazar e ir al estado 131
-    '['            desplazar e ir al estado 132
-    '{'            desplazar e ir al estado 133
-    '-'            desplazar e ir al estado 135
-
-    nombre               ir al estado 78
-    llamada_subprograma  ir al estado 136
-    primario             ir al estado 137
-    literal              ir al estado 138
-    objeto               ir al estado 139
-    enumeraciones        ir al estado 140
-    operadorPOT          ir al estado 308
-    operadorINCDEC       ir al estado 150
-    operadorUN           ir al estado 151
-
-
-Estado 240
-
-  239 operadorMDM: operadorMDM '\\' . operadorPOT
+  240 operadorMDM: operadorMDM '*' . operadorPOT
 
     FALSO          desplazar e ir al estado 122
     OBJETO         desplazar e ir al estado 123
@@ -3682,9 +3621,9 @@ Estado 240
     operadorUN           ir al estado 151
 
 
-Estado 241
+Estado 239
 
-  241 operadorPOT: operadorINCDEC '^' . operadorPOT
+  241 operadorMDM: operadorMDM '/' . operadorPOT
 
     FALSO          desplazar e ir al estado 122
     OBJETO         desplazar e ir al estado 123
@@ -3708,6 +3647,66 @@ Estado 241
     objeto               ir al estado 139
     enumeraciones        ir al estado 140
     operadorPOT          ir al estado 310
+    operadorINCDEC       ir al estado 150
+    operadorUN           ir al estado 151
+
+
+Estado 240
+
+  242 operadorMDM: operadorMDM '\\' . operadorPOT
+
+    FALSO          desplazar e ir al estado 122
+    OBJETO         desplazar e ir al estado 123
+    VERDADERO      desplazar e ir al estado 124
+    CTC_CARACTER   desplazar e ir al estado 125
+    CTC_CADENA     desplazar e ir al estado 126
+    IDENTIFICADOR  desplazar e ir al estado 33
+    CTC_ENTERA     desplazar e ir al estado 127
+    CTC_REAL       desplazar e ir al estado 128
+    INC            desplazar e ir al estado 129
+    DEC            desplazar e ir al estado 130
+    '('            desplazar e ir al estado 131
+    '['            desplazar e ir al estado 132
+    '{'            desplazar e ir al estado 133
+    '-'            desplazar e ir al estado 135
+
+    nombre               ir al estado 78
+    llamada_subprograma  ir al estado 136
+    primario             ir al estado 137
+    literal              ir al estado 138
+    objeto               ir al estado 139
+    enumeraciones        ir al estado 140
+    operadorPOT          ir al estado 311
+    operadorINCDEC       ir al estado 150
+    operadorUN           ir al estado 151
+
+
+Estado 241
+
+  244 operadorPOT: operadorINCDEC '^' . operadorPOT
+
+    FALSO          desplazar e ir al estado 122
+    OBJETO         desplazar e ir al estado 123
+    VERDADERO      desplazar e ir al estado 124
+    CTC_CARACTER   desplazar e ir al estado 125
+    CTC_CADENA     desplazar e ir al estado 126
+    IDENTIFICADOR  desplazar e ir al estado 33
+    CTC_ENTERA     desplazar e ir al estado 127
+    CTC_REAL       desplazar e ir al estado 128
+    INC            desplazar e ir al estado 129
+    DEC            desplazar e ir al estado 130
+    '('            desplazar e ir al estado 131
+    '['            desplazar e ir al estado 132
+    '{'            desplazar e ir al estado 133
+    '-'            desplazar e ir al estado 135
+
+    nombre               ir al estado 78
+    llamada_subprograma  ir al estado 136
+    primario             ir al estado 137
+    literal              ir al estado 138
+    objeto               ir al estado 139
+    enumeraciones        ir al estado 140
+    operadorPOT          ir al estado 312
     operadorINCDEC       ir al estado 150
     operadorUN           ir al estado 151
 
@@ -3743,7 +3742,7 @@ Estado 244
     $default  reduce usando la regla 159 (cero_mas_identificador1)
 
     nombre                             ir al estado 78
-    varias_instrucciones               ir al estado 311
+    varias_instrucciones               ir al estado 313
     instruccion                        ir al estado 80
     instruccion_asignacion             ir al estado 81
     instruccion_devolver               ir al estado 82
@@ -3763,7 +3762,7 @@ Estado 245
 
   175 instruccion_captura_excepcion: PRUEBA varias_instrucciones clausulas . FIN PRUEBA
 
-    FIN  desplazar e ir al estado 312
+    FIN  desplazar e ir al estado 314
 
 
 Estado 246
@@ -3775,7 +3774,7 @@ Estado 246
 
     $default  reduce usando la regla 176 (clausulas)
 
-    clausula_finalmente  ir al estado 313
+    clausula_finalmente  ir al estado 315
 
 
 Estado 247
@@ -3783,10 +3782,10 @@ Estado 247
   179 clausulas_excepcion: varias_clausula_excepcion_especifica . clausula_excepcion_general
   180 varias_clausula_excepcion_especifica: varias_clausula_excepcion_especifica . clausula_excepcion_especifica
 
-    EXCEPCION  desplazar e ir al estado 314
+    EXCEPCION  desplazar e ir al estado 316
 
-    clausula_excepcion_especifica  ir al estado 315
-    clausula_excepcion_general     ir al estado 316
+    clausula_excepcion_especifica  ir al estado 317
+    clausula_excepcion_general     ir al estado 318
 
 
 Estado 248
@@ -3807,7 +3806,7 @@ Estado 250
 
   168 instruccion_interrupcion: SALIR cero_o_uno_de_identificador cero_o_uno_cuando . ';'
 
-    ';'  desplazar e ir al estado 317
+    ';'  desplazar e ir al estado 319
 
 
 Estado 251
@@ -3827,7 +3826,7 @@ Estado 251
     $default  reduce usando la regla 159 (cero_mas_identificador1)
 
     nombre                             ir al estado 78
-    varias_instrucciones               ir al estado 318
+    varias_instrucciones               ir al estado 320
     instruccion                        ir al estado 80
     instruccion_asignacion             ir al estado 81
     instruccion_devolver               ir al estado 82
@@ -3859,21 +3858,21 @@ Estado 253
 
 Estado 254
 
-   12 nombre: IDENTIFICADOR .
-   13       | IDENTIFICADOR . CUATRO_PUNTOS IDENTIFICADOR
+   12 nombre: IDENTIFICADOR . CUATRO_PUNTOS IDENTIFICADOR
+   13       | IDENTIFICADOR .
   142 definicion_parametro: IDENTIFICADOR . ASIGNACION expresion
 
     CUATRO_PUNTOS  desplazar e ir al estado 47
-    ASIGNACION     desplazar e ir al estado 319
+    ASIGNACION     desplazar e ir al estado 321
 
-    $default  reduce usando la regla 12 (nombre)
+    $default  reduce usando la regla 13 (nombre)
 
 
 Estado 255
 
   136 llamada_subprograma: nombre '(' cero_definicion_parametro . ')'
 
-    ')'  desplazar e ir al estado 320
+    ')'  desplazar e ir al estado 322
 
 
 Estado 256
@@ -3881,7 +3880,7 @@ Estado 256
   137 cero_definicion_parametro: varias_definicion_parametro .
   139 varias_definicion_parametro: varias_definicion_parametro . ',' definicion_parametro
 
-    ','  desplazar e ir al estado 321
+    ','  desplazar e ir al estado 323
 
     $default  reduce usando la regla 137 (cero_definicion_parametro)
 
@@ -3911,22 +3910,22 @@ Estado 260
 
   160 clausula_iteracion: PARA IDENTIFICADOR . cero_o_uno_especificacion_tipo EN expresion
 
-    ':'  desplazar e ir al estado 322
+    DOS_PUNTOS  desplazar e ir al estado 324
 
     $default  reduce usando la regla 164 (cero_o_uno_especificacion_tipo)
 
-    cero_o_uno_especificacion_tipo  ir al estado 323
+    cero_o_uno_especificacion_tipo  ir al estado 325
 
 
 Estado 261
 
   161 clausula_iteracion: REPETIR IDENTIFICADOR . cero_o_uno_especificacion_tipo EN rango cero_o_uno_descendente
 
-    ':'  desplazar e ir al estado 322
+    DOS_PUNTOS  desplazar e ir al estado 324
 
     $default  reduce usando la regla 164 (cero_o_uno_especificacion_tipo)
 
-    cero_o_uno_especificacion_tipo  ir al estado 324
+    cero_o_uno_especificacion_tipo  ir al estado 326
 
 
 Estado 262
@@ -3936,7 +3935,7 @@ Estado 262
 
     CASOS          desplazar e ir al estado 69
     DEVOLVER       desplazar e ir al estado 70
-    FIN            desplazar e ir al estado 325
+    FIN            desplazar e ir al estado 327
     LANZA          desplazar e ir al estado 71
     PRUEBA         desplazar e ir al estado 72
     SALIR          desplazar e ir al estado 73
@@ -3973,10 +3972,10 @@ Estado 263
 Estado 264
 
   199 objeto: objeto '[' varias_expresiones . ']'
-  207 varias_expresiones: varias_expresiones . ',' expresion
+  210 varias_expresiones: varias_expresiones . ',' expresion
 
     ','  desplazar e ir al estado 291
-    ']'  desplazar e ir al estado 326
+    ']'  desplazar e ir al estado 328
 
 
 Estado 265
@@ -3991,15 +3990,15 @@ Estado 266
   200 objeto: objeto '{' varias_ctc_cadena . '}'
   201 varias_ctc_cadena: varias_ctc_cadena . ',' CTC_CADENA
 
-    ','  desplazar e ir al estado 327
-    '}'  desplazar e ir al estado 328
+    ','  desplazar e ir al estado 329
+    '}'  desplazar e ir al estado 330
 
 
 Estado 267
 
   123 instruccion_asignacion: objeto op_asignacion expresion . ';'
 
-    ';'  desplazar e ir al estado 329
+    ';'  desplazar e ir al estado 331
 
 
 Estado 268
@@ -4023,22 +4022,22 @@ Estado 270
 
     DICCIONARIO    desplazar e ir al estado 58
     LISTA          desplazar e ir al estado 59
-    REFERENCIA     desplazar e ir al estado 330
+    REFERENCIA     desplazar e ir al estado 332
     SIGNO          desplazar e ir al estado 60
     TABLA          desplazar e ir al estado 61
-    VALOR          desplazar e ir al estado 331
+    VALOR          desplazar e ir al estado 333
     IDENTIFICADOR  desplazar e ir al estado 33
 
     $default  reduce usando la regla 37 (cero_o_uno_signo)
 
     nombre                ir al estado 62
-    especificacion_tipo   ir al estado 332
+    especificacion_tipo   ir al estado 334
     tipo_no_estructurado  ir al estado 64
     tipo_escalar          ir al estado 65
     cero_o_uno_signo      ir al estado 66
     tipo_tabla            ir al estado 67
     tipo_diccionario      ir al estado 68
-    modo                  ir al estado 333
+    modo                  ir al estado 335
 
 
 Estado 271
@@ -4062,37 +4061,37 @@ Estado 273
     IDENTIFICADOR  desplazar e ir al estado 33
 
     nombre          ir al estado 34
-    varios_nombres  ir al estado 334
+    varios_nombres  ir al estado 336
 
 
 Estado 274
 
    68 clase: CLASE cero_uno_ultima cero_uno_superclases . varias_declaraciones_componente FIN CLASE
 
-    ABSTRACTO      desplazar e ir al estado 335
-    CONSTRUCTOR    desplazar e ir al estado 336
-    DESTRUCTOR     desplazar e ir al estado 337
-    ESPECIFICO     desplazar e ir al estado 338
-    FINAL          desplazar e ir al estado 339
-    GENERICO       desplazar e ir al estado 340
-    PRIVADO        desplazar e ir al estado 341
-    PROTEGIDO      desplazar e ir al estado 342
-    PUBLICO        desplazar e ir al estado 343
+    ABSTRACTO      desplazar e ir al estado 337
+    CONSTRUCTOR    desplazar e ir al estado 338
+    DESTRUCTOR     desplazar e ir al estado 339
+    ESPECIFICO     desplazar e ir al estado 340
+    FINAL          desplazar e ir al estado 341
+    GENERICO       desplazar e ir al estado 342
+    PRIVADO        desplazar e ir al estado 343
+    PROTEGIDO      desplazar e ir al estado 344
+    PUBLICO        desplazar e ir al estado 345
     TIPO           desplazar e ir al estado 19
     IDENTIFICADOR  desplazar e ir al estado 20
 
     $default  reduce usando la regla 85 (cero_modificadores)
 
     varios_identificadores           ir al estado 22
-    declaracion_objeto               ir al estado 344
-    declaracion_tipo                 ir al estado 345
-    declaracion_componente           ir al estado 346
-    varias_declaraciones_componente  ir al estado 347
-    visibilidad                      ir al estado 348
-    componente                       ir al estado 349
-    cero_modificadores               ir al estado 350
-    varios_modificadores             ir al estado 351
-    modificador                      ir al estado 352
+    declaracion_objeto               ir al estado 346
+    declaracion_tipo                 ir al estado 347
+    declaracion_componente           ir al estado 348
+    varias_declaraciones_componente  ir al estado 349
+    visibilidad                      ir al estado 350
+    componente                       ir al estado 351
+    cero_modificadores               ir al estado 352
+    varios_modificadores             ir al estado 353
+    modificador                      ir al estado 354
 
 
 Estado 275
@@ -4108,7 +4107,7 @@ Estado 276
 
     IDENTIFICADOR  desplazar e ir al estado 192
 
-    varios_elemento_enumeracion  ir al estado 353
+    varios_elemento_enumeracion  ir al estado 355
     elemento_enumeracion         ir al estado 194
 
 
@@ -4138,7 +4137,7 @@ Estado 277
     literal              ir al estado 138
     objeto               ir al estado 139
     enumeraciones        ir al estado 140
-    expresion            ir al estado 354
+    expresion            ir al estado 356
     operadorOR           ir al estado 142
     operadorAND          ir al estado 143
     operadorNEG          ir al estado 144
@@ -4162,7 +4161,7 @@ Estado 279
 
    61 tipo_enumerado: ENUMERACION varios_elemento_enumeracion FIN . ENUMERACION
 
-    ENUMERACION  desplazar e ir al estado 355
+    ENUMERACION  desplazar e ir al estado 357
 
 
 Estado 280
@@ -4171,7 +4170,7 @@ Estado 280
 
     IDENTIFICADOR  desplazar e ir al estado 192
 
-    elemento_enumeracion  ir al estado 356
+    elemento_enumeracion  ir al estado 358
 
 
 Estado 281
@@ -4188,7 +4187,7 @@ Estado 281
     $default  reduce usando la regla 37 (cero_o_uno_signo)
 
     nombre                ir al estado 62
-    especificacion_tipo   ir al estado 357
+    especificacion_tipo   ir al estado 359
     tipo_no_estructurado  ir al estado 64
     tipo_escalar          ir al estado 65
     cero_o_uno_signo      ir al estado 66
@@ -4200,7 +4199,7 @@ Estado 282
 
    56 tipo_registro: REGISTRO varios_campos FIN . REGISTRO
 
-    REGISTRO  desplazar e ir al estado 358
+    REGISTRO  desplazar e ir al estado 360
 
 
 Estado 283
@@ -4214,7 +4213,7 @@ Estado 284
 
    25 declaracion_objeto: varios_identificadores ':' CONSTANTE especificacion_tipo ASIGNACION expresion . ';'
 
-    ';'  desplazar e ir al estado 359
+    ';'  desplazar e ir al estado 361
 
 
 Estado 285
@@ -4243,7 +4242,7 @@ Estado 285
     literal              ir al estado 138
     objeto               ir al estado 139
     enumeraciones        ir al estado 140
-    expresion            ir al estado 360
+    expresion            ir al estado 362
     operadorOR           ir al estado 142
     operadorAND          ir al estado 143
     operadorNEG          ir al estado 144
@@ -4284,13 +4283,13 @@ Estado 287
     '-'            desplazar e ir al estado 135
 
     nombre               ir al estado 78
-    rango                ir al estado 361
+    rango                ir al estado 363
     llamada_subprograma  ir al estado 136
     primario             ir al estado 137
     literal              ir al estado 138
     objeto               ir al estado 139
     enumeraciones        ir al estado 140
-    expresion            ir al estado 362
+    expresion            ir al estado 364
     operadorOR           ir al estado 142
     operadorAND          ir al estado 143
     operadorNEG          ir al estado 144
@@ -4319,107 +4318,15 @@ Estado 289
 
 Estado 290
 
-  213 expresion_condicional: SI expresion . ENTONCES expresion
-  214                      | SI expresion . ENTONCES expresion SINO expresion
+  216 expresion_condicional: SI expresion . ENTONCES expresion
+  217                      | SI expresion . ENTONCES expresion SINO expresion
 
-    ENTONCES  desplazar e ir al estado 363
+    ENTONCES  desplazar e ir al estado 365
 
 
 Estado 291
 
-  207 varias_expresiones: varias_expresiones ',' . expresion
-
-    FALSO          desplazar e ir al estado 122
-    OBJETO         desplazar e ir al estado 123
-    VERDADERO      desplazar e ir al estado 124
-    CTC_CARACTER   desplazar e ir al estado 125
-    CTC_CADENA     desplazar e ir al estado 126
-    IDENTIFICADOR  desplazar e ir al estado 33
-    CTC_ENTERA     desplazar e ir al estado 127
-    CTC_REAL       desplazar e ir al estado 128
-    INC            desplazar e ir al estado 129
-    DEC            desplazar e ir al estado 130
-    '('            desplazar e ir al estado 131
-    '['            desplazar e ir al estado 132
-    '{'            desplazar e ir al estado 133
-    '~'            desplazar e ir al estado 134
-    '-'            desplazar e ir al estado 135
-
-    nombre               ir al estado 78
-    llamada_subprograma  ir al estado 136
-    primario             ir al estado 137
-    literal              ir al estado 138
-    objeto               ir al estado 139
-    enumeraciones        ir al estado 140
-    expresion            ir al estado 364
-    operadorOR           ir al estado 142
-    operadorAND          ir al estado 143
-    operadorNEG          ir al estado 144
-    operadorASIG         ir al estado 145
-    operadorDES          ir al estado 146
-    operadorSR           ir al estado 147
-    operadorMDM          ir al estado 148
-    operadorPOT          ir al estado 149
-    operadorINCDEC       ir al estado 150
-    operadorUN           ir al estado 151
-
-
-Estado 292
-
-  204 enumeraciones: '[' varias_expresiones ']' .
-
-    $default  reduce usando la regla 204 (enumeraciones)
-
-
-Estado 293
-
-  203 enumeraciones: '[' expresion_condicional ']' .
-
-    $default  reduce usando la regla 203 (enumeraciones)
-
-
-Estado 294
-
-  215 clave_valor: CTC_CADENA FLECHA . expresion
-
-    FALSO          desplazar e ir al estado 122
-    OBJETO         desplazar e ir al estado 123
-    VERDADERO      desplazar e ir al estado 124
-    CTC_CARACTER   desplazar e ir al estado 125
-    CTC_CADENA     desplazar e ir al estado 126
-    IDENTIFICADOR  desplazar e ir al estado 33
-    CTC_ENTERA     desplazar e ir al estado 127
-    CTC_REAL       desplazar e ir al estado 128
-    INC            desplazar e ir al estado 129
-    DEC            desplazar e ir al estado 130
-    '('            desplazar e ir al estado 131
-    '['            desplazar e ir al estado 132
-    '{'            desplazar e ir al estado 133
-    '~'            desplazar e ir al estado 134
-    '-'            desplazar e ir al estado 135
-
-    nombre               ir al estado 78
-    llamada_subprograma  ir al estado 136
-    primario             ir al estado 137
-    literal              ir al estado 138
-    objeto               ir al estado 139
-    enumeraciones        ir al estado 140
-    expresion            ir al estado 365
-    operadorOR           ir al estado 142
-    operadorAND          ir al estado 143
-    operadorNEG          ir al estado 144
-    operadorASIG         ir al estado 145
-    operadorDES          ir al estado 146
-    operadorSR           ir al estado 147
-    operadorMDM          ir al estado 148
-    operadorPOT          ir al estado 149
-    operadorINCDEC       ir al estado 150
-    operadorUN           ir al estado 151
-
-
-Estado 295
-
-  216 campo_valor: IDENTIFICADOR FLECHA . expresion
+  210 varias_expresiones: varias_expresiones ',' . expresion
 
     FALSO          desplazar e ir al estado 122
     OBJETO         desplazar e ir al estado 123
@@ -4456,45 +4363,46 @@ Estado 295
     operadorUN           ir al estado 151
 
 
-Estado 296
+Estado 292
 
-  209 varias_clave_valor: varias_clave_valor ',' . clave_valor
+  207 enumeraciones: '[' varias_expresiones ']' .
 
-    CTC_CADENA  desplazar e ir al estado 217
-
-    clave_valor  ir al estado 367
+    $default  reduce usando la regla 207 (enumeraciones)
 
 
-Estado 297
+Estado 293
 
-  205 enumeraciones: '{' varias_clave_valor '}' .
+  205 enumeraciones: '[' expresion_condicional ']' .
 
     $default  reduce usando la regla 205 (enumeraciones)
 
 
-Estado 298
+Estado 294
 
-  211 varias_campo_valor: varias_campo_valor ',' . campo_valor
+  204 varias_clausulas_iteracion: clausula_iteracion .
 
-    IDENTIFICADOR  desplazar e ir al estado 218
-
-    campo_valor  ir al estado 368
+    $default  reduce usando la regla 204 (varias_clausulas_iteracion)
 
 
-Estado 299
+Estado 295
 
-  206 enumeraciones: '{' varias_campo_valor '}' .
+  203 varias_clausulas_iteracion: varias_clausulas_iteracion . clausula_iteracion
+  206 enumeraciones: '[' expresion_condicional varias_clausulas_iteracion . ']'
 
-    $default  reduce usando la regla 206 (enumeraciones)
+    MIENTRAS  desplazar e ir al estado 167
+    PARA      desplazar e ir al estado 168
+    REPETIR   desplazar e ir al estado 169
+    ']'       desplazar e ir al estado 367
+
+    clausula_iteracion  ir al estado 368
 
 
-Estado 300
+Estado 296
 
-  147 caso: CUANDO . entradas FLECHA varias_instrucciones
+  218 clave_valor: CTC_CADENA FLECHA . expresion
 
     FALSO          desplazar e ir al estado 122
     OBJETO         desplazar e ir al estado 123
-    OTRO           desplazar e ir al estado 369
     VERDADERO      desplazar e ir al estado 124
     CTC_CARACTER   desplazar e ir al estado 125
     CTC_CADENA     desplazar e ir al estado 126
@@ -4511,14 +4419,11 @@ Estado 300
 
     nombre               ir al estado 78
     llamada_subprograma  ir al estado 136
-    entradas             ir al estado 370
-    entrada              ir al estado 371
-    varias_entradas      ir al estado 372
     primario             ir al estado 137
     literal              ir al estado 138
     objeto               ir al estado 139
     enumeraciones        ir al estado 140
-    expresion            ir al estado 373
+    expresion            ir al estado 369
     operadorOR           ir al estado 142
     operadorAND          ir al estado 143
     operadorNEG          ir al estado 144
@@ -4531,105 +4436,219 @@ Estado 300
     operadorUN           ir al estado 151
 
 
+Estado 297
+
+  219 campo_valor: IDENTIFICADOR FLECHA . expresion
+
+    FALSO          desplazar e ir al estado 122
+    OBJETO         desplazar e ir al estado 123
+    VERDADERO      desplazar e ir al estado 124
+    CTC_CARACTER   desplazar e ir al estado 125
+    CTC_CADENA     desplazar e ir al estado 126
+    IDENTIFICADOR  desplazar e ir al estado 33
+    CTC_ENTERA     desplazar e ir al estado 127
+    CTC_REAL       desplazar e ir al estado 128
+    INC            desplazar e ir al estado 129
+    DEC            desplazar e ir al estado 130
+    '('            desplazar e ir al estado 131
+    '['            desplazar e ir al estado 132
+    '{'            desplazar e ir al estado 133
+    '~'            desplazar e ir al estado 134
+    '-'            desplazar e ir al estado 135
+
+    nombre               ir al estado 78
+    llamada_subprograma  ir al estado 136
+    primario             ir al estado 137
+    literal              ir al estado 138
+    objeto               ir al estado 139
+    enumeraciones        ir al estado 140
+    expresion            ir al estado 370
+    operadorOR           ir al estado 142
+    operadorAND          ir al estado 143
+    operadorNEG          ir al estado 144
+    operadorASIG         ir al estado 145
+    operadorDES          ir al estado 146
+    operadorSR           ir al estado 147
+    operadorMDM          ir al estado 148
+    operadorPOT          ir al estado 149
+    operadorINCDEC       ir al estado 150
+    operadorUN           ir al estado 151
+
+
+Estado 298
+
+  212 varias_clave_valor: varias_clave_valor ',' . clave_valor
+
+    CTC_CADENA  desplazar e ir al estado 217
+
+    clave_valor  ir al estado 371
+
+
+Estado 299
+
+  208 enumeraciones: '{' varias_clave_valor '}' .
+
+    $default  reduce usando la regla 208 (enumeraciones)
+
+
+Estado 300
+
+  214 varias_campo_valor: varias_campo_valor ',' . campo_valor
+
+    IDENTIFICADOR  desplazar e ir al estado 218
+
+    campo_valor  ir al estado 372
+
+
 Estado 301
+
+  209 enumeraciones: '{' varias_campo_valor '}' .
+
+    $default  reduce usando la regla 209 (enumeraciones)
+
+
+Estado 302
+
+  147 caso: CUANDO . entradas FLECHA varias_instrucciones
+
+    FALSO          desplazar e ir al estado 122
+    OBJETO         desplazar e ir al estado 123
+    OTRO           desplazar e ir al estado 373
+    VERDADERO      desplazar e ir al estado 124
+    CTC_CARACTER   desplazar e ir al estado 125
+    CTC_CADENA     desplazar e ir al estado 126
+    IDENTIFICADOR  desplazar e ir al estado 33
+    CTC_ENTERA     desplazar e ir al estado 127
+    CTC_REAL       desplazar e ir al estado 128
+    INC            desplazar e ir al estado 129
+    DEC            desplazar e ir al estado 130
+    '('            desplazar e ir al estado 131
+    '['            desplazar e ir al estado 132
+    '{'            desplazar e ir al estado 133
+    '~'            desplazar e ir al estado 134
+    '-'            desplazar e ir al estado 135
+
+    nombre               ir al estado 78
+    llamada_subprograma  ir al estado 136
+    entradas             ir al estado 374
+    entrada              ir al estado 375
+    varias_entradas      ir al estado 376
+    primario             ir al estado 137
+    literal              ir al estado 138
+    objeto               ir al estado 139
+    enumeraciones        ir al estado 140
+    expresion            ir al estado 377
+    operadorOR           ir al estado 142
+    operadorAND          ir al estado 143
+    operadorNEG          ir al estado 144
+    operadorASIG         ir al estado 145
+    operadorDES          ir al estado 146
+    operadorSR           ir al estado 147
+    operadorMDM          ir al estado 148
+    operadorPOT          ir al estado 149
+    operadorINCDEC       ir al estado 150
+    operadorUN           ir al estado 151
+
+
+Estado 303
 
   149 uno_o_mas_casos: caso .
 
     $default  reduce usando la regla 149 (uno_o_mas_casos)
 
 
-Estado 302
+Estado 304
 
   146 instruccion_casos: CASOS expresion ES uno_o_mas_casos . FIN CASOS
   148 uno_o_mas_casos: uno_o_mas_casos . caso
 
-    CUANDO  desplazar e ir al estado 300
-    FIN     desplazar e ir al estado 374
+    CUANDO  desplazar e ir al estado 302
+    FIN     desplazar e ir al estado 378
 
-    caso  ir al estado 375
-
-
-Estado 303
-
-  231 operadorDES: operadorDES DESPI operadorSR .
-  234 operadorSR: operadorSR . '+' operadorMDM
-  235           | operadorSR . '-' operadorMDM
-
-    '+'  desplazar e ir al estado 236
-    '-'  desplazar e ir al estado 237
-
-    $default  reduce usando la regla 231 (operadorDES)
-
-
-Estado 304
-
-  232 operadorDES: operadorDES DESPD operadorSR .
-  234 operadorSR: operadorSR . '+' operadorMDM
-  235           | operadorSR . '-' operadorMDM
-
-    '+'  desplazar e ir al estado 236
-    '-'  desplazar e ir al estado 237
-
-    $default  reduce usando la regla 232 (operadorDES)
+    caso  ir al estado 379
 
 
 Estado 305
 
-  234 operadorSR: operadorSR '+' operadorMDM .
-  237 operadorMDM: operadorMDM . '*' operadorPOT
-  238            | operadorMDM . '/' operadorPOT
-  239            | operadorMDM . '\\' operadorPOT
+  234 operadorDES: operadorDES DESPI operadorSR .
+  237 operadorSR: operadorSR . '+' operadorMDM
+  238           | operadorSR . '-' operadorMDM
 
-    '*'   desplazar e ir al estado 238
-    '/'   desplazar e ir al estado 239
-    '\\'  desplazar e ir al estado 240
+    '+'  desplazar e ir al estado 236
+    '-'  desplazar e ir al estado 237
 
-    $default  reduce usando la regla 234 (operadorSR)
+    $default  reduce usando la regla 234 (operadorDES)
 
 
 Estado 306
 
-  235 operadorSR: operadorSR '-' operadorMDM .
-  237 operadorMDM: operadorMDM . '*' operadorPOT
-  238            | operadorMDM . '/' operadorPOT
-  239            | operadorMDM . '\\' operadorPOT
+  235 operadorDES: operadorDES DESPD operadorSR .
+  237 operadorSR: operadorSR . '+' operadorMDM
+  238           | operadorSR . '-' operadorMDM
+
+    '+'  desplazar e ir al estado 236
+    '-'  desplazar e ir al estado 237
+
+    $default  reduce usando la regla 235 (operadorDES)
+
+
+Estado 307
+
+  237 operadorSR: operadorSR '+' operadorMDM .
+  240 operadorMDM: operadorMDM . '*' operadorPOT
+  241            | operadorMDM . '/' operadorPOT
+  242            | operadorMDM . '\\' operadorPOT
 
     '*'   desplazar e ir al estado 238
     '/'   desplazar e ir al estado 239
     '\\'  desplazar e ir al estado 240
 
-    $default  reduce usando la regla 235 (operadorSR)
-
-
-Estado 307
-
-  237 operadorMDM: operadorMDM '*' operadorPOT .
-
-    $default  reduce usando la regla 237 (operadorMDM)
+    $default  reduce usando la regla 237 (operadorSR)
 
 
 Estado 308
 
-  238 operadorMDM: operadorMDM '/' operadorPOT .
+  238 operadorSR: operadorSR '-' operadorMDM .
+  240 operadorMDM: operadorMDM . '*' operadorPOT
+  241            | operadorMDM . '/' operadorPOT
+  242            | operadorMDM . '\\' operadorPOT
 
-    $default  reduce usando la regla 238 (operadorMDM)
+    '*'   desplazar e ir al estado 238
+    '/'   desplazar e ir al estado 239
+    '\\'  desplazar e ir al estado 240
+
+    $default  reduce usando la regla 238 (operadorSR)
 
 
 Estado 309
 
-  239 operadorMDM: operadorMDM '\\' operadorPOT .
+  240 operadorMDM: operadorMDM '*' operadorPOT .
 
-    $default  reduce usando la regla 239 (operadorMDM)
+    $default  reduce usando la regla 240 (operadorMDM)
 
 
 Estado 310
 
-  241 operadorPOT: operadorINCDEC '^' operadorPOT .
+  241 operadorMDM: operadorMDM '/' operadorPOT .
 
-    $default  reduce usando la regla 241 (operadorPOT)
+    $default  reduce usando la regla 241 (operadorMDM)
 
 
 Estado 311
+
+  242 operadorMDM: operadorMDM '\\' operadorPOT .
+
+    $default  reduce usando la regla 242 (operadorMDM)
+
+
+Estado 312
+
+  244 operadorPOT: operadorINCDEC '^' operadorPOT .
+
+    $default  reduce usando la regla 244 (operadorPOT)
+
+
+Estado 313
 
   111 varias_instrucciones: varias_instrucciones . instruccion
   184 clausula_finalmente: FINALMENTE varias_instrucciones .
@@ -4663,21 +4682,21 @@ Estado 311
     objeto                             ir al estado 92
 
 
-Estado 312
+Estado 314
 
   175 instruccion_captura_excepcion: PRUEBA varias_instrucciones clausulas FIN . PRUEBA
 
-    PRUEBA  desplazar e ir al estado 376
+    PRUEBA  desplazar e ir al estado 380
 
 
-Estado 313
+Estado 315
 
   177 clausulas: clausulas_excepcion clausula_finalmente .
 
     $default  reduce usando la regla 177 (clausulas)
 
 
-Estado 314
+Estado 316
 
   182 clausula_excepcion_especifica: EXCEPCION . '(' nombre ')' varias_instrucciones
   183 clausula_excepcion_general: EXCEPCION . varias_instrucciones
@@ -4691,12 +4710,12 @@ Estado 314
     SIGUIENTE      desplazar e ir al estado 75
     IDENTIFICADOR  desplazar e ir al estado 76
     ';'            desplazar e ir al estado 77
-    '('            desplazar e ir al estado 377
+    '('            desplazar e ir al estado 381
 
     $default  reduce usando la regla 159 (cero_mas_identificador1)
 
     nombre                             ir al estado 78
-    varias_instrucciones               ir al estado 378
+    varias_instrucciones               ir al estado 382
     instruccion                        ir al estado 80
     instruccion_asignacion             ir al estado 81
     instruccion_devolver               ir al estado 82
@@ -4712,28 +4731,28 @@ Estado 314
     objeto                             ir al estado 92
 
 
-Estado 315
+Estado 317
 
   180 varias_clausula_excepcion_especifica: varias_clausula_excepcion_especifica clausula_excepcion_especifica .
 
     $default  reduce usando la regla 180 (varias_clausula_excepcion_especifica)
 
 
-Estado 316
+Estado 318
 
   179 clausulas_excepcion: varias_clausula_excepcion_especifica clausula_excepcion_general .
 
     $default  reduce usando la regla 179 (clausulas_excepcion)
 
 
-Estado 317
+Estado 319
 
   168 instruccion_interrupcion: SALIR cero_o_uno_de_identificador cero_o_uno_cuando ';' .
 
     $default  reduce usando la regla 168 (instruccion_interrupcion)
 
 
-Estado 318
+Estado 320
 
   111 varias_instrucciones: varias_instrucciones . instruccion
   143 instruccion_si: SI expresion ENTONCES varias_instrucciones . cero_mas_instrucciones FIN SI
@@ -4745,7 +4764,7 @@ Estado 318
     SALIR          desplazar e ir al estado 73
     SI             desplazar e ir al estado 74
     SIGUIENTE      desplazar e ir al estado 75
-    SINO           desplazar e ir al estado 379
+    SINO           desplazar e ir al estado 383
     IDENTIFICADOR  desplazar e ir al estado 76
     ';'            desplazar e ir al estado 77
 
@@ -4759,7 +4778,7 @@ Estado 318
     instruccion_llamada                ir al estado 83
     llamada_subprograma                ir al estado 84
     instruccion_si                     ir al estado 85
-    cero_mas_instrucciones             ir al estado 380
+    cero_mas_instrucciones             ir al estado 384
     instruccion_casos                  ir al estado 86
     instruccion_bucle                  ir al estado 87
     cero_mas_identificador1            ir al estado 88
@@ -4769,7 +4788,7 @@ Estado 318
     objeto                             ir al estado 92
 
 
-Estado 319
+Estado 321
 
   142 definicion_parametro: IDENTIFICADOR ASIGNACION . expresion
 
@@ -4795,7 +4814,7 @@ Estado 319
     literal              ir al estado 138
     objeto               ir al estado 139
     enumeraciones        ir al estado 140
-    expresion            ir al estado 381
+    expresion            ir al estado 385
     operadorOR           ir al estado 142
     operadorAND          ir al estado 143
     operadorNEG          ir al estado 144
@@ -4808,14 +4827,14 @@ Estado 319
     operadorUN           ir al estado 151
 
 
-Estado 320
+Estado 322
 
   136 llamada_subprograma: nombre '(' cero_definicion_parametro ')' .
 
     $default  reduce usando la regla 136 (llamada_subprograma)
 
 
-Estado 321
+Estado 323
 
   139 varias_definicion_parametro: varias_definicion_parametro ',' . definicion_parametro
 
@@ -4837,7 +4856,7 @@ Estado 321
 
     nombre                ir al estado 78
     llamada_subprograma   ir al estado 136
-    definicion_parametro  ir al estado 382
+    definicion_parametro  ir al estado 386
     primario              ir al estado 137
     literal               ir al estado 138
     objeto                ir al estado 139
@@ -4855,9 +4874,9 @@ Estado 321
     operadorUN            ir al estado 151
 
 
-Estado 322
+Estado 324
 
-  163 cero_o_uno_especificacion_tipo: ':' . especificacion_tipo
+  163 cero_o_uno_especificacion_tipo: DOS_PUNTOS . especificacion_tipo
 
     DICCIONARIO    desplazar e ir al estado 58
     LISTA          desplazar e ir al estado 59
@@ -4868,7 +4887,7 @@ Estado 322
     $default  reduce usando la regla 37 (cero_o_uno_signo)
 
     nombre                ir al estado 62
-    especificacion_tipo   ir al estado 383
+    especificacion_tipo   ir al estado 387
     tipo_no_estructurado  ir al estado 64
     tipo_escalar          ir al estado 65
     cero_o_uno_signo      ir al estado 66
@@ -4876,70 +4895,70 @@ Estado 322
     tipo_diccionario      ir al estado 68
 
 
-Estado 323
+Estado 325
 
   160 clausula_iteracion: PARA IDENTIFICADOR cero_o_uno_especificacion_tipo . EN expresion
 
-    EN  desplazar e ir al estado 384
-
-
-Estado 324
-
-  161 clausula_iteracion: REPETIR IDENTIFICADOR cero_o_uno_especificacion_tipo . EN rango cero_o_uno_descendente
-
-    EN  desplazar e ir al estado 385
-
-
-Estado 325
-
-  157 instruccion_bucle: cero_mas_identificador1 clausula_iteracion varias_instrucciones FIN . BUCLE
-
-    BUCLE  desplazar e ir al estado 386
+    EN  desplazar e ir al estado 388
 
 
 Estado 326
+
+  161 clausula_iteracion: REPETIR IDENTIFICADOR cero_o_uno_especificacion_tipo . EN rango cero_o_uno_descendente
+
+    EN  desplazar e ir al estado 389
+
+
+Estado 327
+
+  157 instruccion_bucle: cero_mas_identificador1 clausula_iteracion varias_instrucciones FIN . BUCLE
+
+    BUCLE  desplazar e ir al estado 390
+
+
+Estado 328
 
   199 objeto: objeto '[' varias_expresiones ']' .
 
     $default  reduce usando la regla 199 (objeto)
 
 
-Estado 327
+Estado 329
 
   201 varias_ctc_cadena: varias_ctc_cadena ',' . CTC_CADENA
 
-    CTC_CADENA  desplazar e ir al estado 387
+    CTC_CADENA  desplazar e ir al estado 391
 
 
-Estado 328
+Estado 330
 
   200 objeto: objeto '{' varias_ctc_cadena '}' .
 
     $default  reduce usando la regla 200 (objeto)
 
 
-Estado 329
+Estado 331
 
   123 instruccion_asignacion: objeto op_asignacion expresion ';' .
 
     $default  reduce usando la regla 123 (instruccion_asignacion)
 
 
-Estado 330
+Estado 332
 
   106 modo: REFERENCIA .
 
     $default  reduce usando la regla 106 (modo)
 
 
-Estado 331
+Estado 333
 
   105 modo: VALOR .
 
     $default  reduce usando la regla 105 (modo)
 
 
-Estado 332
+Estado 334
 
   101 declaracion_parametros: varios_identificadores ':' especificacion_tipo . cero_uno_expresion
 
@@ -4947,10 +4966,10 @@ Estado 332
 
     $default  reduce usando la regla 67 (cero_uno_expresion)
 
-    cero_uno_expresion  ir al estado 388
+    cero_uno_expresion  ir al estado 392
 
 
-Estado 333
+Estado 335
 
   102 declaracion_parametros: varios_identificadores ':' modo . especificacion_tipo cero_uno_expresion
 
@@ -4963,7 +4982,7 @@ Estado 333
     $default  reduce usando la regla 37 (cero_o_uno_signo)
 
     nombre                ir al estado 62
-    especificacion_tipo   ir al estado 389
+    especificacion_tipo   ir al estado 393
     tipo_no_estructurado  ir al estado 64
     tipo_escalar          ir al estado 65
     cero_o_uno_signo      ir al estado 66
@@ -4971,266 +4990,266 @@ Estado 333
     tipo_diccionario      ir al estado 68
 
 
-Estado 334
+Estado 336
 
    20 varios_nombres: varios_nombres . ',' nombre
    73 superclases: '(' varios_nombres . ')'
 
     ','  desplazar e ir al estado 49
-    ')'  desplazar e ir al estado 390
+    ')'  desplazar e ir al estado 394
 
 
-Estado 335
+Estado 337
 
    91 modificador: ABSTRACTO .
 
     $default  reduce usando la regla 91 (modificador)
 
 
-Estado 336
+Estado 338
 
    88 modificador: CONSTRUCTOR .
 
     $default  reduce usando la regla 88 (modificador)
 
 
-Estado 337
+Estado 339
 
    89 modificador: DESTRUCTOR .
 
     $default  reduce usando la regla 89 (modificador)
 
 
-Estado 338
+Estado 340
 
    92 modificador: ESPECIFICO .
 
     $default  reduce usando la regla 92 (modificador)
 
 
-Estado 339
+Estado 341
 
    93 modificador: FINAL .
 
     $default  reduce usando la regla 93 (modificador)
 
 
-Estado 340
+Estado 342
 
    90 modificador: GENERICO .
 
     $default  reduce usando la regla 90 (modificador)
 
 
-Estado 341
+Estado 343
 
    80 visibilidad: PRIVADO .
 
     $default  reduce usando la regla 80 (visibilidad)
 
 
-Estado 342
+Estado 344
 
    79 visibilidad: PROTEGIDO .
 
     $default  reduce usando la regla 79 (visibilidad)
 
 
-Estado 343
+Estado 345
 
    78 visibilidad: PUBLICO .
 
     $default  reduce usando la regla 78 (visibilidad)
 
 
-Estado 344
+Estado 346
 
    82 componente: declaracion_objeto .
 
     $default  reduce usando la regla 82 (componente)
 
 
-Estado 345
+Estado 347
 
    81 componente: declaracion_tipo .
 
     $default  reduce usando la regla 81 (componente)
 
 
-Estado 346
+Estado 348
 
    77 varias_declaraciones_componente: declaracion_componente .
 
     $default  reduce usando la regla 77 (varias_declaraciones_componente)
 
 
-Estado 347
+Estado 349
 
    68 clase: CLASE cero_uno_ultima cero_uno_superclases varias_declaraciones_componente . FIN CLASE
    76 varias_declaraciones_componente: varias_declaraciones_componente . declaracion_componente
 
-    ABSTRACTO      desplazar e ir al estado 335
-    CONSTRUCTOR    desplazar e ir al estado 336
-    DESTRUCTOR     desplazar e ir al estado 337
-    ESPECIFICO     desplazar e ir al estado 338
-    FIN            desplazar e ir al estado 391
-    FINAL          desplazar e ir al estado 339
-    GENERICO       desplazar e ir al estado 340
-    PRIVADO        desplazar e ir al estado 341
-    PROTEGIDO      desplazar e ir al estado 342
-    PUBLICO        desplazar e ir al estado 343
+    ABSTRACTO      desplazar e ir al estado 337
+    CONSTRUCTOR    desplazar e ir al estado 338
+    DESTRUCTOR     desplazar e ir al estado 339
+    ESPECIFICO     desplazar e ir al estado 340
+    FIN            desplazar e ir al estado 395
+    FINAL          desplazar e ir al estado 341
+    GENERICO       desplazar e ir al estado 342
+    PRIVADO        desplazar e ir al estado 343
+    PROTEGIDO      desplazar e ir al estado 344
+    PUBLICO        desplazar e ir al estado 345
     TIPO           desplazar e ir al estado 19
     IDENTIFICADOR  desplazar e ir al estado 20
 
     $default  reduce usando la regla 85 (cero_modificadores)
 
     varios_identificadores  ir al estado 22
-    declaracion_objeto      ir al estado 344
-    declaracion_tipo        ir al estado 345
-    declaracion_componente  ir al estado 392
-    visibilidad             ir al estado 348
-    componente              ir al estado 349
-    cero_modificadores      ir al estado 350
-    varios_modificadores    ir al estado 351
-    modificador             ir al estado 352
+    declaracion_objeto      ir al estado 346
+    declaracion_tipo        ir al estado 347
+    declaracion_componente  ir al estado 396
+    visibilidad             ir al estado 350
+    componente              ir al estado 351
+    cero_modificadores      ir al estado 352
+    varios_modificadores    ir al estado 353
+    modificador             ir al estado 354
 
 
-Estado 348
+Estado 350
 
    75 declaracion_componente: visibilidad . componente
 
-    ABSTRACTO      desplazar e ir al estado 335
-    CONSTRUCTOR    desplazar e ir al estado 336
-    DESTRUCTOR     desplazar e ir al estado 337
-    ESPECIFICO     desplazar e ir al estado 338
-    FINAL          desplazar e ir al estado 339
-    GENERICO       desplazar e ir al estado 340
+    ABSTRACTO      desplazar e ir al estado 337
+    CONSTRUCTOR    desplazar e ir al estado 338
+    DESTRUCTOR     desplazar e ir al estado 339
+    ESPECIFICO     desplazar e ir al estado 340
+    FINAL          desplazar e ir al estado 341
+    GENERICO       desplazar e ir al estado 342
     TIPO           desplazar e ir al estado 19
     IDENTIFICADOR  desplazar e ir al estado 20
 
     $default  reduce usando la regla 85 (cero_modificadores)
 
     varios_identificadores  ir al estado 22
-    declaracion_objeto      ir al estado 344
-    declaracion_tipo        ir al estado 345
-    componente              ir al estado 393
-    cero_modificadores      ir al estado 350
-    varios_modificadores    ir al estado 351
-    modificador             ir al estado 352
+    declaracion_objeto      ir al estado 346
+    declaracion_tipo        ir al estado 347
+    componente              ir al estado 397
+    cero_modificadores      ir al estado 352
+    varios_modificadores    ir al estado 353
+    modificador             ir al estado 354
 
 
-Estado 349
+Estado 351
 
    74 declaracion_componente: componente .
 
     $default  reduce usando la regla 74 (declaracion_componente)
 
 
-Estado 350
+Estado 352
 
    83 componente: cero_modificadores . declaracion_subprograma
 
     SUBPROGRAMA  desplazar e ir al estado 18
 
-    declaracion_subprograma  ir al estado 394
+    declaracion_subprograma  ir al estado 398
 
 
-Estado 351
+Estado 353
 
    84 cero_modificadores: varios_modificadores .
    86 varios_modificadores: varios_modificadores . ',' modificador
 
-    ','  desplazar e ir al estado 395
+    ','  desplazar e ir al estado 399
 
     $default  reduce usando la regla 84 (cero_modificadores)
 
 
-Estado 352
+Estado 354
 
    87 varios_modificadores: modificador .
 
     $default  reduce usando la regla 87 (varios_modificadores)
 
 
-Estado 353
+Estado 355
 
    62 tipo_enumerado: ENUMERACION DE tipo_escalar varios_elemento_enumeracion . FIN ENUMERACION
    63 varios_elemento_enumeracion: varios_elemento_enumeracion . ',' elemento_enumeracion
 
-    FIN  desplazar e ir al estado 396
+    FIN  desplazar e ir al estado 400
     ','  desplazar e ir al estado 280
 
 
-Estado 354
+Estado 356
 
    66 cero_uno_expresion: ASIGNACION expresion .
 
     $default  reduce usando la regla 66 (cero_uno_expresion)
 
 
-Estado 355
+Estado 357
 
    61 tipo_enumerado: ENUMERACION varios_elemento_enumeracion FIN ENUMERACION .
 
     $default  reduce usando la regla 61 (tipo_enumerado)
 
 
-Estado 356
+Estado 358
 
    63 varios_elemento_enumeracion: varios_elemento_enumeracion ',' elemento_enumeracion .
 
     $default  reduce usando la regla 63 (varios_elemento_enumeracion)
 
 
-Estado 357
+Estado 359
 
    59 campo: varios_identificadores ':' especificacion_tipo . ';'
    60      | varios_identificadores ':' especificacion_tipo . ASIGNACION expresion ';'
 
-    ASIGNACION  desplazar e ir al estado 397
-    ';'         desplazar e ir al estado 398
+    ASIGNACION  desplazar e ir al estado 401
+    ';'         desplazar e ir al estado 402
 
 
-Estado 358
+Estado 360
 
    56 tipo_registro: REGISTRO varios_campos FIN REGISTRO .
 
     $default  reduce usando la regla 56 (tipo_registro)
 
 
-Estado 359
+Estado 361
 
    25 declaracion_objeto: varios_identificadores ':' CONSTANTE especificacion_tipo ASIGNACION expresion ';' .
 
     $default  reduce usando la regla 25 (declaracion_objeto)
 
 
-Estado 360
+Estado 362
 
    50 tipo_tabla: TABLA '(' expresion DOS_PTOS expresion . ')' DE especificacion_tipo
 
-    ')'  desplazar e ir al estado 399
+    ')'  desplazar e ir al estado 403
 
 
-Estado 361
+Estado 363
 
    40 cero_o_uno_rango: RANGO rango .
 
     $default  reduce usando la regla 40 (cero_o_uno_rango)
 
 
-Estado 362
+Estado 364
 
    48 rango: expresion . DOS_PTOS expresion
    49      | expresion . DOS_PTOS expresion DOS_PTOS expresion
 
-    DOS_PTOS  desplazar e ir al estado 400
+    DOS_PTOS  desplazar e ir al estado 404
 
 
-Estado 363
+Estado 365
 
-  213 expresion_condicional: SI expresion ENTONCES . expresion
-  214                      | SI expresion ENTONCES . expresion SINO expresion
+  216 expresion_condicional: SI expresion ENTONCES . expresion
+  217                      | SI expresion ENTONCES . expresion SINO expresion
 
     FALSO          desplazar e ir al estado 122
     OBJETO         desplazar e ir al estado 123
@@ -5254,7 +5273,7 @@ Estado 363
     literal              ir al estado 138
     objeto               ir al estado 139
     enumeraciones        ir al estado 140
-    expresion            ir al estado 401
+    expresion            ir al estado 405
     operadorOR           ir al estado 142
     operadorAND          ir al estado 143
     operadorNEG          ir al estado 144
@@ -5267,70 +5286,84 @@ Estado 363
     operadorUN           ir al estado 151
 
 
-Estado 364
-
-  207 varias_expresiones: varias_expresiones ',' expresion .
-
-    $default  reduce usando la regla 207 (varias_expresiones)
-
-
-Estado 365
-
-  215 clave_valor: CTC_CADENA FLECHA expresion .
-
-    $default  reduce usando la regla 215 (clave_valor)
-
-
 Estado 366
 
-  216 campo_valor: IDENTIFICADOR FLECHA expresion .
+  210 varias_expresiones: varias_expresiones ',' expresion .
 
-    $default  reduce usando la regla 216 (campo_valor)
+    $default  reduce usando la regla 210 (varias_expresiones)
 
 
 Estado 367
 
-  209 varias_clave_valor: varias_clave_valor ',' clave_valor .
+  206 enumeraciones: '[' expresion_condicional varias_clausulas_iteracion ']' .
 
-    $default  reduce usando la regla 209 (varias_clave_valor)
+    $default  reduce usando la regla 206 (enumeraciones)
 
 
 Estado 368
 
-  211 varias_campo_valor: varias_campo_valor ',' campo_valor .
+  203 varias_clausulas_iteracion: varias_clausulas_iteracion clausula_iteracion .
 
-    $default  reduce usando la regla 211 (varias_campo_valor)
+    $default  reduce usando la regla 203 (varias_clausulas_iteracion)
 
 
 Estado 369
+
+  218 clave_valor: CTC_CADENA FLECHA expresion .
+
+    $default  reduce usando la regla 218 (clave_valor)
+
+
+Estado 370
+
+  219 campo_valor: IDENTIFICADOR FLECHA expresion .
+
+    $default  reduce usando la regla 219 (campo_valor)
+
+
+Estado 371
+
+  212 varias_clave_valor: varias_clave_valor ',' clave_valor .
+
+    $default  reduce usando la regla 212 (varias_clave_valor)
+
+
+Estado 372
+
+  214 varias_campo_valor: varias_campo_valor ',' campo_valor .
+
+    $default  reduce usando la regla 214 (varias_campo_valor)
+
+
+Estado 373
 
   152 entrada: OTRO .
 
     $default  reduce usando la regla 152 (entrada)
 
 
-Estado 370
+Estado 374
 
   147 caso: CUANDO entradas . FLECHA varias_instrucciones
 
-    FLECHA  desplazar e ir al estado 402
+    FLECHA  desplazar e ir al estado 406
 
 
-Estado 371
+Estado 375
 
   154 varias_entradas: entrada . ':'
 
-    ':'  desplazar e ir al estado 403
+    ':'  desplazar e ir al estado 407
 
 
-Estado 372
+Estado 376
 
   150 entradas: varias_entradas . entrada
   153 varias_entradas: varias_entradas . entrada ':'
 
     FALSO          desplazar e ir al estado 122
     OBJETO         desplazar e ir al estado 123
-    OTRO           desplazar e ir al estado 369
+    OTRO           desplazar e ir al estado 373
     VERDADERO      desplazar e ir al estado 124
     CTC_CARACTER   desplazar e ir al estado 125
     CTC_CADENA     desplazar e ir al estado 126
@@ -5347,12 +5380,12 @@ Estado 372
 
     nombre               ir al estado 78
     llamada_subprograma  ir al estado 136
-    entrada              ir al estado 404
+    entrada              ir al estado 408
     primario             ir al estado 137
     literal              ir al estado 138
     objeto               ir al estado 139
     enumeraciones        ir al estado 140
-    expresion            ir al estado 373
+    expresion            ir al estado 377
     operadorOR           ir al estado 142
     operadorAND          ir al estado 143
     operadorNEG          ir al estado 144
@@ -5365,48 +5398,48 @@ Estado 372
     operadorUN           ir al estado 151
 
 
-Estado 373
+Estado 377
 
   151 entrada: expresion . cero_mas_expresiones1
 
-    DOS_PTOS  desplazar e ir al estado 405
+    DOS_PTOS  desplazar e ir al estado 409
 
     $default  reduce usando la regla 156 (cero_mas_expresiones1)
 
-    cero_mas_expresiones1  ir al estado 406
+    cero_mas_expresiones1  ir al estado 410
 
 
-Estado 374
+Estado 378
 
   146 instruccion_casos: CASOS expresion ES uno_o_mas_casos FIN . CASOS
 
-    CASOS  desplazar e ir al estado 407
+    CASOS  desplazar e ir al estado 411
 
 
-Estado 375
+Estado 379
 
   148 uno_o_mas_casos: uno_o_mas_casos caso .
 
     $default  reduce usando la regla 148 (uno_o_mas_casos)
 
 
-Estado 376
+Estado 380
 
   175 instruccion_captura_excepcion: PRUEBA varias_instrucciones clausulas FIN PRUEBA .
 
     $default  reduce usando la regla 175 (instruccion_captura_excepcion)
 
 
-Estado 377
+Estado 381
 
   182 clausula_excepcion_especifica: EXCEPCION '(' . nombre ')' varias_instrucciones
 
     IDENTIFICADOR  desplazar e ir al estado 33
 
-    nombre  ir al estado 408
+    nombre  ir al estado 412
 
 
-Estado 378
+Estado 382
 
   111 varias_instrucciones: varias_instrucciones . instruccion
   183 clausula_excepcion_general: EXCEPCION varias_instrucciones .
@@ -5441,7 +5474,7 @@ Estado 378
     objeto                             ir al estado 92
 
 
-Estado 379
+Estado 383
 
   144 cero_mas_instrucciones: SINO . varias_instrucciones
 
@@ -5458,7 +5491,7 @@ Estado 379
     $default  reduce usando la regla 159 (cero_mas_identificador1)
 
     nombre                             ir al estado 78
-    varias_instrucciones               ir al estado 409
+    varias_instrucciones               ir al estado 413
     instruccion                        ir al estado 80
     instruccion_asignacion             ir al estado 81
     instruccion_devolver               ir al estado 82
@@ -5474,35 +5507,35 @@ Estado 379
     objeto                             ir al estado 92
 
 
-Estado 380
+Estado 384
 
   143 instruccion_si: SI expresion ENTONCES varias_instrucciones cero_mas_instrucciones . FIN SI
 
-    FIN  desplazar e ir al estado 410
+    FIN  desplazar e ir al estado 414
 
 
-Estado 381
+Estado 385
 
   142 definicion_parametro: IDENTIFICADOR ASIGNACION expresion .
 
     $default  reduce usando la regla 142 (definicion_parametro)
 
 
-Estado 382
+Estado 386
 
   139 varias_definicion_parametro: varias_definicion_parametro ',' definicion_parametro .
 
     $default  reduce usando la regla 139 (varias_definicion_parametro)
 
 
-Estado 383
+Estado 387
 
-  163 cero_o_uno_especificacion_tipo: ':' especificacion_tipo .
+  163 cero_o_uno_especificacion_tipo: DOS_PUNTOS especificacion_tipo .
 
     $default  reduce usando la regla 163 (cero_o_uno_especificacion_tipo)
 
 
-Estado 384
+Estado 388
 
   160 clausula_iteracion: PARA IDENTIFICADOR cero_o_uno_especificacion_tipo EN . expresion
 
@@ -5528,7 +5561,7 @@ Estado 384
     literal              ir al estado 138
     objeto               ir al estado 139
     enumeraciones        ir al estado 140
-    expresion            ir al estado 411
+    expresion            ir al estado 415
     operadorOR           ir al estado 142
     operadorAND          ir al estado 143
     operadorNEG          ir al estado 144
@@ -5541,7 +5574,7 @@ Estado 384
     operadorUN           ir al estado 151
 
 
-Estado 385
+Estado 389
 
   161 clausula_iteracion: REPETIR IDENTIFICADOR cero_o_uno_especificacion_tipo EN . rango cero_o_uno_descendente
 
@@ -5562,13 +5595,13 @@ Estado 385
     '-'            desplazar e ir al estado 135
 
     nombre               ir al estado 78
-    rango                ir al estado 412
+    rango                ir al estado 416
     llamada_subprograma  ir al estado 136
     primario             ir al estado 137
     literal              ir al estado 138
     objeto               ir al estado 139
     enumeraciones        ir al estado 140
-    expresion            ir al estado 362
+    expresion            ir al estado 364
     operadorOR           ir al estado 142
     operadorAND          ir al estado 143
     operadorNEG          ir al estado 144
@@ -5581,28 +5614,28 @@ Estado 385
     operadorUN           ir al estado 151
 
 
-Estado 386
+Estado 390
 
   157 instruccion_bucle: cero_mas_identificador1 clausula_iteracion varias_instrucciones FIN BUCLE .
 
     $default  reduce usando la regla 157 (instruccion_bucle)
 
 
-Estado 387
+Estado 391
 
   201 varias_ctc_cadena: varias_ctc_cadena ',' CTC_CADENA .
 
     $default  reduce usando la regla 201 (varias_ctc_cadena)
 
 
-Estado 388
+Estado 392
 
   101 declaracion_parametros: varios_identificadores ':' especificacion_tipo cero_uno_expresion .
 
     $default  reduce usando la regla 101 (declaracion_parametros)
 
 
-Estado 389
+Estado 393
 
   102 declaracion_parametros: varios_identificadores ':' modo especificacion_tipo . cero_uno_expresion
 
@@ -5610,66 +5643,66 @@ Estado 389
 
     $default  reduce usando la regla 67 (cero_uno_expresion)
 
-    cero_uno_expresion  ir al estado 413
+    cero_uno_expresion  ir al estado 417
 
 
-Estado 390
+Estado 394
 
    73 superclases: '(' varios_nombres ')' .
 
     $default  reduce usando la regla 73 (superclases)
 
 
-Estado 391
+Estado 395
 
    68 clase: CLASE cero_uno_ultima cero_uno_superclases varias_declaraciones_componente FIN . CLASE
 
-    CLASE  desplazar e ir al estado 414
+    CLASE  desplazar e ir al estado 418
 
 
-Estado 392
+Estado 396
 
    76 varias_declaraciones_componente: varias_declaraciones_componente declaracion_componente .
 
     $default  reduce usando la regla 76 (varias_declaraciones_componente)
 
 
-Estado 393
+Estado 397
 
    75 declaracion_componente: visibilidad componente .
 
     $default  reduce usando la regla 75 (declaracion_componente)
 
 
-Estado 394
+Estado 398
 
    83 componente: cero_modificadores declaracion_subprograma .
 
     $default  reduce usando la regla 83 (componente)
 
 
-Estado 395
+Estado 399
 
    86 varios_modificadores: varios_modificadores ',' . modificador
 
-    ABSTRACTO    desplazar e ir al estado 335
-    CONSTRUCTOR  desplazar e ir al estado 336
-    DESTRUCTOR   desplazar e ir al estado 337
-    ESPECIFICO   desplazar e ir al estado 338
-    FINAL        desplazar e ir al estado 339
-    GENERICO     desplazar e ir al estado 340
+    ABSTRACTO    desplazar e ir al estado 337
+    CONSTRUCTOR  desplazar e ir al estado 338
+    DESTRUCTOR   desplazar e ir al estado 339
+    ESPECIFICO   desplazar e ir al estado 340
+    FINAL        desplazar e ir al estado 341
+    GENERICO     desplazar e ir al estado 342
 
-    modificador  ir al estado 415
+    modificador  ir al estado 419
 
 
-Estado 396
+Estado 400
 
    62 tipo_enumerado: ENUMERACION DE tipo_escalar varios_elemento_enumeracion FIN . ENUMERACION
 
-    ENUMERACION  desplazar e ir al estado 416
+    ENUMERACION  desplazar e ir al estado 420
 
 
-Estado 397
+Estado 401
 
    60 campo: varios_identificadores ':' especificacion_tipo ASIGNACION . expresion ';'
 
@@ -5695,7 +5728,7 @@ Estado 397
     literal              ir al estado 138
     objeto               ir al estado 139
     enumeraciones        ir al estado 140
-    expresion            ir al estado 417
+    expresion            ir al estado 421
     operadorOR           ir al estado 142
     operadorAND          ir al estado 143
     operadorNEG          ir al estado 144
@@ -5708,123 +5741,24 @@ Estado 397
     operadorUN           ir al estado 151
 
 
-Estado 398
+Estado 402
 
    59 campo: varios_identificadores ':' especificacion_tipo ';' .
 
     $default  reduce usando la regla 59 (campo)
 
 
-Estado 399
+Estado 403
 
    50 tipo_tabla: TABLA '(' expresion DOS_PTOS expresion ')' . DE especificacion_tipo
 
-    DE  desplazar e ir al estado 418
-
-
-Estado 400
-
-   48 rango: expresion DOS_PTOS . expresion
-   49      | expresion DOS_PTOS . expresion DOS_PTOS expresion
-
-    FALSO          desplazar e ir al estado 122
-    OBJETO         desplazar e ir al estado 123
-    VERDADERO      desplazar e ir al estado 124
-    CTC_CARACTER   desplazar e ir al estado 125
-    CTC_CADENA     desplazar e ir al estado 126
-    IDENTIFICADOR  desplazar e ir al estado 33
-    CTC_ENTERA     desplazar e ir al estado 127
-    CTC_REAL       desplazar e ir al estado 128
-    INC            desplazar e ir al estado 129
-    DEC            desplazar e ir al estado 130
-    '('            desplazar e ir al estado 131
-    '['            desplazar e ir al estado 132
-    '{'            desplazar e ir al estado 133
-    '~'            desplazar e ir al estado 134
-    '-'            desplazar e ir al estado 135
-
-    nombre               ir al estado 78
-    llamada_subprograma  ir al estado 136
-    primario             ir al estado 137
-    literal              ir al estado 138
-    objeto               ir al estado 139
-    enumeraciones        ir al estado 140
-    expresion            ir al estado 419
-    operadorOR           ir al estado 142
-    operadorAND          ir al estado 143
-    operadorNEG          ir al estado 144
-    operadorASIG         ir al estado 145
-    operadorDES          ir al estado 146
-    operadorSR           ir al estado 147
-    operadorMDM          ir al estado 148
-    operadorPOT          ir al estado 149
-    operadorINCDEC       ir al estado 150
-    operadorUN           ir al estado 151
-
-
-Estado 401
-
-  213 expresion_condicional: SI expresion ENTONCES expresion .
-  214                      | SI expresion ENTONCES expresion . SINO expresion
-
-    SINO  desplazar e ir al estado 420
-
-    $default  reduce usando la regla 213 (expresion_condicional)
-
-
-Estado 402
-
-  147 caso: CUANDO entradas FLECHA . varias_instrucciones
-
-    CASOS          desplazar e ir al estado 69
-    DEVOLVER       desplazar e ir al estado 70
-    LANZA          desplazar e ir al estado 71
-    PRUEBA         desplazar e ir al estado 72
-    SALIR          desplazar e ir al estado 73
-    SI             desplazar e ir al estado 74
-    SIGUIENTE      desplazar e ir al estado 75
-    IDENTIFICADOR  desplazar e ir al estado 76
-    ';'            desplazar e ir al estado 77
-
-    $default  reduce usando la regla 159 (cero_mas_identificador1)
-
-    nombre                             ir al estado 78
-    varias_instrucciones               ir al estado 421
-    instruccion                        ir al estado 80
-    instruccion_asignacion             ir al estado 81
-    instruccion_devolver               ir al estado 82
-    instruccion_llamada                ir al estado 83
-    llamada_subprograma                ir al estado 84
-    instruccion_si                     ir al estado 85
-    instruccion_casos                  ir al estado 86
-    instruccion_bucle                  ir al estado 87
-    cero_mas_identificador1            ir al estado 88
-    instruccion_interrupcion           ir al estado 89
-    instruccion_lanzamiento_excepcion  ir al estado 90
-    instruccion_captura_excepcion      ir al estado 91
-    objeto                             ir al estado 92
-
-
-Estado 403
-
-  154 varias_entradas: entrada ':' .
-
-    $default  reduce usando la regla 154 (varias_entradas)
+    DE  desplazar e ir al estado 422
 
 
 Estado 404
 
-  150 entradas: varias_entradas entrada .
-  153 varias_entradas: varias_entradas entrada . ':'
-
-    ':'  desplazar e ir al estado 422
-
-    $default  reduce usando la regla 150 (entradas)
-
-
-Estado 405
-
-  155 cero_mas_expresiones1: DOS_PTOS . expresion
+   48 rango: expresion DOS_PTOS . expresion
+   49      | expresion DOS_PTOS . expresion DOS_PTOS expresion
 
     FALSO          desplazar e ir al estado 122
     OBJETO         desplazar e ir al estado 123
@@ -5861,28 +5795,127 @@ Estado 405
     operadorUN           ir al estado 151
 
 
+Estado 405
+
+  216 expresion_condicional: SI expresion ENTONCES expresion .
+  217                      | SI expresion ENTONCES expresion . SINO expresion
+
+    SINO  desplazar e ir al estado 424
+
+    $default  reduce usando la regla 216 (expresion_condicional)
+
+
 Estado 406
+
+  147 caso: CUANDO entradas FLECHA . varias_instrucciones
+
+    CASOS          desplazar e ir al estado 69
+    DEVOLVER       desplazar e ir al estado 70
+    LANZA          desplazar e ir al estado 71
+    PRUEBA         desplazar e ir al estado 72
+    SALIR          desplazar e ir al estado 73
+    SI             desplazar e ir al estado 74
+    SIGUIENTE      desplazar e ir al estado 75
+    IDENTIFICADOR  desplazar e ir al estado 76
+    ';'            desplazar e ir al estado 77
+
+    $default  reduce usando la regla 159 (cero_mas_identificador1)
+
+    nombre                             ir al estado 78
+    varias_instrucciones               ir al estado 425
+    instruccion                        ir al estado 80
+    instruccion_asignacion             ir al estado 81
+    instruccion_devolver               ir al estado 82
+    instruccion_llamada                ir al estado 83
+    llamada_subprograma                ir al estado 84
+    instruccion_si                     ir al estado 85
+    instruccion_casos                  ir al estado 86
+    instruccion_bucle                  ir al estado 87
+    cero_mas_identificador1            ir al estado 88
+    instruccion_interrupcion           ir al estado 89
+    instruccion_lanzamiento_excepcion  ir al estado 90
+    instruccion_captura_excepcion      ir al estado 91
+    objeto                             ir al estado 92
+
+
+Estado 407
+
+  154 varias_entradas: entrada ':' .
+
+    $default  reduce usando la regla 154 (varias_entradas)
+
+
+Estado 408
+
+  150 entradas: varias_entradas entrada .
+  153 varias_entradas: varias_entradas entrada . ':'
+
+    ':'  desplazar e ir al estado 426
+
+    $default  reduce usando la regla 150 (entradas)
+
+
+Estado 409
+
+  155 cero_mas_expresiones1: DOS_PTOS . expresion
+
+    FALSO          desplazar e ir al estado 122
+    OBJETO         desplazar e ir al estado 123
+    VERDADERO      desplazar e ir al estado 124
+    CTC_CARACTER   desplazar e ir al estado 125
+    CTC_CADENA     desplazar e ir al estado 126
+    IDENTIFICADOR  desplazar e ir al estado 33
+    CTC_ENTERA     desplazar e ir al estado 127
+    CTC_REAL       desplazar e ir al estado 128
+    INC            desplazar e ir al estado 129
+    DEC            desplazar e ir al estado 130
+    '('            desplazar e ir al estado 131
+    '['            desplazar e ir al estado 132
+    '{'            desplazar e ir al estado 133
+    '~'            desplazar e ir al estado 134
+    '-'            desplazar e ir al estado 135
+
+    nombre               ir al estado 78
+    llamada_subprograma  ir al estado 136
+    primario             ir al estado 137
+    literal              ir al estado 138
+    objeto               ir al estado 139
+    enumeraciones        ir al estado 140
+    expresion            ir al estado 427
+    operadorOR           ir al estado 142
+    operadorAND          ir al estado 143
+    operadorNEG          ir al estado 144
+    operadorASIG         ir al estado 145
+    operadorDES          ir al estado 146
+    operadorSR           ir al estado 147
+    operadorMDM          ir al estado 148
+    operadorPOT          ir al estado 149
+    operadorINCDEC       ir al estado 150
+    operadorUN           ir al estado 151
+
+
+Estado 410
 
   151 entrada: expresion cero_mas_expresiones1 .
 
     $default  reduce usando la regla 151 (entrada)
 
 
-Estado 407
+Estado 411
 
   146 instruccion_casos: CASOS expresion ES uno_o_mas_casos FIN CASOS .
 
     $default  reduce usando la regla 146 (instruccion_casos)
 
 
-Estado 408
+Estado 412
 
   182 clausula_excepcion_especifica: EXCEPCION '(' nombre . ')' varias_instrucciones
 
-    ')'  desplazar e ir al estado 424
+    ')'  desplazar e ir al estado 428
 
 
-Estado 409
+Estado 413
 
   111 varias_instrucciones: varias_instrucciones . instruccion
   144 cero_mas_instrucciones: SINO varias_instrucciones .
@@ -5916,67 +5949,67 @@ Estado 409
     objeto                             ir al estado 92
 
 
-Estado 410
+Estado 414
 
   143 instruccion_si: SI expresion ENTONCES varias_instrucciones cero_mas_instrucciones FIN . SI
 
-    SI  desplazar e ir al estado 425
+    SI  desplazar e ir al estado 429
 
 
-Estado 411
+Estado 415
 
   160 clausula_iteracion: PARA IDENTIFICADOR cero_o_uno_especificacion_tipo EN expresion .
 
     $default  reduce usando la regla 160 (clausula_iteracion)
 
 
-Estado 412
+Estado 416
 
   161 clausula_iteracion: REPETIR IDENTIFICADOR cero_o_uno_especificacion_tipo EN rango . cero_o_uno_descendente
 
-    DESCENDENTE  desplazar e ir al estado 426
+    DESCENDENTE  desplazar e ir al estado 430
 
     $default  reduce usando la regla 166 (cero_o_uno_descendente)
 
-    cero_o_uno_descendente  ir al estado 427
+    cero_o_uno_descendente  ir al estado 431
 
 
-Estado 413
+Estado 417
 
   102 declaracion_parametros: varios_identificadores ':' modo especificacion_tipo cero_uno_expresion .
 
     $default  reduce usando la regla 102 (declaracion_parametros)
 
 
-Estado 414
+Estado 418
 
    68 clase: CLASE cero_uno_ultima cero_uno_superclases varias_declaraciones_componente FIN CLASE .
 
     $default  reduce usando la regla 68 (clase)
 
 
-Estado 415
+Estado 419
 
    86 varios_modificadores: varios_modificadores ',' modificador .
 
     $default  reduce usando la regla 86 (varios_modificadores)
 
 
-Estado 416
+Estado 420
 
    62 tipo_enumerado: ENUMERACION DE tipo_escalar varios_elemento_enumeracion FIN ENUMERACION .
 
     $default  reduce usando la regla 62 (tipo_enumerado)
 
 
-Estado 417
+Estado 421
 
    60 campo: varios_identificadores ':' especificacion_tipo ASIGNACION expresion . ';'
 
-    ';'  desplazar e ir al estado 428
+    ';'  desplazar e ir al estado 432
 
 
-Estado 418
+Estado 422
 
    50 tipo_tabla: TABLA '(' expresion DOS_PTOS expresion ')' DE . especificacion_tipo
 
@@ -5989,7 +6022,7 @@ Estado 418
     $default  reduce usando la regla 37 (cero_o_uno_signo)
 
     nombre                ir al estado 62
-    especificacion_tipo   ir al estado 429
+    especificacion_tipo   ir al estado 433
     tipo_no_estructurado  ir al estado 64
     tipo_escalar          ir al estado 65
     cero_o_uno_signo      ir al estado 66
@@ -5997,19 +6030,19 @@ Estado 418
     tipo_diccionario      ir al estado 68
 
 
-Estado 419
+Estado 423
 
    48 rango: expresion DOS_PTOS expresion .
    49      | expresion DOS_PTOS expresion . DOS_PTOS expresion
 
-    DOS_PTOS  desplazar e ir al estado 430
+    DOS_PTOS  desplazar e ir al estado 434
 
     $default  reduce usando la regla 48 (rango)
 
 
-Estado 420
+Estado 424
 
-  214 expresion_condicional: SI expresion ENTONCES expresion SINO . expresion
+  217 expresion_condicional: SI expresion ENTONCES expresion SINO . expresion
 
     FALSO          desplazar e ir al estado 122
     OBJETO         desplazar e ir al estado 123
@@ -6033,7 +6066,7 @@ Estado 420
     literal              ir al estado 138
     objeto               ir al estado 139
     enumeraciones        ir al estado 140
-    expresion            ir al estado 431
+    expresion            ir al estado 435
     operadorOR           ir al estado 142
     operadorAND          ir al estado 143
     operadorNEG          ir al estado 144
@@ -6046,7 +6079,7 @@ Estado 420
     operadorUN           ir al estado 151
 
 
-Estado 421
+Estado 425
 
   111 varias_instrucciones: varias_instrucciones . instruccion
   147 caso: CUANDO entradas FLECHA varias_instrucciones .
@@ -6081,21 +6114,21 @@ Estado 421
     objeto                             ir al estado 92
 
 
-Estado 422
+Estado 426
 
   153 varias_entradas: varias_entradas entrada ':' .
 
     $default  reduce usando la regla 153 (varias_entradas)
 
 
-Estado 423
+Estado 427
 
   155 cero_mas_expresiones1: DOS_PTOS expresion .
 
     $default  reduce usando la regla 155 (cero_mas_expresiones1)
 
 
-Estado 424
+Estado 428
 
   182 clausula_excepcion_especifica: EXCEPCION '(' nombre ')' . varias_instrucciones
 
@@ -6112,7 +6145,7 @@ Estado 424
     $default  reduce usando la regla 159 (cero_mas_identificador1)
 
     nombre                             ir al estado 78
-    varias_instrucciones               ir al estado 432
+    varias_instrucciones               ir al estado 436
     instruccion                        ir al estado 80
     instruccion_asignacion             ir al estado 81
     instruccion_devolver               ir al estado 82
@@ -6128,42 +6161,42 @@ Estado 424
     objeto                             ir al estado 92
 
 
-Estado 425
+Estado 429
 
   143 instruccion_si: SI expresion ENTONCES varias_instrucciones cero_mas_instrucciones FIN SI .
 
     $default  reduce usando la regla 143 (instruccion_si)
 
 
-Estado 426
+Estado 430
 
   165 cero_o_uno_descendente: DESCENDENTE .
 
     $default  reduce usando la regla 165 (cero_o_uno_descendente)
 
 
-Estado 427
+Estado 431
 
   161 clausula_iteracion: REPETIR IDENTIFICADOR cero_o_uno_especificacion_tipo EN rango cero_o_uno_descendente .
 
     $default  reduce usando la regla 161 (clausula_iteracion)
 
 
-Estado 428
+Estado 432
 
    60 campo: varios_identificadores ':' especificacion_tipo ASIGNACION expresion ';' .
 
     $default  reduce usando la regla 60 (campo)
 
 
-Estado 429
+Estado 433
 
    50 tipo_tabla: TABLA '(' expresion DOS_PTOS expresion ')' DE especificacion_tipo .
 
     $default  reduce usando la regla 50 (tipo_tabla)
 
 
-Estado 430
+Estado 434
 
    49 rango: expresion DOS_PTOS expresion DOS_PTOS . expresion
 
@@ -6189,7 +6222,7 @@ Estado 430
     literal              ir al estado 138
     objeto               ir al estado 139
     enumeraciones        ir al estado 140
-    expresion            ir al estado 433
+    expresion            ir al estado 437
     operadorOR           ir al estado 142
     operadorAND          ir al estado 143
     operadorNEG          ir al estado 144
@@ -6202,14 +6235,14 @@ Estado 430
     operadorUN           ir al estado 151
 
 
-Estado 431
+Estado 435
 
-  214 expresion_condicional: SI expresion ENTONCES expresion SINO expresion .
+  217 expresion_condicional: SI expresion ENTONCES expresion SINO expresion .
 
-    $default  reduce usando la regla 214 (expresion_condicional)
+    $default  reduce usando la regla 217 (expresion_condicional)
 
 
-Estado 432
+Estado 436
 
   111 varias_instrucciones: varias_instrucciones . instruccion
   182 clausula_excepcion_especifica: EXCEPCION '(' nombre ')' varias_instrucciones .
@@ -6243,7 +6276,7 @@ Estado 432
     objeto                             ir al estado 92
 
 
-Estado 433
+Estado 437
 
    49 rango: expresion DOS_PTOS expresion DOS_PTOS expresion .
 

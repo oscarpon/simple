@@ -9,11 +9,11 @@
 
 %}
 
-%token ABSTRACTO BOOLEANO BUCLE CARACTER CASOS CLASE COMO CONSTANTE CONSTRUCTOR CORTO CUANDO DE DESCENDENTE DESTRUCTOR DEVOLVER DICCIONARIO EN ENTERO ENTONCES ENUMERACION ES ESPECIFICO EXCEPCION EXPORTAR FALSO FIN FINAL FINALMENTE GENERICO IMPORTAR LARGO LANZA LIBRERIA LISTA MIENTRAS OBJETO OTRO PARA PRINCIPIO PRIVADO PROGRAMA PROTEGIDO PRUEBA PUBLICO RANGO REAL REFERENCIA REGISTRO REPETIR SALIR SI SIGNO SIGUIENTE SINO SUBPROGRAMA TABLA TIPO ULTIMA VALOR VERDADERO CTC_CARACTER CTC_CADENA IDENTIFICADOR CTC_ENTERA CTC_REAL DOS_PTOS CUATRO_PUNTOS ASIGNACION FLECHA INC DEC DESPI DESPD LEQ CEQ NEQ AND OR ASIG_SUMA ASIG_RESTA ASIG_MULT ASIG_DIV ASIG_RESTO ASIG_POT ASIG_DESPI ASIG_DESP LONGITUD TIPO_BASICO
+%token  ABSTRACTO BOOLEANO BUCLE CARACTER CASOS CLASE COMO CONSTANTE CONSTRUCTOR CORTO CUANDO DE DESCENDENTE DESTRUCTOR DEVOLVER DICCIONARIO EN ENTERO ENTONCES ENUMERACION ES ESPECIFICO EXCEPCION EXPORTAR FALSO FIN FINAL FINALMENTE GENERICO IMPORTAR LARGO LANZA LIBRERIA LISTA MIENTRAS OBJETO OTRO PARA PRINCIPIO PRIVADO PROGRAMA PROTEGIDO PRUEBA PUBLICO RANGO REAL REFERENCIA REGISTRO REPETIR SALIR SI SIGNO SIGUIENTE SINO SUBPROGRAMA TABLA TIPO ULTIMA VALOR VERDADERO CTC_CARACTER CTC_CADENA IDENTIFICADOR CTC_ENTERA CTC_REAL DOS_PTOS CUATRO_PUNTOS ASIGNACION FLECHA INC DEC DESPI DESPD LEQ CEQ NEQ AND OR ASIG_SUMA ASIG_RESTA ASIG_MULT DOS_PUNTOS ASIG_DIV ASIG_RESTO ASIG_POT ASIG_DESPI ASIG_DESP  
 
 %%
 
-/***********************PROGRAMA**************************/
+/***********************PROGRAMA**************************/   
 
 
 programa 
@@ -38,24 +38,23 @@ codigo_programa
   ;
 
 
-  /*cero_o_uno_como_identificador
-  : COMO IDENTIFICADOR
-  ;*/
-
 varias_librerias
   : varias_librerias libreria        { printf ("  varias_librerias -> varias_librerias libreria\n"); }
   |
 	;
    
 varios_identificadores
-: varios_identificadores ',' IDENTIFICADOR       { printf ("  varios_identificadores ->  varios_identificadores  IDENTIFICADOR\n"); }
+: varios_identificadores ',' IDENTIFICADOR       { printf ("  varios_identificadores ->  varios_identificadores , IDENTIFICADOR\n"); }
 | IDENTIFICADOR                                  { printf ("  varios_identificadores -> IDENTIFICADOR\n"); }
 ;
 
-nombre
-: IDENTIFICADOR  { printf ("nombre -> IDENTIFICADOR\n"); } 
-| IDENTIFICADOR CUATRO_PUNTOS IDENTIFICADOR       { printf ("nombre -> IDENTIFICADOR CUATRO_PUNTOS IDENTIFICADOR\n"); }                    
+nombre  
+: IDENTIFICADOR CUATRO_PUNTOS IDENTIFICADOR  { printf ("nombre -> IDENTIFICADOR CUATRO_PUNTOS IDENTIFICADOR\n"); }  
+| IDENTIFICADOR  { printf ("nombre -> IDENTIFICADOR\n"); }              
 ;
+
+
+
 
 definicion_libreria 
 : LIBRERIA IDENTIFICADOR ';' codigo_libreria               { printf ("definicion_libreria -> LIBRERIA IDENTIFICADOR ; codigo_libreria\n"); }
@@ -356,7 +355,7 @@ op_asignacion
   |  ASIG_RESTO  { printf ("  op_asignacion -> ASIG_RESTO"); }
   |  ASIG_POT  { printf ("  op_asignacion -> ASIG_POT"); }
   |  ASIG_DESPI  { printf ("  op_asignacion -> ASIG_DESPI"); }
-  |  ':'   { printf ("  op_asignacion -> :"); }
+  |  ASIG_DESP   { printf ("  op_asignacion -> ASIG_DESP"); }
   ;
 
 
@@ -436,7 +435,7 @@ instruccion_bucle
 ;
 
 cero_mas_identificador1
-: IDENTIFICADOR ':'   { printf ("cero_mas_identificador1 -> IDENTIFICADOR :\n"); }
+: IDENTIFICADOR DOS_PUNTOS   { printf ("cero_mas_identificador1 -> IDENTIFICADOR DOS_PUNTOS\n"); }
 |
 ;
 
@@ -447,7 +446,7 @@ clausula_iteracion
 ;
 
 cero_o_uno_especificacion_tipo
-: ':' especificacion_tipo   { printf ("cero_o_uno_especificacion_tipo -> : especificacion_tipo \n"); }
+: DOS_PUNTOS especificacion_tipo   { printf ("cero_o_uno_especificacion_tipo -> : especificacion_tipo \n"); }
 |
 ;
 
@@ -548,20 +547,19 @@ varias_ctc_cadena
  | CTC_CADENA                                                          { printf ("  varias_ctc_cadena -> CTC_CADENA\n"); }
  ;
 
+varias_clausulas_iteracion
+ : varias_clausulas_iteracion  clausula_iteracion       { printf ("  varias_clausulas_iteracion -> varias_clausulas_iteracion  clausula_iteracion\n"); }                       
+ | clausula_iteracion                             { printf ("  varias_clausulas_iteracion -> clausula_iteracion\n"); }
+ ;
+
 enumeraciones
   : '[' expresion_condicional  ']'            { printf ("  enumeraciones -> [ expresion_condicional varias_clausulas_iteracion ]\n"); }
-       //'[' expresion_condicional varias_clausulas_iteracion ']'            { printf ("  enumeraciones -> [ expresion_condicional varias_clausulas_iteracion ]\n"); }
+  | '[' expresion_condicional varias_clausulas_iteracion ']'            { printf ("  enumeraciones -> [ expresion_condicional varias_clausulas_iteracion ]\n"); }
   | '[' varias_expresiones ']'                                          { printf ("  enumeraciones -> [ expresion ]\n"); }
   | '{' varias_clave_valor '}'                                          { printf ("  enumeraciones -> { varias_clave_valor }\n"); }
   | '{' varias_campo_valor '}'                                          { printf ("  enumeraciones -> { varias_campo_valor }\n"); }
   ;
 
-/*
-varias_clausulas_iteracion
-: varias_clausulas_iteracion clausula_iteracion                       { printf ("  varias_clausulas_iteracion -> varias_clausulas_iteracion clausula_iteracion\n"); }
-| varias_clausulas_iteracion                                          { printf ("  varias_clausulas_iteracion -> varias_clausulas_iteracion\n"); }
-;
-*/
 
 varias_expresiones
   : varias_expresiones ',' expresion       { printf ("  varias_expresiones ->  varias_expresiones , expresion\n"); }
@@ -577,13 +575,19 @@ varias_campo_valor
 :varias_campo_valor ',' campo_valor                                      { printf ("  varias_campo_valor -> varias_campo_valor , campo_valor\n"); }
 | campo_valor                                                         { printf ("  varias_campo_valor -> campo_valor\n"); }
 ;
-  
 
+/*
+cero_o_uno_sino_expresion
+: SINO expresion
+|
+;
+*/
 expresion_condicional
   //: expresion                                                           { printf ("  expresion_condicional -> expresion\n"); }
   : SI expresion ENTONCES expresion                                     { printf ("  expresion_condicional -> SI expresion ENTONCES expresion\n"); }
-  | SI expresion ENTONCES expresion SINO expresion                      { printf ("  expresion_condicional -> SI expresion ENTONCES expresion SINO expresion\n"); }
+  | SI expresion ENTONCES expresion SINO expresion                   { printf ("  expresion_condicional -> SI expresion ENTONCES expresion SINO expresion\n"); }
   ;
+
 
 
 clave_valor
@@ -594,7 +598,7 @@ campo_valor
   : IDENTIFICADOR FLECHA expresion                                      { printf ("  campo_valor -> IDENTIFICADOR FLECHA expresion\n"); }
   ;
 
-/*No estamos seguros de si hemos cumplido con las asociatividades. No hemos entendido muy bien la base. Esto es 
+/*No estamos seguros de si hemos cumplido con las asociatividades. No hemos entendido la base. Esto es 
 lo que hemos podido hacer:*/
 
 expresion
@@ -613,12 +617,11 @@ operadorNEG
 	| operadorASIG			                     
   ;
 
-
 operadorASIG
 	: operadorDES '<' 	       { printf("  operadorASIG ->   operadorDES '<' \n"); }
 	| operadorDES '>' 	       { printf("  operadorASIG ->   operadorDES '>' \n"); }
 	| operadorDES LEQ 	       { printf("  operadorASIG ->   operadorDES LEQ \n"); }
-	| operadorDES FLECHA 	       { printf("  operadorASIG ->   operadorDES FLECHA \n"); }
+	| operadorDES CEQ 	       { printf("  operadorASIG ->   operadorDES CEQ \n"); }
 	| operadorDES '=' 		       { printf("  operadorASIG ->   operadorDES'=' \n"); }
 	| operadorDES NEQ 	       { printf("  operadorASIG ->   operadorDES NEQ \n"); }
 	| operadorDES				                 
@@ -651,7 +654,7 @@ operadorPOT
 
 operadorINCDEC
 	: INC  operadorUN       { printf("  operadorINCDEC ->   INC operadorUN\n"); }
-	| DEC  operadorUN    { printf("  operadorINCDEC ->  DEC operadorUN\n"); }
+	| DEC  operadorUN       { printf("  operadorINCDEC ->  DEC operadorUN\n"); }
 	| operadorUN			                     
 ;
 

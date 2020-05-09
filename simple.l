@@ -108,7 +108,7 @@ COMENTARIOS ((\#\{.*[\n].*\#\})|(\#\#.*)|(\#\{.*\#\}))
 (~=) 	              printf("linea %d, Operador: %s\n",lineas,yytext);return(NEQ);
 (:\*)	              printf("linea %d, Operador: %s\n",lineas,yytext);return(ASIG_MULT);
 (:\>)	              printf("linea %d, Operador: %s\n",lineas,yytext);return(ASIG_DESP);
-"::"                  printf("linea %d, Operador: %s\n",lineas,yytext);return(CUATRO_PUNTOS);
+"::"                 printf("linea %d, Operador: %s\n",lineas,yytext);return(CUATRO_PUNTOS);
 (\<\-)	                printf("linea %d, Operador: %s\n",lineas,yytext);return(DESPI);
 (\/\\)	              printf("linea %d, Operador: %s\n",lineas,yytext);return(AND);
 (:\/)	              printf("linea %d, Operador: %s\n",lineas,yytext);return(ASIG_DIV);
@@ -124,7 +124,7 @@ COMENTARIOS ((\#\{.*[\n].*\#\})|(\#\#.*)|(\#\{.*\#\}))
 (\>=)	                printf("linea %d, Operador: %s\n",lineas,yytext);return(CEQ);
 (:-)	                printf("linea %d, Operador: %s\n",lineas,yytext);return(ASIG_RESTA);
 (:\<)	                printf("linea %d, Operador: %s\n",lineas,yytext);return(ASIG_DESPI);
-
+(:)	                printf("linea %d, Operador: %s\n",lineas,yytext);return(DOS_PUNTOS);
 
 
 .                                        printf ("linea %d, ERROR\n",lineas);
