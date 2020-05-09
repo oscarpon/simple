@@ -1011,8 +1011,7 @@ char *yytext;
 #include "simple.tab.h"
 int lineas = 1;
 #line 1014 "lex.yy.c"
-/*PREGUNTAR */
-#line 1016 "lex.yy.c"
+#line 1015 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -1231,7 +1230,7 @@ YY_DECL
 	{
 #line 28 "simple.l"
 
-#line 1235 "lex.yy.c"
+#line 1234 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1745,7 +1744,7 @@ YY_RULE_SETUP
 #line 133 "simple.l"
 ECHO;
 	YY_BREAK
-#line 1749 "lex.yy.c"
+#line 1748 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
