@@ -550,6 +550,7 @@ varias_ctc_cadena
 
 enumeraciones
   : '[' expresion_condicional  ']'            { printf ("  enumeraciones -> [ expresion_condicional varias_clausulas_iteracion ]\n"); }
+       //'[' expresion_condicional varias_clausulas_iteracion ']'            { printf ("  enumeraciones -> [ expresion_condicional varias_clausulas_iteracion ]\n"); }
   | '[' varias_expresiones ']'                                          { printf ("  enumeraciones -> [ expresion ]\n"); }
   | '{' varias_clave_valor '}'                                          { printf ("  enumeraciones -> { varias_clave_valor }\n"); }
   | '{' varias_campo_valor '}'                                          { printf ("  enumeraciones -> { varias_campo_valor }\n"); }
