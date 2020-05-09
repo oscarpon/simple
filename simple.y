@@ -9,7 +9,7 @@
 
 %}
 
-%token  ABSTRACTO BOOLEANO BUCLE CARACTER CASOS CLASE COMO CONSTANTE CONSTRUCTOR CORTO CUANDO DE DESCENDENTE DESTRUCTOR DEVOLVER DICCIONARIO EN ENTERO ENTONCES ENUMERACION ES ESPECIFICO EXCEPCION EXPORTAR FALSO FIN FINAL FINALMENTE GENERICO IMPORTAR LARGO LANZA LIBRERIA LISTA MIENTRAS OBJETO OTRO PARA PRINCIPIO PRIVADO PROGRAMA PROTEGIDO PRUEBA PUBLICO RANGO REAL REFERENCIA REGISTRO REPETIR SALIR SI SIGNO SIGUIENTE SINO SUBPROGRAMA TABLA TIPO ULTIMA VALOR VERDADERO CTC_CARACTER CTC_CADENA IDENTIFICADOR CTC_ENTERA CTC_REAL DOS_PTOS CUATRO_PUNTOS ASIGNACION FLECHA INC DEC DESPI DESPD LEQ CEQ NEQ AND OR ASIG_SUMA ASIG_RESTA ASIG_MULT DOS_PUNTOS ASIG_DIV ASIG_RESTO ASIG_POT ASIG_DESPI ASIG_DESP  
+%token  ABSTRACTO BOOLEANO BUCLE CARACTER CASOS CLASE COMO CONSTANTE CONSTRUCTOR CORTO CUANDO DE DESCENDENTE DESTRUCTOR DEVOLVER DICCIONARIO EN ENTERO ENTONCES ENUMERACION ES ESPECIFICO EXCEPCION EXPORTAR FALSO FIN FINAL FINALMENTE GENERICO IMPORTAR LARGO LANZA LIBRERIA LISTA MIENTRAS OBJETO OTRO PARA PRINCIPIO PRIVADO PROGRAMA PROTEGIDO PRUEBA PUBLICO RANGO REAL REFERENCIA REGISTRO REPETIR SALIR SI SIGNO SIGUIENTE SINO SUBPROGRAMA TABLA TIPO ULTIMA VALOR VERDADERO CTC_CARACTER CTC_CADENA IDENTIFICADOR CTC_ENTERA CTC_REAL DOS_PTOS CUATRO_PUNTOS ASIGNACION FLECHA INC DEC DESPI DESPD LEQ CEQ NEQ AND OR ASIG_SUMA ASIG_RESTA ASIG_MULT ASIG_DIV ASIG_RESTO ASIG_POT ASIG_DESPI ASIG_DESP  
 
 %%
 
@@ -38,19 +38,23 @@ codigo_programa
   ;
 
 
+
+nombre   
+:  nombre CUATRO_PUNTOS IDENTIFICADOR { printf ("nombre -> nombre :: IDENTIFICADOR\n"); }
+|  IDENTIFICADOR  { printf ("nombre -> IDENTIFICADOR\n"); }
+;
+
+
+
+
 varias_librerias
   : varias_librerias libreria        { printf ("  varias_librerias -> varias_librerias libreria\n"); }
-  |
+  |                                  { printf ("  varias_librerias -> EMPTY\n"); }
 	;
    
 varios_identificadores
 : varios_identificadores ',' IDENTIFICADOR       { printf ("  varios_identificadores ->  varios_identificadores , IDENTIFICADOR\n"); }
 | IDENTIFICADOR                                  { printf ("  varios_identificadores -> IDENTIFICADOR\n"); }
-;
-
-nombre  
-: IDENTIFICADOR CUATRO_PUNTOS IDENTIFICADOR  { printf ("nombre -> IDENTIFICADOR CUATRO_PUNTOS IDENTIFICADOR\n"); }  
-| IDENTIFICADOR  { printf ("nombre -> IDENTIFICADOR\n"); }              
 ;
 
 
@@ -435,7 +439,7 @@ instruccion_bucle
 ;
 
 cero_mas_identificador1
-: IDENTIFICADOR DOS_PUNTOS   { printf ("cero_mas_identificador1 -> IDENTIFICADOR DOS_PUNTOS\n"); }
+: IDENTIFICADOR ':'   { printf ("cero_mas_identificador1 -> IDENTIFICADOR :\n"); }
 |
 ;
 
@@ -446,7 +450,7 @@ clausula_iteracion
 ;
 
 cero_o_uno_especificacion_tipo
-: DOS_PUNTOS especificacion_tipo   { printf ("cero_o_uno_especificacion_tipo -> : especificacion_tipo \n"); }
+: ':' especificacion_tipo   { printf ("cero_o_uno_especificacion_tipo -> : especificacion_tipo \n"); }
 |
 ;
 
@@ -666,6 +670,7 @@ operadorUN
 
 
 
+
 %%
 
 
@@ -682,7 +687,7 @@ int yywrap() {
 
 int main(int argc, char *argv[]) {
 
-  yydebug = 1;
+  yydebug = 0;
 
   if (argc < 2) {
     printf("Uso: ./simple NombreArchivo\n");

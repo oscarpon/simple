@@ -13,14 +13,14 @@ Gramática
     6         | IMPORTAR LIBRERIA nombre COMO IDENTIFICADOR ';'
     7         | DE LIBRERIA nombre IMPORTAR varios_identificadores ';'
 
-    8 varias_librerias: varias_librerias libreria
-    9                 | %empty
+    8 nombre: nombre CUATRO_PUNTOS IDENTIFICADOR
+    9       | IDENTIFICADOR
 
-   10 varios_identificadores: varios_identificadores ',' IDENTIFICADOR
-   11                       | IDENTIFICADOR
+   10 varias_librerias: varias_librerias libreria
+   11                 | %empty
 
-   12 nombre: IDENTIFICADOR CUATRO_PUNTOS IDENTIFICADOR
-   13       | IDENTIFICADOR
+   12 varios_identificadores: varios_identificadores ',' IDENTIFICADOR
+   13                       | IDENTIFICADOR
 
    14 definicion_libreria: LIBRERIA IDENTIFICADOR ';' codigo_libreria
 
@@ -235,14 +235,14 @@ Gramática
 
   157 instruccion_bucle: cero_mas_identificador1 clausula_iteracion varias_instrucciones FIN BUCLE
 
-  158 cero_mas_identificador1: IDENTIFICADOR DOS_PUNTOS
+  158 cero_mas_identificador1: IDENTIFICADOR ':'
   159                        | %empty
 
   160 clausula_iteracion: PARA IDENTIFICADOR cero_o_uno_especificacion_tipo EN expresion
   161                   | REPETIR IDENTIFICADOR cero_o_uno_especificacion_tipo EN rango cero_o_uno_descendente
   162                   | MIENTRAS expresion
 
-  163 cero_o_uno_especificacion_tipo: DOS_PUNTOS especificacion_tipo
+  163 cero_o_uno_especificacion_tipo: ':' especificacion_tipo
   164                               | %empty
 
   165 cero_o_uno_descendente: DESCENDENTE
@@ -375,11 +375,11 @@ $end (0) 0
 ')' (41) 50 73 100 136 182 190
 '*' (42) 240
 '+' (43) 237
-',' (44) 10 20 63 86 139 201 210 212 214
+',' (44) 12 20 63 86 139 201 210 212 214
 '-' (45) 238 249
 '.' (46) 198
 '/' (47) 241
-':' (58) 25 26 27 59 60 101 102 153 154
+':' (58) 25 26 27 59 60 101 102 153 154 158 163
 ';' (59) 3 5 6 7 14 19 25 26 27 30 59 60 103 122 123 133 134 135 167
     168 174
 '<' (60) 227
@@ -455,12 +455,12 @@ VALOR (316) 105
 VERDADERO (317) 191
 CTC_CARACTER (318) 195
 CTC_CADENA (319) 196 201 202 218
-IDENTIFICADOR (320) 3 6 10 11 12 13 14 30 31 65 95 142 158 160 161
-    172 198 219
+IDENTIFICADOR (320) 3 6 8 9 12 13 14 30 31 65 95 142 158 160 161 172
+    198 219
 CTC_ENTERA (321) 193
 CTC_REAL (322) 194
 DOS_PTOS (323) 48 49 50 155
-CUATRO_PUNTOS (324) 12
+CUATRO_PUNTOS (324) 8
 ASIGNACION (325) 25 27 60 66 124 142
 FLECHA (326) 147 218 219
 INC (327) 246
@@ -475,257 +475,256 @@ OR (335) 221
 ASIG_SUMA (336) 125
 ASIG_RESTA (337) 126
 ASIG_MULT (338) 127
-DOS_PUNTOS (339) 158 163
-ASIG_DIV (340) 128
-ASIG_RESTO (341) 129
-ASIG_POT (342) 130
-ASIG_DESPI (343) 131
-ASIG_DESP (344) 132
+ASIG_DIV (339) 128
+ASIG_RESTO (340) 129
+ASIG_POT (341) 130
+ASIG_DESPI (342) 131
+ASIG_DESP (343) 132
 
 
 No terminales con las reglas donde aparecen
 
-$accept (110)
+$accept (109)
     en la izquierda: 0
-programa (111)
+programa (110)
     en la izquierda: 1 2, en la derecha: 0
-definicion_programa (112)
+definicion_programa (111)
     en la izquierda: 3, en la derecha: 1
-codigo_programa (113)
+codigo_programa (112)
     en la izquierda: 4, en la derecha: 3
-libreria (114)
-    en la izquierda: 5 6 7, en la derecha: 8
-varias_librerias (115)
-    en la izquierda: 8 9, en la derecha: 4 8 15 16
-varios_identificadores (116)
-    en la izquierda: 10 11, en la derecha: 7 10 25 26 27 59 60 101
-    102
-nombre (117)
-    en la izquierda: 12 13, en la derecha: 5 6 7 20 21 28 136 174 182
+libreria (113)
+    en la izquierda: 5 6 7, en la derecha: 10
+nombre (114)
+    en la izquierda: 8 9, en la derecha: 5 6 7 8 20 21 28 136 174 182
     197
-definicion_libreria (118)
+varias_librerias (115)
+    en la izquierda: 10 11, en la derecha: 4 10 15 16
+varios_identificadores (116)
+    en la izquierda: 12 13, en la derecha: 7 12 25 26 27 59 60 101
+    102
+definicion_libreria (117)
     en la izquierda: 14, en la derecha: 2
-codigo_libreria (119)
+codigo_libreria (118)
     en la izquierda: 15 16, en la derecha: 14
-varias_declaraciones (120)
+varias_declaraciones (119)
     en la izquierda: 17 18, en la derecha: 15 16 17 109
-exportaciones (121)
+exportaciones (120)
     en la izquierda: 19, en la derecha: 16
-varios_nombres (122)
+varios_nombres (121)
     en la izquierda: 20 21, en la derecha: 19 20 73
-declaracion (123)
+declaracion (122)
     en la izquierda: 22 23 24, en la derecha: 17 18 109
-declaracion_objeto (124)
+declaracion_objeto (123)
     en la izquierda: 25 26 27, en la derecha: 22 82
-especificacion_tipo (125)
+especificacion_tipo (124)
     en la izquierda: 28 29, en la derecha: 25 26 27 50 51 52 59 60
     101 102 107 163
-declaracion_tipo (126)
+declaracion_tipo (125)
     en la izquierda: 30 31, en la derecha: 23 81
-tipo_no_estructurado (127)
+tipo_no_estructurado (126)
     en la izquierda: 32 33 34, en la derecha: 29 30
-tipo_escalar (128)
+tipo_escalar (127)
     en la izquierda: 35, en la derecha: 32 62
-cero_o_uno_signo (129)
+cero_o_uno_signo (128)
     en la izquierda: 36 37, en la derecha: 35
-cero_o_uno_longitud (130)
+cero_o_uno_longitud (129)
     en la izquierda: 38 39, en la derecha: 35
-cero_o_uno_rango (131)
+cero_o_uno_rango (130)
     en la izquierda: 40 41, en la derecha: 35
-longitud (132)
+longitud (131)
     en la izquierda: 42 43, en la derecha: 38
-tipo_basico (133)
+tipo_basico (132)
     en la izquierda: 44 45 46 47, en la derecha: 35
-rango (134)
+rango (133)
     en la izquierda: 48 49, en la derecha: 40 161
-tipo_tabla (135)
+tipo_tabla (134)
     en la izquierda: 50 51, en la derecha: 33
-tipo_diccionario (136)
+tipo_diccionario (135)
     en la izquierda: 52, en la derecha: 34
-tipo_estructurado (137)
+tipo_estructurado (136)
     en la izquierda: 53 54 55, en la derecha: 31
-tipo_registro (138)
+tipo_registro (137)
     en la izquierda: 56, en la derecha: 53
-varios_campos (139)
+varios_campos (138)
     en la izquierda: 57 58, en la derecha: 56 57
-campo (140)
+campo (139)
     en la izquierda: 59 60, en la derecha: 57 58
-tipo_enumerado (141)
+tipo_enumerado (140)
     en la izquierda: 61 62, en la derecha: 54
-varios_elemento_enumeracion (142)
+varios_elemento_enumeracion (141)
     en la izquierda: 63 64, en la derecha: 61 62 63
-elemento_enumeracion (143)
+elemento_enumeracion (142)
     en la izquierda: 65, en la derecha: 63 64
-cero_uno_expresion (144)
+cero_uno_expresion (143)
     en la izquierda: 66 67, en la derecha: 65 101 102
-clase (145)
+clase (144)
     en la izquierda: 68, en la derecha: 55
-cero_uno_ultima (146)
+cero_uno_ultima (145)
     en la izquierda: 69 70, en la derecha: 68
-cero_uno_superclases (147)
+cero_uno_superclases (146)
     en la izquierda: 71 72, en la derecha: 68
-superclases (148)
+superclases (147)
     en la izquierda: 73, en la derecha: 71
-declaracion_componente (149)
+declaracion_componente (148)
     en la izquierda: 74 75, en la derecha: 76 77
-varias_declaraciones_componente (150)
+varias_declaraciones_componente (149)
     en la izquierda: 76 77, en la derecha: 68 76
-visibilidad (151)
+visibilidad (150)
     en la izquierda: 78 79 80, en la derecha: 75
-componente (152)
+componente (151)
     en la izquierda: 81 82 83, en la derecha: 74 75
-cero_modificadores (153)
+cero_modificadores (152)
     en la izquierda: 84 85, en la derecha: 83
-varios_modificadores (154)
+varios_modificadores (153)
     en la izquierda: 86 87, en la derecha: 84 86
-modificador (155)
+modificador (154)
     en la izquierda: 88 89 90 91 92 93, en la derecha: 86 87
-declaracion_subprograma (156)
+declaracion_subprograma (155)
     en la izquierda: 94, en la derecha: 24 83
-cabecera_subprograma (157)
+cabecera_subprograma (156)
     en la izquierda: 95, en la derecha: 94
-cero_uno_parametrizacion (158)
+cero_uno_parametrizacion (157)
     en la izquierda: 96 97, en la derecha: 95
-cero_uno_tipoResultado (159)
+cero_uno_tipoResultado (158)
     en la izquierda: 98 99, en la derecha: 95
-parametrizacion (160)
+parametrizacion (159)
     en la izquierda: 100, en la derecha: 96
-declaracion_parametros (161)
+declaracion_parametros (160)
     en la izquierda: 101 102, en la derecha: 100 103
-varias_declaraciones_parametros (162)
+varias_declaraciones_parametros (161)
     en la izquierda: 103 104, en la derecha: 100 103
-modo (163)
+modo (162)
     en la izquierda: 105 106, en la derecha: 102
-tipo_resultado (164)
+tipo_resultado (163)
     en la izquierda: 107, en la derecha: 98
-cuerpo_subprograma (165)
+cuerpo_subprograma (164)
     en la izquierda: 108, en la derecha: 4 94
-cero_o_mas_declaraciones (166)
+cero_o_mas_declaraciones (165)
     en la izquierda: 109 110, en la derecha: 108
-varias_instrucciones (167)
+varias_instrucciones (166)
     en la izquierda: 111 112, en la derecha: 108 111 143 144 147 157
     175 182 183 184
-instruccion (168)
+instruccion (167)
     en la izquierda: 113 114 115 116 117 118 119 120 121 122, en la derecha:
     111 112
-instruccion_asignacion (169)
+instruccion_asignacion (168)
     en la izquierda: 123, en la derecha: 113
-op_asignacion (170)
+op_asignacion (169)
     en la izquierda: 124 125 126 127 128 129 130 131 132, en la derecha:
     123
-instruccion_devolver (171)
+instruccion_devolver (170)
     en la izquierda: 133 134, en la derecha: 114
-instruccion_llamada (172)
+instruccion_llamada (171)
     en la izquierda: 135, en la derecha: 115
-llamada_subprograma (173)
+llamada_subprograma (172)
     en la izquierda: 136, en la derecha: 135 187 188
-cero_definicion_parametro (174)
+cero_definicion_parametro (173)
     en la izquierda: 137 138, en la derecha: 136
-varias_definicion_parametro (175)
+varias_definicion_parametro (174)
     en la izquierda: 139 140, en la derecha: 137 139
-definicion_parametro (176)
+definicion_parametro (175)
     en la izquierda: 141 142, en la derecha: 139 140
-instruccion_si (177)
+instruccion_si (176)
     en la izquierda: 143, en la derecha: 116
-cero_mas_instrucciones (178)
+cero_mas_instrucciones (177)
     en la izquierda: 144 145, en la derecha: 143
-instruccion_casos (179)
+instruccion_casos (178)
     en la izquierda: 146, en la derecha: 117
-caso (180)
+caso (179)
     en la izquierda: 147, en la derecha: 148 149
-uno_o_mas_casos (181)
+uno_o_mas_casos (180)
     en la izquierda: 148 149, en la derecha: 146 148
-entradas (182)
+entradas (181)
     en la izquierda: 150, en la derecha: 147
-entrada (183)
+entrada (182)
     en la izquierda: 151 152, en la derecha: 150 153 154
-varias_entradas (184)
+varias_entradas (183)
     en la izquierda: 153 154, en la derecha: 150 153
-cero_mas_expresiones1 (185)
+cero_mas_expresiones1 (184)
     en la izquierda: 155 156, en la derecha: 151
-instruccion_bucle (186)
+instruccion_bucle (185)
     en la izquierda: 157, en la derecha: 118
-cero_mas_identificador1 (187)
+cero_mas_identificador1 (186)
     en la izquierda: 158 159, en la derecha: 157
-clausula_iteracion (188)
+clausula_iteracion (187)
     en la izquierda: 160 161 162, en la derecha: 157 203 204
-cero_o_uno_especificacion_tipo (189)
+cero_o_uno_especificacion_tipo (188)
     en la izquierda: 163 164, en la derecha: 160 161
-cero_o_uno_descendente (190)
+cero_o_uno_descendente (189)
     en la izquierda: 165 166, en la derecha: 161
-instruccion_interrupcion (191)
+instruccion_interrupcion (190)
     en la izquierda: 167 168, en la derecha: 119
-cuando (192)
+cuando (191)
     en la izquierda: 169, en la derecha: 170
-cero_o_uno_cuando (193)
+cero_o_uno_cuando (192)
     en la izquierda: 170 171, en la derecha: 167 168
-cero_o_uno_de_identificador (194)
+cero_o_uno_de_identificador (193)
     en la izquierda: 172 173, en la derecha: 168
-instruccion_lanzamiento_excepcion (195)
+instruccion_lanzamiento_excepcion (194)
     en la izquierda: 174, en la derecha: 120
-instruccion_captura_excepcion (196)
+instruccion_captura_excepcion (195)
     en la izquierda: 175, en la derecha: 121
-clausulas (197)
+clausulas (196)
     en la izquierda: 176 177 178, en la derecha: 175
-clausulas_excepcion (198)
+clausulas_excepcion (197)
     en la izquierda: 179, en la derecha: 176 177
-varias_clausula_excepcion_especifica (199)
+varias_clausula_excepcion_especifica (198)
     en la izquierda: 180 181, en la derecha: 179 180
-clausula_excepcion_especifica (200)
+clausula_excepcion_especifica (199)
     en la izquierda: 182, en la derecha: 180
-clausula_excepcion_general (201)
+clausula_excepcion_general (200)
     en la izquierda: 183, en la derecha: 179
-clausula_finalmente (202)
+clausula_finalmente (201)
     en la izquierda: 184, en la derecha: 177 178
-primario (203)
+primario (202)
     en la izquierda: 185 186 187 188 189 190, en la derecha: 249 250
-literal (204)
+literal (203)
     en la izquierda: 191 192 193 194 195 196, en la derecha: 185
-objeto (205)
+objeto (204)
     en la izquierda: 197 198 199 200, en la derecha: 123 186 198 199
     200
-varias_ctc_cadena (206)
+varias_ctc_cadena (205)
     en la izquierda: 201 202, en la derecha: 200 201
-varias_clausulas_iteracion (207)
+varias_clausulas_iteracion (206)
     en la izquierda: 203 204, en la derecha: 203 206
-enumeraciones (208)
+enumeraciones (207)
     en la izquierda: 205 206 207 208 209, en la derecha: 189
-varias_expresiones (209)
+varias_expresiones (208)
     en la izquierda: 210 211, en la derecha: 199 207 210
-varias_clave_valor (210)
+varias_clave_valor (209)
     en la izquierda: 212 213, en la derecha: 208 212
-varias_campo_valor (211)
+varias_campo_valor (210)
     en la izquierda: 214 215, en la derecha: 209 214
-expresion_condicional (212)
+expresion_condicional (211)
     en la izquierda: 216 217, en la derecha: 205 206
-clave_valor (213)
+clave_valor (212)
     en la izquierda: 218, en la derecha: 212 213
-campo_valor (214)
+campo_valor (213)
     en la izquierda: 219, en la derecha: 214 215
-expresion (215)
+expresion (214)
     en la izquierda: 220, en la derecha: 25 27 48 49 50 60 66 123 134
     141 142 143 146 151 155 160 162 169 190 210 211 216 217 218 219
-operadorOR (216)
+operadorOR (215)
     en la izquierda: 221 222, en la derecha: 220
-operadorAND (217)
+operadorAND (216)
     en la izquierda: 223 224, en la derecha: 221 222
-operadorNEG (218)
+operadorNEG (217)
     en la izquierda: 225 226, en la derecha: 223 224
-operadorASIG (219)
+operadorASIG (218)
     en la izquierda: 227 228 229 230 231 232 233, en la derecha: 226
-operadorDES (220)
+operadorDES (219)
     en la izquierda: 234 235 236, en la derecha: 225 227 228 229 230
     231 232 233 234 235
-operadorSR (221)
+operadorSR (220)
     en la izquierda: 237 238 239, en la derecha: 234 235 236 237 238
-operadorMDM (222)
+operadorMDM (221)
     en la izquierda: 240 241 242 243, en la derecha: 237 238 239 240
     241 242
-operadorPOT (223)
+operadorPOT (222)
     en la izquierda: 244 245, en la derecha: 240 241 242 243 244
-operadorINCDEC (224)
+operadorINCDEC (223)
     en la izquierda: 246 247 248, en la derecha: 244 245
-operadorUN (225)
+operadorUN (224)
     en la izquierda: 249 250, en la derecha: 246 247 248
 
 
@@ -801,7 +800,7 @@ Estado 9
 
    14 definicion_libreria: LIBRERIA IDENTIFICADOR ';' . codigo_libreria
 
-    $default  reduce usando la regla 9 (varias_librerias)
+    $default  reduce usando la regla 11 (varias_librerias)
 
     varias_librerias  ir al estado 11
     codigo_libreria   ir al estado 12
@@ -811,7 +810,7 @@ Estado 10
 
     3 definicion_programa: PROGRAMA IDENTIFICADOR ';' . codigo_programa
 
-    $default  reduce usando la regla 9 (varias_librerias)
+    $default  reduce usando la regla 11 (varias_librerias)
 
     codigo_programa   ir al estado 13
     varias_librerias  ir al estado 14
@@ -819,7 +818,7 @@ Estado 10
 
 Estado 11
 
-    8 varias_librerias: varias_librerias . libreria
+   10 varias_librerias: varias_librerias . libreria
    15 codigo_libreria: varias_librerias . varias_declaraciones
    16                | varias_librerias . exportaciones varias_declaraciones
 
@@ -857,7 +856,7 @@ Estado 13
 Estado 14
 
     4 codigo_programa: varias_librerias . cuerpo_subprograma
-    8 varias_librerias: varias_librerias . libreria
+   10 varias_librerias: varias_librerias . libreria
 
     DE             desplazar e ir al estado 15
     IMPORTAR       desplazar e ir al estado 17
@@ -922,21 +921,21 @@ Estado 19
 
 Estado 20
 
-   11 varios_identificadores: IDENTIFICADOR .
+   13 varios_identificadores: IDENTIFICADOR .
 
-    $default  reduce usando la regla 11 (varios_identificadores)
+    $default  reduce usando la regla 13 (varios_identificadores)
 
 
 Estado 21
 
-    8 varias_librerias: varias_librerias libreria .
+   10 varias_librerias: varias_librerias libreria .
 
-    $default  reduce usando la regla 8 (varias_librerias)
+    $default  reduce usando la regla 10 (varias_librerias)
 
 
 Estado 22
 
-   10 varios_identificadores: varios_identificadores . ',' IDENTIFICADOR
+   12 varios_identificadores: varios_identificadores . ',' IDENTIFICADOR
    25 declaracion_objeto: varios_identificadores . ':' CONSTANTE especificacion_tipo ASIGNACION expresion ';'
    26                   | varios_identificadores . ':' especificacion_tipo ';'
    27                   | varios_identificadores . ':' especificacion_tipo ASIGNACION expresion ';'
@@ -1048,17 +1047,17 @@ Estado 32
 
 Estado 33
 
-   12 nombre: IDENTIFICADOR . CUATRO_PUNTOS IDENTIFICADOR
-   13       | IDENTIFICADOR .
+    9 nombre: IDENTIFICADOR .
 
-    CUATRO_PUNTOS  desplazar e ir al estado 47
-
-    $default  reduce usando la regla 13 (nombre)
+    $default  reduce usando la regla 9 (nombre)
 
 
 Estado 34
 
+    8 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
    21 varios_nombres: nombre .
+
+    CUATRO_PUNTOS  desplazar e ir al estado 47
 
     $default  reduce usando la regla 21 (varios_nombres)
 
@@ -1124,7 +1123,7 @@ Estado 39
 
 Estado 40
 
-   10 varios_identificadores: varios_identificadores ',' . IDENTIFICADOR
+   12 varios_identificadores: varios_identificadores ',' . IDENTIFICADOR
 
     IDENTIFICADOR  desplazar e ir al estado 56
 
@@ -1223,13 +1222,15 @@ Estado 45
 Estado 46
 
     7 libreria: DE LIBRERIA nombre . IMPORTAR varios_identificadores ';'
+    8 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
 
-    IMPORTAR  desplazar e ir al estado 93
+    IMPORTAR       desplazar e ir al estado 93
+    CUATRO_PUNTOS  desplazar e ir al estado 47
 
 
 Estado 47
 
-   12 nombre: IDENTIFICADOR CUATRO_PUNTOS . IDENTIFICADOR
+    8 nombre: nombre CUATRO_PUNTOS . IDENTIFICADOR
 
     IDENTIFICADOR  desplazar e ir al estado 94
 
@@ -1254,9 +1255,11 @@ Estado 50
 
     5 libreria: IMPORTAR LIBRERIA nombre . ';'
     6         | IMPORTAR LIBRERIA nombre . COMO IDENTIFICADOR ';'
+    8 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
 
-    COMO  desplazar e ir al estado 96
-    ';'   desplazar e ir al estado 97
+    COMO           desplazar e ir al estado 96
+    CUATRO_PUNTOS  desplazar e ir al estado 47
+    ';'            desplazar e ir al estado 97
 
 
 Estado 51
@@ -1322,9 +1325,9 @@ Estado 55
 
 Estado 56
 
-   10 varios_identificadores: varios_identificadores ',' IDENTIFICADOR .
+   12 varios_identificadores: varios_identificadores ',' IDENTIFICADOR .
 
-    $default  reduce usando la regla 10 (varios_identificadores)
+    $default  reduce usando la regla 12 (varios_identificadores)
 
 
 Estado 57
@@ -1378,7 +1381,10 @@ Estado 61
 
 Estado 62
 
+    8 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
    28 especificacion_tipo: nombre .
+
+    CUATRO_PUNTOS  desplazar e ir al estado 47
 
     $default  reduce usando la regla 28 (especificacion_tipo)
 
@@ -1618,14 +1624,12 @@ Estado 75
 
 Estado 76
 
-   12 nombre: IDENTIFICADOR . CUATRO_PUNTOS IDENTIFICADOR
-   13       | IDENTIFICADOR .
-  158 cero_mas_identificador1: IDENTIFICADOR . DOS_PUNTOS
+    9 nombre: IDENTIFICADOR .
+  158 cero_mas_identificador1: IDENTIFICADOR . ':'
 
-    CUATRO_PUNTOS  desplazar e ir al estado 47
-    DOS_PUNTOS     desplazar e ir al estado 162
+    ':'  desplazar e ir al estado 162
 
-    $default  reduce usando la regla 13 (nombre)
+    $default  reduce usando la regla 9 (nombre)
 
 
 Estado 77
@@ -1637,10 +1641,12 @@ Estado 77
 
 Estado 78
 
+    8 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
   136 llamada_subprograma: nombre . '(' cero_definicion_parametro ')'
   197 objeto: nombre .
 
-    '('  desplazar e ir al estado 163
+    CUATRO_PUNTOS  desplazar e ir al estado 47
+    '('            desplazar e ir al estado 163
 
     $default  reduce usando la regla 197 (objeto)
 
@@ -1801,14 +1807,17 @@ Estado 93
 
 Estado 94
 
-   12 nombre: IDENTIFICADOR CUATRO_PUNTOS IDENTIFICADOR .
+    8 nombre: nombre CUATRO_PUNTOS IDENTIFICADOR .
 
-    $default  reduce usando la regla 12 (nombre)
+    $default  reduce usando la regla 8 (nombre)
 
 
 Estado 95
 
+    8 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
    20 varios_nombres: varios_nombres ',' nombre .
+
+    CUATRO_PUNTOS  desplazar e ir al estado 47
 
     $default  reduce usando la regla 20 (varios_nombres)
 
@@ -2555,9 +2564,11 @@ Estado 153
 
 Estado 154
 
+    8 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
   174 instruccion_lanzamiento_excepcion: LANZA nombre . ';'
 
-    ';'  desplazar e ir al estado 243
+    CUATRO_PUNTOS  desplazar e ir al estado 47
+    ';'            desplazar e ir al estado 243
 
 
 Estado 155
@@ -2680,7 +2691,7 @@ Estado 161
 
 Estado 162
 
-  158 cero_mas_identificador1: IDENTIFICADOR DOS_PUNTOS .
+  158 cero_mas_identificador1: IDENTIFICADOR ':' .
 
     $default  reduce usando la regla 158 (cero_mas_identificador1)
 
@@ -2997,7 +3008,7 @@ Estado 183
 Estado 184
 
     7 libreria: DE LIBRERIA nombre IMPORTAR varios_identificadores . ';'
-   10 varios_identificadores: varios_identificadores . ',' IDENTIFICADOR
+   12 varios_identificadores: varios_identificadores . ',' IDENTIFICADOR
 
     ';'  desplazar e ir al estado 268
     ','  desplazar e ir al estado 40
@@ -3012,7 +3023,7 @@ Estado 185
 
 Estado 186
 
-   10 varios_identificadores: varios_identificadores . ',' IDENTIFICADOR
+   12 varios_identificadores: varios_identificadores . ',' IDENTIFICADOR
   101 declaracion_parametros: varios_identificadores . ':' especificacion_tipo cero_uno_expresion
   102                       | varios_identificadores . ':' modo especificacion_tipo cero_uno_expresion
 
@@ -3096,7 +3107,7 @@ Estado 194
 
 Estado 195
 
-   10 varios_identificadores: varios_identificadores . ',' IDENTIFICADOR
+   12 varios_identificadores: varios_identificadores . ',' IDENTIFICADOR
    59 campo: varios_identificadores . ':' especificacion_tipo ';'
    60      | varios_identificadores . ':' especificacion_tipo ASIGNACION expresion ';'
 
@@ -3231,9 +3242,11 @@ Estado 207
 
 Estado 208
 
+    8 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
   136 llamada_subprograma: nombre . '(' cero_definicion_parametro ')'
 
-    '('  desplazar e ir al estado 163
+    CUATRO_PUNTOS  desplazar e ir al estado 47
+    '('            desplazar e ir al estado 163
 
 
 Estado 209
@@ -3858,14 +3871,12 @@ Estado 253
 
 Estado 254
 
-   12 nombre: IDENTIFICADOR . CUATRO_PUNTOS IDENTIFICADOR
-   13       | IDENTIFICADOR .
+    9 nombre: IDENTIFICADOR .
   142 definicion_parametro: IDENTIFICADOR . ASIGNACION expresion
 
-    CUATRO_PUNTOS  desplazar e ir al estado 47
-    ASIGNACION     desplazar e ir al estado 321
+    ASIGNACION  desplazar e ir al estado 321
 
-    $default  reduce usando la regla 13 (nombre)
+    $default  reduce usando la regla 9 (nombre)
 
 
 Estado 255
@@ -3910,7 +3921,7 @@ Estado 260
 
   160 clausula_iteracion: PARA IDENTIFICADOR . cero_o_uno_especificacion_tipo EN expresion
 
-    DOS_PUNTOS  desplazar e ir al estado 324
+    ':'  desplazar e ir al estado 324
 
     $default  reduce usando la regla 164 (cero_o_uno_especificacion_tipo)
 
@@ -3921,7 +3932,7 @@ Estado 261
 
   161 clausula_iteracion: REPETIR IDENTIFICADOR . cero_o_uno_especificacion_tipo EN rango cero_o_uno_descendente
 
-    DOS_PUNTOS  desplazar e ir al estado 324
+    ':'  desplazar e ir al estado 324
 
     $default  reduce usando la regla 164 (cero_o_uno_especificacion_tipo)
 
@@ -4876,7 +4887,7 @@ Estado 323
 
 Estado 324
 
-  163 cero_o_uno_especificacion_tipo: DOS_PUNTOS . especificacion_tipo
+  163 cero_o_uno_especificacion_tipo: ':' . especificacion_tipo
 
     DICCIONARIO    desplazar e ir al estado 58
     LISTA          desplazar e ir al estado 59
@@ -5530,7 +5541,7 @@ Estado 386
 
 Estado 387
 
-  163 cero_o_uno_especificacion_tipo: DOS_PUNTOS especificacion_tipo .
+  163 cero_o_uno_especificacion_tipo: ':' especificacion_tipo .
 
     $default  reduce usando la regla 163 (cero_o_uno_especificacion_tipo)
 
@@ -5910,9 +5921,11 @@ Estado 411
 
 Estado 412
 
+    8 nombre: nombre . CUATRO_PUNTOS IDENTIFICADOR
   182 clausula_excepcion_especifica: EXCEPCION '(' nombre . ')' varias_instrucciones
 
-    ')'  desplazar e ir al estado 428
+    CUATRO_PUNTOS  desplazar e ir al estado 47
+    ')'            desplazar e ir al estado 428
 
 
 Estado 413

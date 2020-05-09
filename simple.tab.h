@@ -126,12 +126,11 @@ extern int yydebug;
     ASIG_SUMA = 336,
     ASIG_RESTA = 337,
     ASIG_MULT = 338,
-    DOS_PUNTOS = 339,
-    ASIG_DIV = 340,
-    ASIG_RESTO = 341,
-    ASIG_POT = 342,
-    ASIG_DESPI = 343,
-    ASIG_DESP = 344
+    ASIG_DIV = 339,
+    ASIG_RESTO = 340,
+    ASIG_POT = 341,
+    ASIG_DESPI = 342,
+    ASIG_DESP = 343
   };
 #endif
 
