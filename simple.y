@@ -533,11 +533,6 @@ clausula_finalmente
 
 
 
-expresion_posfija 
-    : operadorUN { printf ("expresion_posfija ->operadorUN "); }
-    | operadorUN operadorINCDEC { printf ("expresion_posfija ->operadorUN operadorINCDEC"); }
-;
-
 
 
 
@@ -613,15 +608,12 @@ expresion_condicional
 
 
 clave_valor
-  : CTC_CADENA FLECHA expresion                                         { printf ("  clave_valor -> CTC_CADENA FLECHA expresion\n"); }
+  : CTC_CADENA FLECHA expresion                                         { printf ("  clave_valor -> CTC_CADENA => expresion\n"); }
   ;
 
 campo_valor
-  : IDENTIFICADOR FLECHA expresion                                      { printf ("  campo_valor -> IDENTIFICADOR FLECHA expresion\n"); }
+  : IDENTIFICADOR FLECHA expresion                                      { printf ("  campo_valor -> IDENTIFICADOR => expresion\n"); }
   ;
-
-/*No estamos seguros de si hemos cumplido con las asociatividades. No hemos entendido la base. Esto es 
-lo que hemos podido hacer:*/
 
 expresion
 	: operadorOR		                         { printf("  expresion ->  operadorOR\n"); }
@@ -641,11 +633,11 @@ operadorNEG
   ;
 
 operadorASIG
-	: operadorDES '<' 	       { printf("  operadorASIG ->   operadorDES '<' \n"); }
-	| operadorDES '>' 	       { printf("  operadorASIG ->   operadorDES '>' \n"); }
+	: operadorDES '<' 	       { printf("  operadorASIG ->   operadorDES < \n"); }
+	| operadorDES '>' 	       { printf("  operadorASIG ->   operadorDES > \n"); }
 	| operadorDES LEQ 	       { printf("  operadorASIG ->   operadorDES LEQ \n"); }
 	| operadorDES CEQ 	       { printf("  operadorASIG ->   operadorDES CEQ \n"); }
-	| operadorDES '=' 		       { printf("  operadorASIG ->   operadorDES '=' \n"); }
+	| operadorDES '=' 		       { printf("  operadorASIG ->   operadorDES = \n"); }
 	| operadorDES NEQ 	       { printf("  operadorASIG ->   operadorDES NEQ \n"); }
 	| operadorDES				                 
   ;
@@ -657,15 +649,15 @@ operadorDES
 ;
 
 operadorSR
-	: operadorMDS '+' 		         { printf("  operadorSR ->  operadorSR '+' operadorMDS\n"); }
-	| operadorMDS '-' 		         { printf("  operadorSR ->  operadorSR '-' operadorMDS\n"); }
+	: operadorMDS '+' 		         { printf("  operadorSR ->  operadorSR + operadorMDS\n"); }
+	| operadorMDS '-' 		         { printf("  operadorSR ->  operadorSR - operadorMDS\n"); }
 	| operadorMDS				                     
 ;
 
 operadorMDS
-	: expresion_potencia '*' 		         { printf("  operadorMDS ->  expresion_potencia '*' \n"); }
-	| expresion_potencia '/' 		         { printf("  operadorMDS ->  expresion_potencia '/' \n"); }
-	| expresion_potencia '\\' 		       { printf("  operadorMDS ->  expresion_potencia '\' \n"); }
+	: expresion_potencia '*' 		         { printf("  operadorMDS ->  expresion_potencia * \n"); }
+	| expresion_potencia '/' 		         { printf("  operadorMDS ->  expresion_potencia / \n"); }
+	| expresion_potencia '\\' 		       { printf("  operadorMDS ->  expresion_potencia \\ \n"); }
 	| expresion_potencia				                     
 ;
 
@@ -677,21 +669,21 @@ expresion_potencia
 ;
 
 expresion_posfija 
-    :  operadorINCDEC { printf ("expresion_posfija -> operadorINCDEC"); }
-    | operadorINCDEC UNI operadorUN { printf ("expresion_posfija ->operadorINCDEC - operadorUN "); }
+    :  expresion_unaria { printf ("expresion_posfija -> expresion_unaria"); }
+    | operador_posfijo expresion_unaria { printf ("expresion_posfija ->operadorINCDEC - expresion_unaria "); }
     
 ;
 
 
-operadorINCDEC
-	: INC         { printf("  operadorINCDEC ->   INC \n"); }
-	| DEC         { printf("  operadorINCDEC ->  DEC \n"); }                  
+operador_posfijo
+	: INC         { printf("  operadorINCDEC ->   ++ \n"); }
+	| DEC         { printf("  operadorINCDEC ->  -- \n"); }                  
 ;
 
 
-operadorUN
-	: UNI primario		             { printf("  operadorUN -> - primario \n"); }
-	| primario			               { printf("  operadorUN -> primario \n"); }
+expresion_unaria
+	: UNI primario		             { printf("  expresion_unaria -> - primario \n"); }
+	| primario			               { printf("  expresion_unaria -> primario \n"); }
 ;
 
 
