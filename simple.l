@@ -97,7 +97,7 @@ COMENTARIOS ((\#\{.*[\n].*\#\})|(\#\#.*)|(\#\{.*\#\}))
 {REALES} printf("linea %d, constante real: %s\n",lineas,yytext); return(CTC_REAL);
 {CARACTERES} printf("linea %d, constante caracter: %s\n",lineas,yytext);return(CTC_CARACTER);
 {CADENAS} printf("linea %d, constante cadena: %s\n",lineas,yytext);return(CTC_CADENA);
-
+{COMENTARIOS}         printf("linea %d, comentario: %s\n",lineas,yytext); 
 
 
 
@@ -124,7 +124,7 @@ COMENTARIOS ((\#\{.*[\n].*\#\})|(\#\#.*)|(\#\{.*\#\}))
 (\>=)	                printf("linea %d, Operador: %s\n",lineas,yytext);return(CEQ);
 (:-)	                printf("linea %d, Operador: %s\n",lineas,yytext);return(ASIG_RESTA);
 (:\<)	                printf("linea %d, Operador: %s\n",lineas,yytext);return(ASIG_DESPI);
-
+(-)                     printf("linea %d, Operador: %s\n",lineas,yytext);return(UNI);
 
 [\(\)\{\}:;,\|]	      printf("linea %d, Delimitador: %s\n",lineas,yytext);return(yytext[0]);
 

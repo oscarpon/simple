@@ -9,7 +9,18 @@
 
 %}
 
-%token  ABSTRACTO BOOLEANO BUCLE CARACTER CASOS CLASE COMO CONSTANTE CONSTRUCTOR CORTO CUANDO DE DESCENDENTE DESTRUCTOR DEVOLVER DICCIONARIO EN ENTERO ENTONCES ENUMERACION ES ESPECIFICO EXCEPCION EXPORTAR FALSO FIN FINAL FINALMENTE GENERICO IMPORTAR LARGO LANZA LIBRERIA LISTA MIENTRAS OBJETO OTRO PARA PRINCIPIO PRIVADO PROGRAMA PROTEGIDO PRUEBA PUBLICO RANGO REAL REFERENCIA REGISTRO REPETIR SALIR SI SIGNO SIGUIENTE SINO SUBPROGRAMA TABLA TIPO ULTIMA VALOR VERDADERO CTC_CARACTER CTC_CADENA IDENTIFICADOR CTC_ENTERA CTC_REAL DOS_PTOS CUATRO_PUNTOS ASIGNACION FLECHA INC DEC DESPI DESPD LEQ CEQ NEQ AND OR ASIG_SUMA ASIG_RESTA ASIG_MULT ASIG_DIV ASIG_RESTO ASIG_POT ASIG_DESPI ASIG_DESP  
+%token UNI ABSTRACTO BOOLEANO BUCLE CARACTER CASOS CLASE COMO CONSTANTE CONSTRUCTOR CORTO CUANDO DE DESCENDENTE DESTRUCTOR DEVOLVER DICCIONARIO EN ENTERO ENTONCES ENUMERACION ES ESPECIFICO EXCEPCION EXPORTAR FALSO FIN FINAL FINALMENTE GENERICO IMPORTAR LARGO LANZA LIBRERIA LISTA MIENTRAS OBJETO OTRO PARA PRINCIPIO PRIVADO PROGRAMA PROTEGIDO PRUEBA PUBLICO RANGO REAL REFERENCIA REGISTRO REPETIR SALIR SI SIGNO SIGUIENTE SINO SUBPROGRAMA TABLA TIPO ULTIMA VALOR VERDADERO CTC_CARACTER CTC_CADENA IDENTIFICADOR CTC_ENTERA CTC_REAL DOS_PTOS CUATRO_PUNTOS ASIGNACION FLECHA INC DEC DESPI DESPD LEQ CEQ NEQ AND OR ASIG_SUMA ASIG_RESTA ASIG_MULT ASIG_DIV ASIG_RESTO ASIG_POT ASIG_DESPI ASIG_DESP  
+
+%left OR
+%left AND
+%nonassoc '~'
+%nonassoc '<' '>' LEQ CEQ '=' NEQ
+%left DESPD DESPI 
+%left '+' '-'
+%left '*' '/' '\\'
+%right '^'
+%nonassoc INC DEC
+%nonassoc UNI 
 
 %%
 
@@ -520,6 +531,16 @@ clausula_finalmente
 
 /********************EXPRESIONES************************************/
 
+
+
+expresion_posfija 
+    : operadorUN { printf ("expresion_posfija ->operadorUN "); }
+    | operadorUN operadorINCDEC { printf ("expresion_posfija ->operadorUN operadorINCDEC"); }
+;
+
+
+
+
 primario
   : literal                                                             { printf ("  primario -> literal\n"); }
   | objeto                                                              { printf ("  primario -> objeto\n"); }
@@ -580,12 +601,9 @@ varias_campo_valor
 | campo_valor                                                         { printf ("  varias_campo_valor -> campo_valor\n"); }
 ;
 
-/*
-cero_o_uno_sino_expresion
-: SINO expresion
-|
-;
-*/
+
+
+
 expresion_condicional
   //: expresion                                                           { printf ("  expresion_condicional -> expresion\n"); }
   : SI expresion ENTONCES expresion                                     { printf ("  expresion_condicional -> SI expresion ENTONCES expresion\n"); }
@@ -607,18 +625,19 @@ lo que hemos podido hacer:*/
 
 expresion
 	: operadorOR		                         { printf("  expresion ->  operadorOR\n"); }
+  
   ;
 operadorOR
-	: operadorAND OR 	             { printf("  operadorOR ->  operadorOR OR operadorAND\n"); }
+	: operadorAND OR   	             { printf("  operadorOR ->  operadorOR OR operadorAND\n"); }
 	| operadorAND			                      
 ;
 operadorAND
-	: operadorNEG AND          { printf("  operadorAND ->  operadorAND AND operadorNEG\n"); }
+	: operadorNEG AND            { printf("  operadorAND ->  operadorAND AND operadorNEG\n"); }
 	| operadorNEG			                      
   ;
 operadorNEG
-	: '~' operadorDES  		                   { printf("  operadorNEG -> operadorASIG ~\n"); }
-	| operadorASIG			                     
+	: '~' operadorASIG  		                   { printf("  operadorNEG -> operadorASIG ~\n"); }	
+  |	operadorASIG                     
   ;
 
 operadorASIG
@@ -632,39 +651,46 @@ operadorASIG
   ;
 
 operadorDES
-	: operadorDES DESPI operadorSR		       { printf("  operadorDES ->  operadorDES DESPI operadorSR\n"); }
-	| operadorDES DESPD operadorSR		       { printf("  operadorDES ->  operadorDES DESPD operadorSR\n"); }
+	: operadorSR DESPI 		       { printf("  operadorDES ->  operadorDES DESPI operadorSR\n"); }
+	| operadorSR DESPD 		       { printf("  operadorDES ->  operadorDES DESPD operadorSR\n"); }
 	| operadorSR				                    
 ;
 
 operadorSR
-	: operadorSR '+' operadorMDM		         { printf("  operadorSR ->  operadorSR '+' operadorMDM\n"); }
-	| operadorSR '-' operadorMDM		         { printf("  operadorSR ->  operadorSR '-' operadorMDM\n"); }
-	| operadorMDM				                     
+	: operadorMDS '+' 		         { printf("  operadorSR ->  operadorSR '+' operadorMDS\n"); }
+	| operadorMDS '-' 		         { printf("  operadorSR ->  operadorSR '-' operadorMDS\n"); }
+	| operadorMDS				                     
 ;
 
-operadorMDM
-	: operadorMDM '*' operadorPOT		         { printf("  operadorMDM ->  operadorMDM '*' operadorPOT\n"); }
-	| operadorMDM '/' operadorPOT		         { printf("  operadorMDM ->  operadorMDM '/' operadorPOT\n"); }
-	| operadorMDM '\\' operadorPOT		       { printf("  operadorMDM ->  operadorMDM '\\' operadorPOT\n"); }
-	| operadorPOT				                     
+operadorMDS
+	: expresion_potencia '*' 		         { printf("  operadorMDS ->  expresion_potencia '*' \n"); }
+	| expresion_potencia '/' 		         { printf("  operadorMDS ->  expresion_potencia '/' \n"); }
+	| expresion_potencia '\\' 		       { printf("  operadorMDS ->  expresion_potencia '\' \n"); }
+	| expresion_potencia				                     
 ;
 
-operadorPOT
-	: operadorINCDEC '^' operadorPOT	       { printf("  operadorPOT ->  operadorINCDEC '^' operadorPOT\n"); }
-	| operadorINCDEC				                     
+
+expresion_potencia 
+      : expresion_posfija 
+      | expresion_posfija  '^' expresion_potencia 
+
+;
+
+expresion_posfija 
+    :  operadorINCDEC { printf ("expresion_posfija -> operadorINCDEC"); }
+    | operadorINCDEC UNI operadorUN { printf ("expresion_posfija ->operadorINCDEC - operadorUN "); }
+    
 ;
 
 
 operadorINCDEC
-	: INC  operadorUN       { printf("  operadorINCDEC ->   INC operadorUN\n"); }
-	| DEC  operadorUN       { printf("  operadorINCDEC ->  DEC operadorUN\n"); }
-	| operadorUN			                     
+	: INC         { printf("  operadorINCDEC ->   INC \n"); }
+	| DEC         { printf("  operadorINCDEC ->  DEC \n"); }                  
 ;
 
 
 operadorUN
-	: '-' primario		             { printf("  operadorUN -> - primario \n"); }
+	: UNI primario		             { printf("  operadorUN -> - primario \n"); }
 	| primario			               { printf("  operadorUN -> primario \n"); }
 ;
 

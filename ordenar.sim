@@ -4,7 +4,7 @@ de libreria principal::sistema_operativo::entrada_salida importar abrir,cerrar;
 
 exportar ordenarQuicksort, ordenarQuicksort::quicksort;
 
-#{
+{#
 primer subprograma: implementación del quicksort
 #}
 subprograma ordenarQuicksort
