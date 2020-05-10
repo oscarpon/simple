@@ -126,8 +126,7 @@ COMENTARIOS ((\#\{.*[\n].*\#\})|(\#\#.*)|(\#\{.*\#\}))
 (:\<)	                printf("linea %d, Operador: %s\n",lineas,yytext);return(ASIG_DESPI);
 (-)                     printf("linea %d, Operador: %s\n",lineas,yytext);return(UNI);
 
-[\(\)\{\}:;,\|]	      printf("linea %d, Delimitador: %s\n",lineas,yytext);return(yytext[0]);
-
+[\(#)\{#}:;,\|]	      printf("linea %d, Delimitador: %s\n",lineas,yytext);return(yytext[0]);
 .                                        printf ("linea %d, ERROR\n",lineas);
 
 %%

@@ -617,8 +617,8 @@ campo_valor
 
 expresion
 	: operadorOR		                         { printf("  expresion ->  operadorOR\n"); }
-  
   ;
+  
 operadorOR
 	: operadorAND OR   	             { printf("  operadorOR ->  operadorOR OR operadorAND\n"); }
 	| operadorAND			                      

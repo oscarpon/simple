@@ -362,7 +362,7 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[478] =
     {   0,
-       67,   67,   94,   92,   92,    2,    3,   92,   92,   66,
+       67,   67,   94,   92,   92,    2,    3,   92,   91,   66,
        91,   92,   90,   92,   92,   65,   91,   92,   92,   92,
        64,   64,   64,   64,   64,   64,   64,   64,   64,   64,
        64,   64,   64,   64,   64,   64,   64,   64,   92,   64,
@@ -1758,12 +1758,12 @@ printf("linea %d, Delimitador: %s\n",lineas,yytext);return(yytext[0]);
 	YY_BREAK
 case 92:
 YY_RULE_SETUP
-#line 131 "simple.l"
+#line 130 "simple.l"
 printf ("linea %d, ERROR\n",lineas);
 	YY_BREAK
 case 93:
 YY_RULE_SETUP
-#line 133 "simple.l"
+#line 132 "simple.l"
 ECHO;
 	YY_BREAK
 #line 1770 "lex.yy.c"
@@ -2771,6 +2771,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 133 "simple.l"
+#line 132 "simple.l"
 
 
